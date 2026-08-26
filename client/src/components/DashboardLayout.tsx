@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 import { startLogin } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { FolderKanban, LayoutDashboard, LogOut, PanelLeft, Star } from "lucide-react";
+import { CalendarCheck, FolderKanban, LayoutDashboard, LogOut, PanelLeft, Star } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
@@ -31,6 +31,7 @@ const menuItems = [
   { icon: LayoutDashboard, label: "ملخص الإدارة", path: "/admin" },
   { icon: FolderKanban, label: "معرض الأعمال", path: "/admin#projects" },
   { icon: Star, label: "آراء العملاء", path: "/admin#testimonials" },
+  { icon: CalendarCheck, label: "الحجوزات", path: "/admin#bookings" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";

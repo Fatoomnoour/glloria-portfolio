@@ -1,10 +1,26 @@
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
+import { notifyOwner } from "./_core/notification";
 import { systemRouter } from "./_core/systemRouter";
 import { adminProcedure, publicProcedure, router } from "./_core/trpc";
-import { TRPCError } from "@trpc/server";
-import { createProject, createTestimonial, deleteProject, deleteTestimonial, getProjectBySlug, listProjects, listTestimonials, updateProject, updateTestimonial } from "./db";
+import {
+  createConsultationRequest,
+  createProject,
+  createTestimonial,
+  deleteProject,
+  deleteTestimonial,
+  getConsultationRequest,
+  getConsultationStats,
+  getProjectBySlug,
+  listConsultationRequests,
+  listProjects,
+  listTestimonials,
+  updateConsultationRequest,
+  updateProject,
+  updateTestimonial,
+} from "./db";
 
 const projectFields = {
   slug: z.string().trim().min(2).max(160),
@@ -32,10 +48,43 @@ const testimonialFields = {
   approved: z.boolean().default(false),
 };
 
-function assertTestimonialPublication(input: { approved?: boolean; consentConfirmed?: boolean; verificationStatus?: "pending" | "verified" | "rejected" }) {
+const consultationStatus = z.enum(["new", "reviewing", "contacted", "confirmed", "completed", "cancelled"]);
+const consultationInput = z.object({
+  fullName: z.string().trim().min(2).max(160),
+  phone: z.string().trim().min(7).max(40).regex(/^\+?[0-9 ()-]{7,}$/),
+  email: z.string().trim().email().max(320).optional().or(z.literal("")),
+  city: z.string().trim().min(2).max(160),
+  propertyType: z.string().trim().min(2).max(160),
+  area: z.string().trim().min(1).max(80),
+  service: z.string().trim().min(2).max(180),
+  budget: z.string().trim().min(2).max(160),
+  preferredDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  preferredTime: z.string().trim().min(2).max(10),
+  description: z.string().trim().min(10).max(5000),
+  privacyConsent: z.literal(true),
+  honeypot: z.string().max(120).optional().default(""),
+});
+
+type TestimonialPublicationInput = { approved?: boolean; consentConfirmed?: boolean; verificationStatus?: "pending" | "verified" | "rejected" };
+function assertTestimonialPublication(input: TestimonialPublicationInput) {
   if (input.approved === true && (input.consentConfirmed !== true || input.verificationStatus !== "verified")) {
     throw new TRPCError({ code: "BAD_REQUEST", message: "لا يمكن نشر التقييم قبل تأكيد موافقة العميل وحالة التحقق." });
   }
+}
+
+function consultationNotificationContent(input: z.infer<typeof consultationInput>) {
+  return [
+    `الاسم: ${input.fullName}`,
+    `الهاتف: ${input.phone}`,
+    input.email ? `البريد: ${input.email}` : null,
+    `المدينة: ${input.city}`,
+    `العقار: ${input.propertyType}`,
+    `المساحة: ${input.area}`,
+    `الخدمة: ${input.service}`,
+    `الميزانية: ${input.budget}`,
+    `الموعد المقترح: ${input.preferredDate} — ${input.preferredTime}`,
+    `الوصف: ${input.description}`,
+  ].filter(Boolean).join("\n");
 }
 
 export const appRouter = router({
@@ -47,6 +96,19 @@ export const appRouter = router({
       ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
       return { success: true } as const;
     }),
+  }),
+  consultations: router({
+    create: publicProcedure.input(consultationInput).mutation(async ({ input }) => {
+      if (input.honeypot.trim()) throw new TRPCError({ code: "BAD_REQUEST", message: "تعذر قبول الطلب." });
+      const request = await createConsultationRequest({ ...input, email: input.email || null, honeypot: null, status: "new" });
+      const notified = await notifyOwner({ title: `طلب استشارة جديد — ${input.fullName}`, content: consultationNotificationContent(input) });
+      return { success: true as const, id: request?.id ?? null, notified };
+    }),
+    list: adminProcedure.input(z.object({ search: z.string().trim().max(160).optional(), city: z.string().trim().max(160).optional(), service: z.string().trim().max(180).optional(), status: consultationStatus.optional(), date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional() }).optional()).query(({ input }) => listConsultationRequests(input ?? {})),
+    get: adminProcedure.input(z.object({ id: z.number().int().positive() })).query(({ input }) => getConsultationRequest(input.id)),
+    stats: adminProcedure.query(() => getConsultationStats()),
+    update: adminProcedure.input(z.object({ id: z.number().int().positive(), status: consultationStatus, adminNotes: z.string().max(5000).optional().or(z.literal("")) })).mutation(({ ctx, input }) => updateConsultationRequest(input.id, { status: input.status, adminNotes: input.adminNotes || null, lastEditedBy: ctx.user.id })),
+    export: adminProcedure.input(z.object({ search: z.string().trim().max(160).optional(), city: z.string().trim().max(160).optional(), service: z.string().trim().max(180).optional(), status: consultationStatus.optional(), date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional() }).optional()).query(({ input }) => listConsultationRequests(input ?? {})),
   }),
   projects: router({
     list: publicProcedure.input(z.object({ designType: z.enum(["interior", "architectural"]).optional() }).optional()).query(({ input }) => listProjects(input?.designType)),

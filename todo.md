@@ -86,4 +86,47 @@
 # Final reduced-motion evidence
 
 - [x] Verify reduced-motion behavior on the published /projects page through an emulated preference or document the browser-tool limitation explicitly. (CSS rule verified; browser tool cannot emulate OS preference.)
-- [ ] Save a fresh checkpoint after documenting reduced-motion evidence.
+- [x] Save a fresh checkpoint after documenting reduced-motion evidence. (Checkpoint 57f9f19e.)
+
+# Attachment content update
+
+- [x] Read and summarize the supplied attachment content.
+- [x] Map verified attachment facts to the appropriate Glloria sections.
+- [x] Apply approved attachment content without inventing credentials, testimonials, or project claims.
+- [x] Re-test affected pages and save a new checkpoint if site files change.
+
+# Attachment v6 — Finalization, Booking Admin, and Domain Readiness
+
+- [x] Verify the current v5 implementation against the attachment requirements and preserve reusable components.
+- [x] Add privacy policy and terms of use pages and link them from the booking/privacy consent flow.
+- [x] Add persistent consultation booking records with status lifecycle: new, reviewing, contacted, confirmed, completed, cancelled.
+- [x] Add protected admin booking statistics for new, reviewing, confirmed, completed, and cancelled requests.
+- [x] Add an admin bookings table with search/filter by name, city, service, status, and date.
+- [x] Add booking detail editing for status and internal admin notes with last-edited metadata.
+- [x] Add quick WhatsApp and email contact actions in booking details.
+- [x] Add CSV export for bookings without exposing secrets or unapproved data publicly.
+- [x] Add owner notification on new booking using the built-in owner notification channel, with graceful failure handling.
+- [x] Add server-side validation and lightweight anti-spam protection for public booking submissions.
+- [x] Extend admin content management for testimonials and projects without publishing test data.
+- [x] Add domain setup documentation covering DNS, SSL, canonical URL, sitemap, www preference, and social links.
+- [x] Run focused tests and production build; verify no test records are visible publicly.
+- [x] Review todo.md and save a new checkpoint only after all implemented requirements are tested.
+
+# v6 implementation fix
+
+- [x] Fix the Admin.tsx ternary syntax introduced while adding the bookings tab, then rerun TypeScript and tests.
+
+# v6 visual follow-up
+
+- [x] Increase legal-page body text contrast while preserving the warm editorial palette.
+- [x] Re-run desktop/mobile screenshots for privacy and terms after the contrast fix.
+
+# v6 review gaps to resolve
+
+- [x] Expose the last editor name and last updated timestamp in booking details inside the admin UI.
+- [x] Capture and review mobile screenshots for /privacy and /terms after the contrast fix.
+- [ ] Save a fresh checkpoint after the v6 booking/admin/legal changes are fully verified.
+
+# v6 deployment verification
+
+- [ ] Verify the published domain exits maintenance mode and serves the latest Glloria build after the new checkpoint.

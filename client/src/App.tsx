@@ -7,6 +7,8 @@ import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
 import Contact from "./pages/Contact";
 import Booking from "./pages/Booking";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 import Admin from "./pages/Admin";
 import { LocaleProvider, useLocale } from "./contexts/LocaleContext";
@@ -41,8 +43,8 @@ function SiteHeader() {
 }
 
 function SiteFooter() {
-  const { t, locale } = useLocale();
-  return <footer className="site-footer"><div className="footer-topline" /><div className="footer-grid"><div><Link href="/" className="footer-brand">Glloria<span>®</span></Link><p className="footer-statement">{t("footer.statement").split("\n").map((line) => <span key={line}>{line}<br /></span>)}</p></div><div className="footer-column"><span className="footer-label">{t("footer.contact")}</span><a href="https://wa.me/201097430973" target="_blank" rel="noreferrer">WhatsApp ↗</a><a href="mailto:hello@glloria.studio">hello@glloria.studio</a></div><div className="footer-column"><span className="footer-label">{t("footer.follow")}</span><a href="https://www.facebook.com/glloriaaa" target="_blank" rel="noreferrer">Facebook ↗</a><a href="https://www.instagram.com/glloriaaa" target="_blank" rel="noreferrer"><Instagram size={14} /> Instagram ↗</a></div><div className="footer-end"><span>GLL / 01</span><span>© 2024 Glloria Studio</span></div></div></footer>;
+  const { t } = useLocale();
+  return <footer className="site-footer"><div className="footer-topline" /><div className="footer-grid"><div><Link href="/" className="footer-brand">Glloria<span>®</span></Link><p className="footer-statement">{t("footer.statement").split("\n").map((line) => <span key={line}>{line}<br /></span>)}</p></div><div className="footer-column"><span className="footer-label">{t("footer.contact")}</span><a href="https://wa.me/201097430973" target="_blank" rel="noreferrer">WhatsApp ↗</a><a href="mailto:hello@glloria.studio">hello@glloria.studio</a></div><div className="footer-column"><span className="footer-label">{t("footer.follow")}</span><a href="https://www.facebook.com/glloriaaa" target="_blank" rel="noreferrer">Facebook ↗</a><a href="https://www.instagram.com/glloriaaa" target="_blank" rel="noreferrer"><Instagram size={14} /> Instagram ↗</a></div><div className="footer-column footer-legal"><span className="footer-label">{t("footer.legal") || "Legal"}</span><Link href="/privacy">{t("footer.privacy") || "Privacy"}</Link><Link href="/terms">{t("footer.terms") || "Terms"}</Link></div><div className="footer-end"><span>GLL / 01</span><span>© 2024 Glloria Studio</span></div></div></footer>;
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
@@ -52,8 +54,8 @@ function Shell({ children }: { children: React.ReactNode }) {
 
 function AppContent() {
   const [location] = useLocation();
-  if (location === "/admin") return <Admin />;
-  return <Shell><Switch><Route path="/" component={Home} /><Route path="/projects" component={Projects} /><Route path="/projects/:slug" component={ProjectDetail} /><Route path="/contact" component={Contact} /><Route path="/booking" component={Booking} /><Route component={NotFound} /></Switch></Shell>;
+  if (location.startsWith("/admin")) return <Admin />;
+  return <Shell><Switch><Route path="/" component={Home} /><Route path="/projects" component={Projects} /><Route path="/projects/:slug" component={ProjectDetail} /><Route path="/contact" component={Contact} /><Route path="/booking" component={Booking} /><Route path="/privacy" component={Privacy} /><Route path="/terms" component={Terms} /><Route component={NotFound} /></Switch></Shell>;
 }
 
 export default function App() { return <LocaleProvider><AppContent /></LocaleProvider>; }

@@ -15,6 +15,13 @@
       "when": 1787768114342,
       "tag": "0001_purple_strong_guy",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1787775228195,
+      "tag": "0002_polite_black_crow",
+      "breakpoints": true
     }
   ]
 }

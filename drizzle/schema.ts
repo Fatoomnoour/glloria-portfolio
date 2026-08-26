@@ -55,9 +55,41 @@ export const testimonials = mysqlTable("testimonials", {
   verificationIdx: index("testimonials_verification_idx").on(table.verificationStatus),
 }));
 
+export const consultationRequests = mysqlTable("consultation_requests", {
+  id: int("id").autoincrement().primaryKey(),
+  ownerId: int("ownerId"),
+  fullName: varchar("fullName", { length: 160 }).notNull(),
+  phone: varchar("phone", { length: 40 }).notNull(),
+  email: varchar("email", { length: 320 }),
+  city: varchar("city", { length: 160 }).notNull(),
+  propertyType: varchar("propertyType", { length: 160 }).notNull(),
+  area: varchar("area", { length: 80 }).notNull(),
+  service: varchar("service", { length: 180 }).notNull(),
+  budget: varchar("budget", { length: 160 }).notNull(),
+  preferredDate: varchar("preferredDate", { length: 10 }).notNull(),
+  preferredTime: varchar("preferredTime", { length: 10 }).notNull(),
+  description: text("description").notNull(),
+  privacyConsent: boolean("privacyConsent").default(false).notNull(),
+  honeypot: varchar("honeypot", { length: 120 }),
+  status: mysqlEnum("status", ["new", "reviewing", "contacted", "confirmed", "completed", "cancelled"]).default("new").notNull(),
+  adminNotes: text("adminNotes"),
+  lastEditedBy: int("lastEditedBy"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  ownerFk: foreignKey({ columns: [table.ownerId], foreignColumns: [users.id] }),
+  editorFk: foreignKey({ columns: [table.lastEditedBy], foreignColumns: [users.id] }),
+  statusIdx: index("consultation_requests_status_idx").on(table.status),
+  createdAtIdx: index("consultation_requests_created_at_idx").on(table.createdAt),
+  cityIdx: index("consultation_requests_city_idx").on(table.city),
+  serviceIdx: index("consultation_requests_service_idx").on(table.service),
+}));
+
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 export type Project = typeof projects.$inferSelect;
 export type InsertProject = typeof projects.$inferInsert;
 export type Testimonial = typeof testimonials.$inferSelect;
 export type InsertTestimonial = typeof testimonials.$inferInsert;
+export type ConsultationRequest = typeof consultationRequests.$inferSelect;
+export type InsertConsultationRequest = typeof consultationRequests.$inferInsert;

@@ -1,11 +1,13 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, count, desc, eq, like } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
+  InsertConsultationRequest,
   InsertProject,
   InsertTestimonial,
+  InsertUser,
+  consultationRequests,
   projects,
   testimonials,
-  InsertUser,
   users,
 } from "../drizzle/schema";
 import { ENV } from "./_core/env";
@@ -129,4 +131,65 @@ export async function deleteTestimonial(id: number) {
   if (!db) throw new Error("Database unavailable");
   await db.delete(testimonials).where(eq(testimonials.id, id));
   return { success: true as const };
+}
+
+export type ConsultationFilters = {
+  search?: string;
+  city?: string;
+  service?: string;
+  status?: "new" | "reviewing" | "contacted" | "confirmed" | "completed" | "cancelled";
+  date?: string;
+};
+
+function consultationWhere(filters: ConsultationFilters = {}) {
+  const conditions = [];
+  if (filters.search) {
+    const value = `%${filters.search}%`;
+    conditions.push(like(consultationRequests.fullName, value));
+  }
+  if (filters.city) conditions.push(like(consultationRequests.city, `%${filters.city}%`));
+  if (filters.service) conditions.push(eq(consultationRequests.service, filters.service));
+  if (filters.status) conditions.push(eq(consultationRequests.status, filters.status));
+  if (filters.date) conditions.push(eq(consultationRequests.preferredDate, filters.date));
+  return conditions.length ? and(...conditions) : undefined;
+}
+
+export async function createConsultationRequest(request: InsertConsultationRequest) {
+  const db = await getDb();
+  if (!db) throw new Error("Database unavailable");
+  const result = await db.insert(consultationRequests).values(request);
+  const id = Number(result[0].insertId);
+  return getConsultationRequest(id);
+}
+
+export async function listConsultationRequests(filters: ConsultationFilters = {}) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(consultationRequests).where(consultationWhere(filters)).orderBy(desc(consultationRequests.createdAt));
+}
+
+export async function getConsultationRequest(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select({ request: consultationRequests, lastEditorName: users.name, lastEditorEmail: users.email }).from(consultationRequests).leftJoin(users, eq(consultationRequests.lastEditedBy, users.id)).where(eq(consultationRequests.id, id)).limit(1);
+  if (!result[0]) return undefined;
+  return { ...result[0].request, lastEditorName: result[0].lastEditorName, lastEditorEmail: result[0].lastEditorEmail };
+}
+
+export async function updateConsultationRequest(id: number, data: Partial<InsertConsultationRequest>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database unavailable");
+  await db.update(consultationRequests).set(data).where(eq(consultationRequests.id, id));
+  return getConsultationRequest(id);
+}
+
+export async function getConsultationStats() {
+  const db = await getDb();
+  const empty = { total: 0, new: 0, reviewing: 0, contacted: 0, confirmed: 0, completed: 0, cancelled: 0 } as const;
+  if (!db) return empty;
+  const rows = await db.select({ status: consultationRequests.status, count: count() }).from(consultationRequests).groupBy(consultationRequests.status);
+  const stats = { ...empty } as Record<string, number>;
+  for (const row of rows) stats[row.status] = Number(row.count);
+  stats.total = rows.reduce((total, row) => total + Number(row.count), 0);
+  return stats;
 }
