@@ -696,3 +696,8 @@ img { display: block; max-width: 100%; }
 .archive-results.is-filtering { position: relative; opacity: 1; }
 .archive-loading-overlay { position: absolute; z-index: 2; inset: 0; min-height: 100%; background: rgba(245,241,234,.72); backdrop-filter: blur(2px); }
 @media (max-width: 600px) { .archive-loading-overlay { min-height: 180px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .archive-loading-overlay { backdrop-filter: none; }
+}
