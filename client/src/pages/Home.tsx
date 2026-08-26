@@ -2,122 +2,17 @@
 import { ArrowDownLeft, ArrowUpLeft, Check, MoveUpLeft } from "lucide-react";
 import { Link } from "wouter";
 import TestimonialsSection from "../components/TestimonialsSection";
+import { useLocale } from "../contexts/LocaleContext";
 
 const heroImage = "/manus-storage/glloria-hero_b9a954a0.jpg";
 const hebaPortrait = "/manus-storage/heba-portrait_08a10116.png";
-const projectImages = {
-  dining: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=85",
-  cafe: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85",
-  bedroom: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1400&q=85",
-};
-
-const services = [
-  { number: "01", title: "تصميم داخلي", english: "INTERIOR DESIGN", text: "من الفكرة الأولى إلى لوحة الألوان وتفاصيل المكان؛ نصمم فراغاً متكاملاً يشبه إيقاع حياتك." },
-  { number: "02", title: "تصوّر ثلاثي الأبعاد", english: "3D VISUALIZATION", text: "نحوّل التصور إلى صورة يمكن رؤيتها والإحساس بها قبل أن تبدأ أي خطوة في الموقع." },
-  { number: "03", title: "تنفيذ وإشراف", english: "EXECUTION", text: "اختيار الخامات، متابعة التفاصيل، والتنسيق مع فريق التنفيذ حتى تصل الفكرة إلى مكانها الصحيح." },
-];
-
-const steps = [
-  ["01", "نستمع", "مكالمة قصيرة نفهم فيها المكان، احتياجاته، وما تريدين أن تشعري به داخله."],
-  ["02", "نكتشف", "زيارة وقياسات وقراءة للضوء والحركة والخامات التي سيبنى عليها التصميم."],
-  ["03", "نصمم", "كونسبت واضح، moodboard، وتفاصيل بصرية تجعل القرار أسهل وأكثر اطمئناناً."],
-  ["04", "نُنجز", "تنسيق وتنفيذ ومتابعة دقيقة حتى يصبح التصميم جزءاً طبيعياً من يومك."],
-];
+const projectImages = { dining: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=75", cafe: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=75", bedroom: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1400&q=75" };
+const services = [{ number: "01", title: "تصميم داخلي", enTitle: "Interior design", english: "INTERIOR DESIGN", ar: "من الفكرة الأولى إلى لوحة الألوان وتفاصيل المكان؛ نصمم فراغاً متكاملاً يشبه إيقاع حياتك.", en: "From the first idea to palettes and details, we shape a complete space around your rhythm." }, { number: "02", title: "تصوّر ثلاثي الأبعاد", enTitle: "3D visualisation", english: "3D VISUALIZATION", ar: "نحوّل التصور إلى صورة يمكن رؤيتها والإحساس بها قبل أن تبدأ أي خطوة في الموقع.", en: "See the materials, light, and atmosphere before the first site step begins." }, { number: "03", title: "تنفيذ وإشراف", enTitle: "Execution & supervision", english: "EXECUTION", ar: "اختيار الخامات، متابعة التفاصيل، والتنسيق مع فريق التنفيذ حتى تصل الفكرة إلى مكانها الصحيح.", en: "Material selection, site coordination, and careful supervision from idea to delivery." }];
+const steps = [{ number: "01", ar: ["نستمع", "مكالمة قصيرة نفهم فيها المكان، احتياجاته، وما تريدين أن تشعري به داخله."], en: ["Listen", "A short call to understand your space, needs, and how you want it to feel."] }, { number: "02", ar: ["نكتشف", "زيارة وقياسات وقراءة للضوء والحركة والخامات التي سيبنى عليها التصميم."], en: ["Discover", "We read the light, movement, and materials that will shape the design."] }, { number: "03", ar: ["نصمم", "كونسبت واضح، moodboard، وتفاصيل بصرية تجعل القرار أسهل وأكثر اطمئناناً."], en: ["Design", "A clear concept, moodboard, and visual details that make decisions easier."] }, { number: "04", ar: ["نُنجز", "تنسيق وتنفيذ ومتابعة دقيقة حتى يصبح التصميم جزءاً طبيعياً من يومك."], en: ["Deliver", "Thoughtful coordination until the design becomes a natural part of your day."] }];
+const faqs = [{ ar: ["كم سعر الاستشارة؟", "يتم تأكيد سعر الاستشارة حسب نوعها ومدتها بعد مراجعة تفاصيل المشروع، وتظهر التكلفة بوضوح قبل اعتماد الموعد."], en: ["What is the consultation fee?", "The consultation fee depends on the format and duration. We confirm it clearly after reviewing your project details."] }, { ar: ["كم تستغرق الاستشارة؟", "الاستشارة الأساسية مدتها 45 دقيقة، ويمكن الاتفاق على جلسات أطول عند الحاجة."], en: ["How long is a consultation?", "The standard consultation is 45 minutes. Longer sessions can be arranged when needed."] }, { ar: ["ما المدن والمناطق التي تخدمونها؟", "نستقبل مشاريع من قنا والصعيد والقاهرة، ونحدد الزيارات حسب نطاق المشروع، مع توفير استشارات أونلاين."], en: ["Which areas do you serve?", "We work across Qena, Upper Egypt, and Cairo, with site visits planned by project scope and online consultations available."] }, { ar: ["هل يمكن العمل عن بُعد؟", "نعم. نوفر باقات تصميم واستشارات أونلاين تشمل الرندرات والمخططات وتوصيات الخامات."], en: ["Can you work remotely?", "Yes. Online packages can include consultations, renders, drawings, and material guidance."] }, { ar: ["ما مدة التصميم والتنفيذ؟", "عادة تستغرق مرحلة التصميم من أسبوعين إلى أربعة أسابيع، بينما يختلف التنفيذ حسب المساحة ونطاق الأعمال."], en: ["How long do design and execution take?", "Design typically takes two to four weeks; execution varies by area, scope, and site conditions."] }, { ar: ["ما الفرق بين التصميم والإشراف والتنفيذ؟", "التصميم يحدد الفكرة والرسومات، والإشراف يراجع جودة التنفيذ، أما التنفيذ فيشمل إدارة الأعمال والخامات حتى التسليم."], en: ["What is the difference between design, supervision, and execution?", "Design defines the concept and drawings; supervision reviews quality; execution manages work and materials through delivery."] }];
 
 export default function Home() {
-  return (
-    <div className="home-page">
-      <section className="hero section-pad">
-        <div className="hero-index editorial-index"><span>01</span><span>THE BEGINNING</span></div>
-        <div className="hero-copy">
-          <p className="eyebrow">Glloria / Interior Design Studio</p>
-          <h1>مساحات<br /><em>تُشبه أصحابها.</em></h1>
-          <p className="hero-intro">نصمم بيوتاً وأماكن عمل تحمل حكاية أصحابها؛ بهدوء، بدقة، وبعين ترى التفاصيل الصغيرة.</p>
-          <a className="text-link" href="#projects">اكتشفي الأعمال <ArrowDownLeft size={17} strokeWidth={1.4} /></a>
-        </div>
-        <div className="hero-visual-wrap">
-          <div className="hero-visual-frame"><img src={heroImage} alt="مساحة معيشة بتصميم Glloria" /></div>
-          <div className="hero-caption"><span>01 / 04</span><span>Private Residence · Qena</span></div>
-        </div>
-        <div className="hero-side-note">DESIGNED FOR LIVING<br />NOT JUST LOOKING</div>
-      </section>
-
-      <section className="manifesto section-pad" id="about">
-        <div className="section-marker"><span>02</span><span>THE STUDIO</span></div>
-        <div className="manifesto-copy">
-          <p className="eyebrow">عن Glloria</p>
-          <h2>البيت ليس خلفية.<br /><em>إنه جزء من الحكاية.</em></h2>
-          <p>في Glloria، نبدأ من الإنسان قبل المساحة. من عاداته، ذوقه، الضوء الذي يحبه، والأشياء التي يريد أن تبقى حوله. ثم نترجم كل ذلك إلى تصميم متوازن؛ جميل في الصورة، ومريح في الحياة اليومية.</p>
-          <Link className="text-link" href="/projects">شاهدي طريقة تفكيرنا <MoveUpLeft size={17} strokeWidth={1.4} /></Link>
-        </div>
-        <div className="manifesto-aside founder-card">
-          <div className="founder-portrait"><img src={hebaPortrait} alt="المهندسة هبة الدمراني — مؤسسة Glloria" /></div>
-          <p className="founder-caption">Heba El Damarany<br /><span>FOUNDER / GLLORIA STUDIO</span></p>
-          <div className="studio-seal"><img src="/manus-storage/glloria-logo_c03b6188.png" alt="شعار Glloria" /></div>
-        </div>
-      </section>
-
-      <section className="projects-preview section-pad" id="projects">
-        <div className="section-heading">
-          <div className="section-marker"><span>03</span><span>SELECTED WORK</span></div>
-          <div className="heading-side"><p>أعمال مختارة</p><Link className="text-link" href="/projects">كل المشاريع <ArrowUpLeft size={16} strokeWidth={1.4} /></Link></div>
-        </div>
-        <div className="project-feature-grid">
-          <Link href="/projects/private-residence" className="project-card project-card-large">
-            <div className="project-image"><img src={projectImages.dining} alt="منزل خاص — غرفة الطعام" /><span className="project-arrow"><ArrowUpLeft size={19} strokeWidth={1.4} /></span></div>
-            <div className="project-meta"><span>01 / PRIVATE RESIDENCE</span><span>قنا، مصر · 2024</span></div>
-            <h3>بيت بين الضوء<br /><em>والظل.</em></h3>
-          </Link>
-          <div className="project-stack">
-            <Link href="/projects/cafe-namaa" className="project-card">
-              <div className="project-image"><img src={projectImages.cafe} alt="مقهى نماء — تصميم داخلي" /><span className="project-arrow"><ArrowUpLeft size={17} strokeWidth={1.4} /></span></div>
-              <div className="project-meta"><span>02 / HOSPITALITY</span><span>قنا، مصر · 2023</span></div>
-              <h3>مقهى <em>نماء.</em></h3>
-            </Link>
-            <Link href="/projects/quiet-bedroom" className="project-card project-card-mini">
-              <div className="project-image"><img src={projectImages.bedroom} alt="غرفة نوم هادئة — تصميم Glloria" /><span className="project-arrow"><ArrowUpLeft size={17} strokeWidth={1.4} /></span></div>
-              <div className="project-meta"><span>03 / PRIVATE RESIDENCE</span><span>2024</span></div>
-              <h3>غرفة هادئة.</h3>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="services section-pad" id="services">
-        <div className="section-marker"><span>04</span><span>WHAT WE DO</span></div>
-        <div className="services-header"><p className="eyebrow">الخدمات</p><h2>من أول سؤال<br /><em>إلى آخر تفصيلة.</em></h2></div>
-        <div className="services-list">
-          {services.map((service) => (
-            <div className="service-row" key={service.number}>
-              <span className="service-number">{service.number}</span>
-              <h3>{service.title}<small>{service.english}</small></h3>
-              <p>{service.text}</p>
-              <ArrowUpLeft className="service-arrow" size={19} strokeWidth={1.25} />
-            </div>
-          ))}
-        </div>
-        <Link href="/contact" className="clay-button">اطلبي استشارتك <ArrowUpLeft size={17} strokeWidth={1.4} /></Link>
-      </section>
-
-      <section className="process section-pad">
-        <div className="section-marker"><span>05</span><span>THE PROCESS</span></div>
-        <div className="process-intro"><p className="eyebrow">طريقة العمل</p><h2>واضحة، إنسانية،<br /><em>ومصممة لكِ.</em></h2></div>
-        <div className="process-list">
-          {steps.map(([number, title, text]) => (
-            <div className="process-step" key={number}><span>{number}</span><div><h3>{title}</h3><p>{text}</p></div></div>
-          ))}
-        </div>
-      </section>
-
-      <TestimonialsSection />
-
-      <section className="closing-cta section-pad">
-        <div className="closing-ornament" aria-hidden="true"><span /><span /><span /></div>
-        <p className="eyebrow">المشروع القادم قد يكون هنا</p>
-        <h2>احكي لنا عن المكان<br /><em>الذي تتخيلينه.</em></h2>
-        <Link href="/booking" className="dark-button">احجزي استشارتك <ArrowUpLeft size={18} strokeWidth={1.4} /></Link>
-        <div className="closing-foot"><span>Glloria / Qena</span><span><Check size={14} /> نرد خلال 24 ساعة</span></div>
-      </section>
-    </div>
-  );
+  const { locale, t } = useLocale();
+  const isArabic = locale === "ar";
+  return <div className="home-page"><section className="hero section-pad"><div className="hero-index editorial-index"><span>01</span><span>THE BEGINNING</span></div><div className="hero-copy"><p className="eyebrow">Glloria / Interior Design Studio</p><h1>{isArabic ? <>مساحات<br /><em>تُشبه أصحابها.</em></> : <>Spaces<br /><em>that feel like you.</em></>}</h1><p className="hero-intro">{isArabic ? "نصمم بيوتاً وأماكن عمل تحمل حكاية أصحابها؛ بهدوء، بدقة، وبعين ترى التفاصيل الصغيرة." : "We shape homes and workspaces around the people who live in them — quietly, precisely, and with an eye for the small details."}</p><div className="hero-actions"><Link className="dark-button" href="/booking">{t("nav.primary")} <ArrowUpLeft size={17} /></Link><a className="text-link" href="#projects">{t("nav.secondary")} <ArrowDownLeft size={17} strokeWidth={1.4} /></a></div></div><div className="hero-visual-wrap"><div className="hero-visual-frame"><img src={heroImage} alt={isArabic ? "مساحة معيشة دافئة من تصميم Glloria" : "Warm living space designed by Glloria"} fetchPriority="high" /></div><div className="hero-caption"><span>01 / 04</span><span>Private Residence · Qena</span></div></div><div className="hero-side-note">DESIGNED FOR LIVING<br />NOT JUST LOOKING</div></section><section className="manifesto section-pad" id="about"><div className="section-marker"><span>02</span><span>THE STUDIO</span></div><div className="manifesto-copy"><p className="eyebrow">{isArabic ? "عن هبة / Glloria" : "ABOUT HEBA / GLLORIA"}</p><h2>{isArabic ? <>البيت ليس خلفية.<br /><em>إنه جزء من الحكاية.</em></> : <>A home is not a backdrop.<br /><em>It is part of the story.</em></>}</h2><p>{isArabic ? "المهندسة هبة الدمراني مؤسسة Glloria ومصممة داخلية ومعمارية تعمل على تحويل احتياجات كل عميل إلى حلول متوازنة بين الجمال والراحة والتنفيذ الواقعي. بخبرة في التصميم والرندر والإشراف، تبدأ هبة من الإنسان قبل المساحة." : "Heba El Damarany is Glloria's founder and an interior and architectural designer. Her work turns each client's needs into spaces that balance beauty, comfort, and buildable detail — always beginning with the person before the plan."}</p><div className="about-credentials"><span>{isArabic ? "تصميم داخلي ومعماري" : "Interior & architectural design"}</span><span>{isArabic ? "رندر ومخططات تنفيذية" : "3D renders & working drawings"}</span><span>{isArabic ? "سكني · تجاري · أونلاين" : "Residential · commercial · remote"}</span><span>{isArabic ? "المؤهلات والخبرة الرسمية تُضاف بعد اعتماد السيرة المهنية" : "Formal qualifications & experience to be added from the approved profile"}</span></div><Link className="text-link" href="/projects">{isArabic ? "شاهدي طريقة تفكيرنا" : "See our way of thinking"} <MoveUpLeft size={17} strokeWidth={1.4} /></Link></div><div className="manifesto-aside founder-card"><div className="founder-portrait"><img src={hebaPortrait} alt={isArabic ? "المهندسة هبة الدمراني، مؤسسة Glloria" : "Heba El Damarany, founder of Glloria"} loading="lazy" /></div><p className="founder-caption">Heba El Damarany<br /><span>FOUNDER / GLLORIA STUDIO</span></p><div className="studio-seal"><img src="/manus-storage/glloria-logo_c03b6188.png" alt="Glloria logo" loading="lazy" /></div></div></section><section className="projects-preview section-pad" id="projects"><div className="section-heading"><div className="section-marker"><span>03</span><span>SELECTED WORK</span></div><div className="heading-side"><p>{isArabic ? "أعمال مختارة" : "Selected work"}</p><Link className="text-link" href="/projects">{t("nav.secondary")} <ArrowUpLeft size={16} strokeWidth={1.4} /></Link></div></div><div className="project-feature-grid"><Link href="/projects/private-residence" className="project-card project-card-large"><div className="project-image"><img src={projectImages.dining} alt={isArabic ? "منزل خاص — غرفة الطعام" : "Private residence — dining room"} loading="lazy" /><span className="project-arrow"><ArrowUpLeft size={19} strokeWidth={1.4} /></span></div><div className="project-meta"><span>01 / PRIVATE RESIDENCE</span><span>قنا، مصر · 2024</span></div><h3>{isArabic ? <>بيت بين الضوء<br /><em>والظل.</em></> : <>A house between light<br /><em>and shadow.</em></>}</h3></Link><div className="project-stack"><Link href="/projects/cafe-namaa" className="project-card"><div className="project-image"><img src={projectImages.cafe} alt={isArabic ? "مقهى نماء — تصميم داخلي" : "Namaa café — interior design"} loading="lazy" /><span className="project-arrow"><ArrowUpLeft size={17} strokeWidth={1.4} /></span></div><div className="project-meta"><span>02 / HOSPITALITY</span><span>قنا، مصر · 2023</span></div><h3>{isArabic ? <>مقهى <em>نماء.</em></> : <>Namaa <em>café.</em></>}</h3></Link><Link href="/projects/quiet-bedroom" className="project-card project-card-mini"><div className="project-image"><img src={projectImages.bedroom} alt={isArabic ? "غرفة نوم هادئة — تصميم Glloria" : "Quiet bedroom — Glloria design"} loading="lazy" /><span className="project-arrow"><ArrowUpLeft size={17} strokeWidth={1.4} /></span></div><div className="project-meta"><span>03 / PRIVATE RESIDENCE</span><span>2024</span></div><h3>{isArabic ? "غرفة هادئة." : "A quiet room."}</h3></Link></div></div></section><section className="services section-pad" id="services"><div className="section-marker"><span>04</span><span>WHAT WE DO</span></div><div className="services-header"><p className="eyebrow">{isArabic ? "الخدمات" : "Services"}</p><h2>{isArabic ? <>من أول سؤال<br /><em>إلى آخر تفصيلة.</em></> : <>From first question<br /><em>to final detail.</em></>}</h2></div><div className="services-list">{services.map((service) => <div className="service-row" key={service.number}><span className="service-number">{service.number}</span><h3>{isArabic ? service.title : service.enTitle}<small>{service.english}</small></h3><p>{isArabic ? service.ar : service.en}</p><ArrowUpLeft className="service-arrow" size={19} strokeWidth={1.25} /></div>)}</div><Link href="/booking" className="clay-button">{t("nav.primary")} <ArrowUpLeft size={17} strokeWidth={1.4} /></Link></section><section className="process section-pad"><div className="section-marker"><span>05</span><span>THE PROCESS</span></div><div className="process-intro"><p className="eyebrow">{isArabic ? "طريقة العمل" : "The process"}</p><h2>{isArabic ? <>واضحة، إنسانية،<br /><em>ومصممة لكِ.</em></> : <>Clear, human,<br /><em>and made for you.</em></>}</h2></div><div className="process-list">{steps.map((step) => { const content = isArabic ? step.ar : step.en; return <div className="process-step" key={step.number}><span>{step.number}</span><div><h3>{content[0]}</h3><p>{content[1]}</p></div></div>; })}</div></section><section className="faq-section section-pad" id="faq"><div className="section-marker"><span>06</span><span>FAQ / BEFORE WE BEGIN</span></div><div className="faq-heading"><p className="eyebrow">{t("faq.title")}</p><h2>{isArabic ? <>إجابات واضحة<br /><em>قبل أول خطوة.</em></> : <>Clear answers<br /><em>before the first step.</em></>}</h2></div><div className="faq-list">{faqs.map((faq, index) => { const content = isArabic ? faq.ar : faq.en; return <details className="faq-item" key={index}><summary><span>0{index + 1}</span><strong>{content[0]}</strong><ArrowDownLeft size={16} /></summary><p>{content[1]}</p></details>; })}</div></section><TestimonialsSection /><section className="closing-cta section-pad"><div className="closing-ornament" aria-hidden="true"><span /><span /><span /></div><p className="eyebrow">{isArabic ? "المشروع القادم قد يكون هنا" : "The next project could be here"}</p><h2>{isArabic ? <>احكي لنا عن المكان<br /><em>الذي تتخيلينه.</em></> : <>Tell us about the place<br /><em>you imagine.</em></>}</h2><Link href="/booking" className="dark-button">{t("nav.primary")} <ArrowUpLeft size={18} strokeWidth={1.4} /></Link><div className="closing-foot"><span>Glloria / Qena</span><span><Check size={14} /> {isArabic ? "نرد خلال 24 ساعة" : "We reply within 24 hours"}</span></div></section></div>;
 }
