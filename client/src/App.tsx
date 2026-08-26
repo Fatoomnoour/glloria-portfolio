@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
 import Contact from "./pages/Contact";
+import Booking from "./pages/Booking";
 import NotFound from "./pages/NotFound";
 
 const navItems = [
@@ -13,6 +14,8 @@ const navItems = [
   { label: "الأعمال", href: "/projects" },
   { label: "عن هبة", href: "/#about" },
   { label: "الخدمات", href: "/#services" },
+  { label: "الحجز", href: "/booking" },
+  { label: "آراء العملاء", href: "/#testimonials" },
 ];
 
 function SiteHeader() {
@@ -26,7 +29,7 @@ function SiteHeader() {
           {open ? <X size={22} strokeWidth={1.5} /> : <Menu size={22} strokeWidth={1.5} />}
         </button>
         <Link href="/" className="brand-lockup" onClick={() => setOpen(false)} aria-label="Glloria الرئيسية">
-          <span className="brand-mark" aria-hidden="true"><img src="/manus-storage/glloria-mark_babb58a8.png" alt="" /></span>
+          <span className="brand-mark" aria-hidden="true"><img src="/manus-storage/glloria-logo_c03b6188.png" alt="" /></span>
           <span className="brand-name">Glloria</span>
           <span className="brand-sub">INTERIORS / STUDIO</span>
         </Link>
@@ -41,7 +44,7 @@ function SiteHeader() {
               {item.label}
             </a>
           ))}
-          <Link href="/contact" className="nav-cta" onClick={() => setOpen(false)}>
+          <Link href="/booking" className="nav-cta" onClick={() => setOpen(false)}>
             ابدئي الحكاية <ArrowUpLeft size={15} strokeWidth={1.5} />
           </Link>
         </nav>
@@ -100,6 +103,7 @@ export default function App() {
         <Route path="/projects" component={Projects} />
         <Route path="/projects/:slug" component={ProjectDetail} />
         <Route path="/contact" component={Contact} />
+        <Route path="/booking" component={Booking} />
         <Route component={NotFound} />
       </Switch>
     </Shell>

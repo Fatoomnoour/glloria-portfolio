@@ -2,6 +2,7 @@
 import { ArrowDownLeft, ArrowUpLeft, Check, ChevronLeft } from "lucide-react";
 import { Link, useRoute } from "wouter";
 import { projects } from "./Projects";
+import ShareActions from "../components/ShareActions";
 
 const details: Record<string, { statement: string; description: string; services: string[]; palette: string[]; image: string; }> = {
   "private-residence": { statement: "بيتٌ يترك للضوء مكاناً كي يتنفس.", description: "كان المطلوب بيتاً عائلياً لا يبدو ثقيلاً رغم كثرة الاستخدام. بدأنا من غرفة الطعام كقلب للمشهد، ثم بنينا حولها مساحات دافئة بخامات طبيعية وحركة سهلة بين مناطق اليوم.", services: ["Interior Design", "Space Planning", "Material Selection", "Site Supervision"], palette: ["Warm ivory", "Walnut", "Fired clay"], image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=85" },
@@ -18,7 +19,7 @@ export default function ProjectDetail() {
     <div className="detail-page page-transition">
       <div className="detail-back section-pad"><Link href="/projects"><ChevronLeft size={16} /> العودة إلى الأعمال</Link><span>GLL / {project.number}</span></div>
       <section className="detail-hero section-pad">
-        <div className="detail-hero-copy"><p className="eyebrow">{project.type} / {project.location} / {project.year}</p><h1>{project.title}<br /><em>{detail.statement}</em></h1><p className="detail-intro">{detail.description}</p><a className="text-link" href="#story">اقرئي قصة المشروع <ArrowDownLeft size={17} strokeWidth={1.4} /></a></div>
+        <div className="detail-hero-copy"><p className="eyebrow">{project.type} / {project.location} / {project.year}</p><h1>{project.title}<br /><em>{detail.statement}</em></h1><p className="detail-intro">{detail.description}</p><a className="text-link" href="#story">اقرئي قصة المشروع <ArrowDownLeft size={17} strokeWidth={1.4} /></a><ShareActions title={project.title} /></div>
         <figure className="detail-hero-image"><img src={detail.image} alt={project.title} /><figcaption><span>{project.number} / {project.type}</span><span>Glloria Studio Archive</span></figcaption></figure>
       </section>
       <section className="detail-story section-pad" id="story">

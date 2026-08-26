@@ -1,8 +1,10 @@
 /* Glloria Design Direction: Warm Editorial Atelier — an asymmetric lookbook landing page where material, image, and quiet copy lead. */
 import { ArrowDownLeft, ArrowUpLeft, Check, MoveUpLeft } from "lucide-react";
 import { Link } from "wouter";
+import TestimonialsSection from "../components/TestimonialsSection";
 
 const heroImage = "/manus-storage/glloria-hero_b9a954a0.jpg";
+const hebaPortrait = "/manus-storage/heba-portrait_08a10116.png";
 const projectImages = {
   dining: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=85",
   cafe: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85",
@@ -48,9 +50,10 @@ export default function Home() {
           <p>في Glloria، نبدأ من الإنسان قبل المساحة. من عاداته، ذوقه، الضوء الذي يحبه، والأشياء التي يريد أن تبقى حوله. ثم نترجم كل ذلك إلى تصميم متوازن؛ جميل في الصورة، ومريح في الحياة اليومية.</p>
           <Link className="text-link" href="/projects">شاهدي طريقة تفكيرنا <MoveUpLeft size={17} strokeWidth={1.4} /></Link>
         </div>
-        <div className="manifesto-aside">
-          <div className="monogram-large" aria-hidden="true"><span /><i /></div>
-          <p>GLLORIA<br /><span>INTERIORS / STUDIO</span></p>
+        <div className="manifesto-aside founder-card">
+          <div className="founder-portrait"><img src={hebaPortrait} alt="المهندسة هبة الدمراني — مؤسسة Glloria" /></div>
+          <p className="founder-caption">Heba El Damarany<br /><span>FOUNDER / GLLORIA STUDIO</span></p>
+          <div className="studio-seal"><img src="/manus-storage/glloria-logo_c03b6188.png" alt="شعار Glloria" /></div>
         </div>
       </section>
 
@@ -106,11 +109,13 @@ export default function Home() {
         </div>
       </section>
 
+      <TestimonialsSection />
+
       <section className="closing-cta section-pad">
         <div className="closing-ornament" aria-hidden="true"><span /><span /><span /></div>
         <p className="eyebrow">المشروع القادم قد يكون هنا</p>
         <h2>احكي لنا عن المكان<br /><em>الذي تتخيلينه.</em></h2>
-        <Link href="/contact" className="dark-button">ابدئي محادثة <ArrowUpLeft size={18} strokeWidth={1.4} /></Link>
+        <Link href="/booking" className="dark-button">احجزي استشارتك <ArrowUpLeft size={18} strokeWidth={1.4} /></Link>
         <div className="closing-foot"><span>Glloria / Qena</span><span><Check size={14} /> نرد خلال 24 ساعة</span></div>
       </section>
     </div>

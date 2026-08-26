@@ -424,3 +424,109 @@ img { display: block; max-width: 100%; }
   .footer-end { font-size: 8px; }
   .whatsapp-float { right: 15px; bottom: 15px; }
 }
+
+
+/* v2 feature surfaces — verified voices, consultation booking, and quiet project sharing. */
+.founder-card { width: 210px; justify-self: end; }
+.founder-portrait { position: relative; overflow: hidden; width: 165px; height: 215px; margin: 0 auto 14px; background: var(--secondary); }
+.founder-portrait::after { position: absolute; inset: 9px; border: 1px solid rgba(255,255,255,.7); content: ""; pointer-events: none; }
+.founder-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: saturate(.84) contrast(.96); }
+.founder-caption { margin: 0 !important; color: var(--ink); font: 500 16px/1.25 var(--serif) !important; letter-spacing: 0 !important; }
+.founder-caption span { color: var(--clay) !important; font: 7px var(--mono) !important; letter-spacing: .1em !important; }
+.studio-seal { display: flex; align-items: center; justify-content: center; width: 78px; height: 78px; margin: 18px auto 0; border: 1px solid var(--line); background: var(--paper-light); }
+.studio-seal img { width: 64px; height: 64px; object-fit: contain; }
+
+.testimonials { padding-top: 115px; padding-bottom: 125px; border-top: 1px solid var(--line); }
+.testimonials-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 9vw; margin-top: 55px; padding-inline-start: 14%; }
+.testimonial-heading h2 { margin: 22px 0 24px; color: var(--ink); font-size: clamp(42px, 5vw, 72px); font-weight: 600; line-height: 1.02; letter-spacing: -.045em; }
+.testimonial-heading h2 em { color: var(--clay); font-family: var(--serif); font-style: italic; font-weight: 500; }
+.testimonial-heading > p:not(.eyebrow) { max-width: 360px; margin: 0 0 28px; color: var(--muted-foreground); font-size: 12px; line-height: 2.3; }
+.testimonial-empty { position: relative; min-height: 310px; padding: 39px 42px; border: 1px solid var(--line); background: var(--secondary); }
+.quote-mark { display: grid; place-items: center; width: 40px; height: 40px; margin-bottom: 22px; border: 1px solid var(--clay); color: var(--clay); }
+.empty-stars { display: flex; gap: 5px; margin-bottom: 20px; color: var(--clay); opacity: .62; }
+.testimonial-empty h3 { margin: 0 0 16px; color: var(--ink); font: 500 32px/1.08 var(--serif); }
+.testimonial-empty h3 em { color: var(--clay); }
+.testimonial-empty p { max-width: 330px; margin: 0; color: var(--muted-foreground); font-size: 10px; line-height: 2; }
+.verified-note { position: absolute; right: 42px; bottom: 29px; left: 42px; padding-top: 11px; border-top: 1px solid var(--line); color: var(--clay); direction: ltr; font: 8px var(--mono); letter-spacing: .1em; }
+
+.contact-booking-link { display: flex; align-items: flex-start; gap: 13px; width: fit-content; margin: 0 0 34px; padding: 14px 15px; border-block: 1px solid var(--line); color: var(--clay); }
+.contact-booking-link > svg { margin-top: 3px; }
+.contact-booking-link div { display: flex; flex-direction: column; gap: 6px; }
+.contact-booking-link span { color: var(--muted-foreground); font: 9px var(--mono); }
+.contact-booking-link a { display: inline-flex; align-items: center; gap: 9px; color: var(--ink); font-size: 11px; transition: gap .2s var(--ease-out), color .2s; }
+.contact-booking-link a:hover { gap: 14px; color: var(--clay); }
+
+.booking-page { padding-top: 165px; padding-bottom: 130px; }
+.booking-back { display: inline-flex; align-items: center; gap: 7px; color: var(--muted-foreground); font-size: 10px; transition: color .2s; }
+.booking-back:hover { color: var(--clay); }
+.booking-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 10vw; padding-top: 78px; }
+.booking-copy { padding-inline-start: 14%; }
+.booking-copy h1 { margin: 38px 0 24px; color: var(--ink); font-size: clamp(57px, 6vw, 94px); font-weight: 600; line-height: .98; letter-spacing: -.045em; }
+.booking-copy h1 em { color: var(--clay); font-family: var(--serif); font-style: italic; font-weight: 500; }
+.booking-copy > p:not(.eyebrow) { max-width: 380px; margin: 0 0 40px; color: var(--muted-foreground); font-size: 12px; line-height: 2.3; }
+.booking-notes { display: flex; flex-direction: column; gap: 13px; color: var(--muted-foreground); font: 10px var(--mono); }
+.booking-notes span { display: flex; align-items: center; gap: 9px; }
+.booking-notes svg { color: var(--clay); }
+.booking-panel { min-height: 600px; padding: 38px 42px; background: var(--secondary); }
+.booking-panel form { display: flex; flex-direction: column; gap: 18px; }
+.booking-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.booking-success { min-height: 520px; }
+.booking-reset { margin-top: 20px; border: 0; background: transparent; }
+
+.share-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--line); direction: ltr; }
+.share-label { display: inline-flex; align-items: center; gap: 7px; width: 100%; color: var(--clay); direction: rtl; font: 9px var(--mono); letter-spacing: .08em; }
+.share-actions button, .share-actions a { display: inline-flex; align-items: center; gap: 6px; padding: 4px 0; border: 0; background: transparent; color: var(--muted-foreground); font: 9px var(--mono); transition: color .2s; }
+.share-actions button:hover, .share-actions a:hover { color: var(--clay); }
+.whatsapp-glyph { display: inline-grid; place-items: center; width: 15px; height: 15px; border: 1px solid currentColor; border-radius: 50%; font: 8px var(--mono); }
+
+@media (max-width: 900px) {
+  .testimonials-layout { padding-inline-start: 0; gap: 45px; }
+  .founder-card { justify-self: center; }
+  .booking-layout { gap: 50px; }
+  .booking-copy { padding-inline-start: 0; }
+}
+
+@media (max-width: 600px) {
+  .founder-card { display: none; }
+  .testimonials { padding-top: 75px; padding-bottom: 85px; }
+  .testimonials-layout { display: block; margin-top: 40px; }
+  .testimonial-heading h2 { font-size: 47px; }
+  .testimonial-empty { min-height: 315px; margin-top: 38px; padding: 28px 23px; }
+  .verified-note { right: 23px; bottom: 22px; left: 23px; font-size: 7px; }
+  .booking-page { padding-top: 125px; }
+  .booking-layout { display: block; padding-top: 50px; }
+  .booking-copy h1 { margin-top: 28px; font-size: 57px; }
+  .booking-panel { min-height: 0; margin-top: 55px; padding: 25px 21px; }
+  .booking-fields { gap: 12px; }
+  .share-actions { gap: 8px 11px; }
+  .share-actions span:not(.share-label):not(.whatsapp-glyph) { display: none; }
+  .share-actions button, .share-actions a { padding: 5px; }
+}
+
+.rating-placeholder { display: inline-block; width: fit-content; margin-bottom: 20px; padding: 5px 8px; border: 1px solid rgba(182,94,69,.42); color: var(--clay); font: 8px var(--mono); letter-spacing: .04em; }
+
+
+/* v2 visual refinement — stronger studio signature, tactile surfaces, and warmer proof imagery. */
+.brand-mark { width: 32px; height: 32px; border: 0; background: var(--paper-light); }
+.brand-lockup { width: 205px; }
+.archive-image img, .project-image img, .detail-hero-image img { filter: saturate(.86) sepia(.055) contrast(.98); }
+.archive-card:hover .archive-image img, .project-card:hover .project-image img { filter: saturate(.96) sepia(.025) contrast(1); }
+.services, .testimonial-empty, .inquiry-panel, .booking-panel { background-image: linear-gradient(rgba(255,255,255,.12), rgba(255,255,255,.12)), radial-gradient(rgba(39,37,34,.075) .55px, transparent .55px); background-size: auto, 9px 9px; }
+.testimonials { background: linear-gradient(90deg, rgba(233,225,213,.26), transparent 42%); }
+.inquiry-panel, .booking-panel { position: relative; }
+.inquiry-panel::before, .booking-panel::before { position: absolute; top: 20px; left: 20px; width: 9px; height: 9px; border: 1px solid var(--clay); content: ""; }
+.inquiry-panel::after, .booking-panel::after { position: absolute; top: 24px; left: 34px; width: 27px; height: 1px; background: var(--clay); content: ""; }
+.form-submit { background: var(--clay) !important; border-color: var(--clay) !important; }
+.form-submit:hover { background: var(--ink) !important; border-color: var(--ink) !important; }
+.closing-ornament { position: relative; }
+.closing-ornament::after { position: absolute; top: 29px; width: 96px; height: 1px; background: rgba(255,250,243,.45); content: ""; }
+.studio-seal { box-shadow: 7px 7px 0 rgba(182,94,69,.12); }
+.share-actions { position: relative; }
+.share-actions::before { position: absolute; top: -1px; left: 0; width: 30px; height: 1px; background: var(--clay); content: ""; }
+
+@media (max-width: 600px) {
+  .brand-mark { width: 30px; height: 30px; }
+  .brand-lockup { width: 172px; }
+  .inquiry-panel::before, .booking-panel::before { top: 14px; left: 14px; }
+  .inquiry-panel::after, .booking-panel::after { top: 18px; left: 28px; }
+}
