@@ -8,6 +8,7 @@ import ProjectDetail from "./pages/ProjectDetail";
 import Contact from "./pages/Contact";
 import Booking from "./pages/Booking";
 import NotFound from "./pages/NotFound";
+import Admin from "./pages/Admin";
 
 const navItems = [
   { label: "الرئيسية", href: "/" },
@@ -17,11 +18,11 @@ const navItems = [
   { label: "الحجز", href: "/booking" },
   { label: "آراء العملاء", href: "/#testimonials" },
 ];
-
 function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [location] = useLocation();
 
+  // make sure to consider if you need authentication for certain routes
   return (
     <header className="site-header">
       <div className="header-inner">
@@ -65,7 +66,7 @@ function SiteFooter() {
         </div>
         <div className="footer-column">
           <span className="footer-label">تواصلي معنا</span>
-          <a href="https://wa.me/201000000000" target="_blank" rel="noreferrer">WhatsApp ↗</a>
+          <a href="https://wa.me/201097430973" target="_blank" rel="noreferrer">WhatsApp ↗</a>
           <a href="mailto:hello@glloria.studio">hello@glloria.studio</a>
         </div>
         <div className="footer-column">
@@ -88,7 +89,7 @@ function Shell({ children }: { children: React.ReactNode }) {
       <SiteHeader />
       <main>{children}</main>
       <SiteFooter />
-      <a className="whatsapp-float" href="https://wa.me/201000000000" target="_blank" rel="noreferrer" aria-label="تواصلي مع Glloria على واتساب">
+      <a className="whatsapp-float" href="https://wa.me/201097430973" target="_blank" rel="noreferrer" aria-label="تواصلي مع Glloria على واتساب">
         <span>واتساب</span><ArrowUpLeft size={17} strokeWidth={1.5} />
       </a>
     </div>
@@ -96,6 +97,9 @@ function Shell({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const [location] = useLocation();
+  if (location === "/admin") return <Admin />;
+
   return (
     <Shell>
       <Switch>
