@@ -125,8 +125,19 @@
 
 - [x] Expose the last editor name and last updated timestamp in booking details inside the admin UI.
 - [x] Capture and review mobile screenshots for /privacy and /terms after the contrast fix.
-- [ ] Save a fresh checkpoint after the v6 booking/admin/legal changes are fully verified.
+- [x] Save a fresh checkpoint after the v6 booking/admin/legal changes are fully verified. (Checkpoint 98b7e078.)
 
 # v6 deployment verification
 
-- [ ] Verify the published domain exits maintenance mode and serves the latest Glloria build after the new checkpoint.
+- [x] Verify the published domain exits maintenance mode and serves the latest Glloria build after the new checkpoint. (Public homepage serves the latest Glloria build; the visible Made with Manus badge is platform-injected outside app code.)
+
+# v6 published proof follow-up
+
+- [x] Verify /privacy, /terms, and /booking on the intended published domain after checkpoint 98b7e078.
+- [x] Check the alternate domain variant and document whether it is a stale or incorrect URL without changing DNS. (The intended domain is glloriaport-marmsbvo.manus.space; no DNS changes were made.)
+- [x] Save a final checkpoint only after published v6-specific routes are confirmed.
+
+# Final published verification checkpoint
+
+- [ ] Save a fresh checkpoint after the confirmed /privacy, /terms, and /booking production-route checks.
+- [ ] Optionally re-open the intended public domain after that checkpoint to confirm the verified routes remain live.
