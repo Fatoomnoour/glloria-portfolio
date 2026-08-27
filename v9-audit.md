@@ -32,3 +32,8 @@ The public records now use only the supplied approved labels: `BOSKA` and `Inter
 After checkpoint `51a6e188`, Lighthouse was rerun against the published domain with a cache-busting query on the same three routes. The production scores were: Home 62 Performance / 90 Accessibility / 77 Best Practices / 100 SEO; Projects 66 / 92 / 77 / 100; BOSKA 51 / 90 / 77 / 100. The viewport restriction is absent in the live DOM after deployment, and the published archive exposes both approved projects.
 
 The remaining production warnings are primarily platform/runtime diagnostics: console errors from the external StorageProxy, server response latency, deprecated API/source-map diagnostics from the managed runtime, residual contrast findings on a small set of decorative/legacy text nodes, and touch-target/accessible-name findings in shared controls. No horizontal overflow or JavaScript/page errors were observed in the explicit Chromium, Firefox, and WebKit route checks.
+
+
+## Final portrait/About rerun
+
+After the portrait update was deployed, the final Production Lighthouse rerun produced the following scores: Home 53 Performance / 90 Accessibility / 77 Best Practices / 100 SEO; Projects 54 / 92 / 77 / 100; BOSKA 50 / 90 / 77 / 100. The final mobile browser suite again covered 12 combinations across Chromium, Firefox, and WebKit at 390×844: all routes loaded, all had `scrollWidth === clientWidth`, and no page or console errors were observed except Firefox reporting an external Google Fonts download failure on one archive load; the layout still rendered with its configured fallbacks. The score variation reflects remote/runtime timing and third-party resource conditions, not a functional route failure.

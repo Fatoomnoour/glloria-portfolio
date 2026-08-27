@@ -220,5 +220,5 @@
 - [x] Validate the newly attached portrait and header image dimensions and readable text before using them. (Portrait 693×960; banner 1080×283; verified visible text documented in v9-attached-assets.md.)
 - [x] Upload an optimized portrait asset to permanent WebDev storage and replace the About portrait reference. (WebP asset `/manus-storage/heba-portrait-final_6972e2d6.webp`.)
 - [x] Apply only the profile wording explicitly readable in the attached material; do not infer qualifications beyond it. (Added the supplied home-story quote in Arabic/English; no credentials inferred.)
-- [ ] Re-run TypeScript, Vitest, production build, Lighthouse, and cross-browser checks after the portrait/About update.
+- [x] Re-run TypeScript, Vitest, production build, Lighthouse, and cross-browser checks after the portrait/About update. (16 Vitest tests, TypeScript, build, final Production Lighthouse, and 12 Chromium/Firefox/WebKit checks completed.)
 - [ ] Save the final v9 checkpoint after the attached portrait and approved copy are live.
