@@ -25,3 +25,10 @@ The test used the local preview. A production Lighthouse rerun should be perform
 ## Content note
 
 The public records now use only the supplied approved labels: `BOSKA` and `Interior`, both marked as executed, with no invented city, year, narrative, or project claims. The final professional portrait file and approved qualifications text were not supplied in this task, so the existing portrait and factual About copy remain unchanged rather than being replaced with unverified content.
+
+
+## Production rerun
+
+After checkpoint `51a6e188`, Lighthouse was rerun against the published domain with a cache-busting query on the same three routes. The production scores were: Home 62 Performance / 90 Accessibility / 77 Best Practices / 100 SEO; Projects 66 / 92 / 77 / 100; BOSKA 51 / 90 / 77 / 100. The viewport restriction is absent in the live DOM after deployment, and the published archive exposes both approved projects.
+
+The remaining production warnings are primarily platform/runtime diagnostics: console errors from the external StorageProxy, server response latency, deprecated API/source-map diagnostics from the managed runtime, residual contrast findings on a small set of decorative/legacy text nodes, and touch-target/accessible-name findings in shared controls. No horizontal overflow or JavaScript/page errors were observed in the explicit Chromium, Firefox, and WebKit route checks.

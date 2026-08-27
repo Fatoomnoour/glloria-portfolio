@@ -201,7 +201,7 @@
 - [x] Publish the Interior and BOSKA projects only after the approved metadata is confirmed, preserving gallery order, alt text, lazy loading, and mobile behavior. (Published as `/projects/interior` and `/projects/boska`; minimal detail pages show the names and original galleries.)
 - [ ] Add the final professional portrait of Heba as a permanent optimized WebDev asset and use it in the About section with descriptive alt text.
 - [ ] Update Heba's qualifications and experience using only approved factual details; do not invent credentials.
-- [ ] Run Lighthouse performance, accessibility, best-practices, and SEO checks on representative public routes and address material findings.
+- [x] Run Lighthouse performance, accessibility, best-practices, and SEO checks on representative public routes and address material findings. (Production rerun completed on Home, Projects, and BOSKA; viewport and light-theme contrast improvements applied; remaining runtime warnings documented in v9-audit.md.)
 - [x] Verify the public experience across Chromium, WebKit/Safari-equivalent, and Firefox/Edge-equivalent viewport and interaction scenarios; document limitations where browser automation is unavailable. (12 route/browser checks passed at 390×844 with no console/page errors and no horizontal overflow.)
 - [x] Add/update Vitest coverage for the v9 content and metadata behavior, then run TypeScript, tests, and production build. (16 tests passed; TypeScript and build passed.)
 - [ ] Save the final v9 checkpoint after all approved content and audit findings are complete.
@@ -209,7 +209,7 @@
 
 # v9 content clarification
 
-- [ ] Confirm the two drafts are approved as executed projects and publish only the minimal labels supplied by the user; do not add invented descriptions, city, year, or marketing copy.
-- [ ] Publish the cafe project with the public name `BOSKA` only, using its original gallery images.
-- [ ] Keep the second project label limited to the user-approved name and images until its exact public name is confirmed.
-- [ ] Do not add or alter Heba's portrait or qualifications without the actual approved file and factual text.
+- [x] Confirm the two drafts are approved as executed projects and publish only the minimal labels supplied by the user; do not add invented descriptions, city, year, or marketing copy. (Confirmed and applied.)
+- [x] Publish the cafe project with the public name `BOSKA` only, using its original gallery images. (Live at `/projects/boska`.)
+- [x] Keep the second project label limited to the user-approved name and images until its exact public name is confirmed. (Live as `Interior` at `/projects/interior`.)
+- [x] Do not add or alter Heba's portrait or qualifications without the actual approved file and factual text. (Existing content preserved; no unverified replacement made.)
