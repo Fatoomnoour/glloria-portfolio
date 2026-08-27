@@ -76,6 +76,10 @@ const consultationInput = z.object({
   preferredTime: z.string().trim().min(2).max(10),
   description: z.string().trim().min(10).max(5000),
   aestheticPreference: z.string().trim().max(500).nullable().optional(),
+  sourceProjectSlug: z.string().trim().min(2).max(160).regex(/^[a-z0-9-]+$/).nullable().optional(),
+  utmSource: z.string().trim().min(1).max(100).nullable().optional(),
+  utmMedium: z.string().trim().min(1).max(100).nullable().optional(),
+  utmCampaign: z.string().trim().min(1).max(160).nullable().optional(),
   privacyConsent: z.literal(true),
   honeypot: z.string().max(120).optional().default(""),
 });
@@ -87,7 +91,7 @@ function assertTestimonialPublication(input: TestimonialPublicationInput) {
   }
 }
 
-function consultationNotificationContent(input: z.infer<typeof consultationInput>) {
+function consultationNotificationContent(input: z.infer<typeof consultationInput>, sourceProjectTitle?: string | null) {
   return [
     `الاسم: ${input.fullName}`,
     `الهاتف: ${input.phone}`,
@@ -100,6 +104,8 @@ function consultationNotificationContent(input: z.infer<typeof consultationInput
     `الموعد المقترح: ${input.preferredDate} — ${input.preferredTime}`,
     `الوصف: ${input.description}`,
     input.aestheticPreference ? `الإحساس المطلوب: ${input.aestheticPreference}` : null,
+    sourceProjectTitle ? `المشروع المرجعي: ${sourceProjectTitle}` : null,
+    input.utmSource || input.utmMedium || input.utmCampaign ? `الحملة: ${[input.utmSource, input.utmMedium, input.utmCampaign].filter(Boolean).join(" / ")}` : null,
   ].filter(Boolean).join("\n");
 }
 
@@ -116,8 +122,9 @@ export const appRouter = router({
   consultations: router({
     create: publicProcedure.input(consultationInput).mutation(async ({ input }) => {
       if (input.honeypot.trim()) throw new TRPCError({ code: "BAD_REQUEST", message: "تعذر قبول الطلب." });
-      const request = await createConsultationRequest({ ...input, email: input.email || null, aestheticPreference: input.aestheticPreference || null, honeypot: null, status: "new" });
-      const notified = await notifyOwner({ title: `طلب استشارة جديد — ${input.fullName}`, content: consultationNotificationContent(input) });
+      const sourceProject = input.sourceProjectSlug ? await getProjectBySlug(input.sourceProjectSlug) : undefined;
+      const request = await createConsultationRequest({ ...input, email: input.email || null, aestheticPreference: input.aestheticPreference || null, sourceProjectSlug: sourceProject?.slug ?? null, sourceProjectTitle: sourceProject?.title ?? null, utmSource: input.utmSource || null, utmMedium: input.utmMedium || null, utmCampaign: input.utmCampaign || null, honeypot: null, status: "new" });
+      const notified = await notifyOwner({ title: `طلب استشارة جديد — ${input.fullName}`, content: consultationNotificationContent(input, sourceProject?.title) });
       return { success: true as const, id: request?.id ?? null, notified };
     }),
     list: adminProcedure.input(z.object({ search: z.string().trim().max(160).optional(), city: z.string().trim().max(160).optional(), service: z.string().trim().max(180).optional(), status: consultationStatus.optional(), date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional() }).optional()).query(({ input }) => listConsultationRequests(input ?? {})),
