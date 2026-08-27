@@ -8,12 +8,53 @@ import { useLocale } from "../contexts/LocaleContext";
 import { parseProjectGallery } from "@shared/gallery";
 import NotFound from "./NotFound";
 
-type CaseStudy = { statement: [string, string]; intro: [string, string]; challenge: [string, string]; concept: [string, string]; materials: string[]; services: string[]; gallery: string[]; status: [string, string]; imageKind: [string, string]; };
-const cases: Record<string, CaseStudy> = {
-  "private-residence": { statement: ["بيتٌ يترك للضوء مكاناً كي يتنفس.", "A home that gives the light room to breathe."], intro: ["كان المطلوب بيتاً عائلياً لا يبدو ثقيلاً رغم كثرة الاستخدام. بدأنا من غرفة الطعام كقلب للمشهد، ثم بنينا حولها مساحات دافئة بخامات طبيعية وحركة سهلة بين مناطق اليوم.", "The brief called for a family home that could handle daily life without feeling heavy. We began with the dining room as its heart, then built a warm, easy flow around it."], challenge: ["خلق بيت عائلي عملي من دون التنازل عن الهدوء البصري.", "Create a practical family home without compromising visual calm."], concept: ["الضوء كعنصر معماري، والخامة كذاكرة يومية.", "Light as architecture, material as an everyday memory."], materials: ["Warm ivory", "Walnut", "Fired clay", "Natural linen"], services: ["Interior Design", "Space Planning", "Material Selection", "Site Supervision"], gallery: ["https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=75", "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=75", "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=75"], status: ["صور أرشيفية مرجعية — تحتاج اعتماد صور التنفيذ الفعلية.", "Reference archive images — final built photography should be approved."], imageKind: ["صورة مرجعية — ليست إثباتاً لمشروع منفذ أو تصور 3D.", "Reference imagery — not proof of a built project or 3D visualisation."] },
-  "cafe-namaa": { statement: ["مساحة صغيرة، وذاكرة كبيرة.", "A small space with a lasting memory."], intro: ["في نماء، كان التحدي أن يشعر المكان بالاتساع والترحيب من دون أن يفقد شخصيته. استخدمنا الأقواس، الضوء الطبيعي، وخامات صادقة تصنع خلفية لطيفة للحظات اليومية.", "For Namaa, the challenge was to make a compact space feel generous without losing character. Arches, daylight, and honest materials form a gentle backdrop for everyday moments."], challenge: ["توسيع الإحساس بالمكان داخل مساحة تجارية محدودة.", "Make a compact commercial footprint feel more open and welcoming."], concept: ["ترحيب هادئ يبدأ من المدخل ويمتد حتى آخر طاولة.", "A quiet welcome that begins at the entrance and reaches every table."], materials: ["Limewash", "Natural oak", "Muted olive", "Handmade ceramic"], services: ["Brand Space", "Interior Design", "3D Visualization", "Execution"], gallery: ["https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=75", "https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1400&q=75", "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1400&q=75"], status: ["صور أرشيفية مرجعية — تحتاج اعتماد صور التنفيذ الفعلية.", "Reference archive images — final built photography should be approved."], imageKind: ["صورة مرجعية — ليست إثباتاً لمشروع منفذ أو تصور 3D.", "Reference imagery — not proof of a built project or 3D visualisation."] },
-  "quiet-bedroom": { statement: ["غرفة تجعل نهاية اليوم أهدأ.", "A room that softens the end of the day."], intro: ["تصميم غرفة نوم بمفردات قليلة ومدروسة: حائط منحني، نسيج طبيعي، إضاءة منخفضة، وتفصيلة طينية تمنح المكان دفئه من غير ضوضاء.", "A bedroom shaped by a few deliberate gestures: a curved wall, natural textile, low light, and a clay detail that adds warmth without noise."], challenge: ["تحويل غرفة يومية إلى مساحة راحة من دون ازدحام بصري.", "Turn an everyday bedroom into a restful space without visual noise."], concept: ["الاقتصاد في العناصر، والكرم في الإحساس.", "Fewer elements, a richer feeling."], materials: ["Linen", "Plaster", "Terracotta", "Brushed oak"], services: ["Interior Design", "Lighting Mood", "Styling"], gallery: ["https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1400&q=75", "https://images.unsplash.com/photo-1617104678098-de229db51175?auto=format&fit=crop&w=1400&q=75", "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=75"], status: ["صور أرشيفية مرجعية — تحتاج اعتماد صور التنفيذ الفعلية.", "Reference archive images — final built photography should be approved."], imageKind: ["صورة مرجعية — ليست إثباتاً لمشروع منفذ أو تصور 3D.", "Reference imagery — not proof of a built project or 3D visualisation."] },
+type CaseStudy = {
+  statement: [string, string];
+  intro: [string, string];
+  challenge: [string, string];
+  concept: [string, string];
+  materials: string[];
+  services: string[];
+  gallery: string[];
+  imageKind: [string, string];
 };
+
+const cases: Record<string, CaseStudy> = {
+  "private-residence": {
+    statement: ["بيتٌ يترك للضوء مكاناً كي يتنفس.", "A home that gives the light room to breathe."],
+    intro: ["كان المطلوب بيتاً عائلياً لا يبدو ثقيلاً رغم كثرة الاستخدام. بدأنا من غرفة الطعام كقلب للمشهد، ثم بنينا حولها مساحات دافئة بخامات طبيعية وحركة سهلة بين مناطق اليوم.", "The brief called for a family home that could handle daily life without feeling heavy. We began with the dining room as its heart, then built a warm, easy flow around it."],
+    challenge: ["خلق بيت عائلي عملي من دون التنازل عن الهدوء البصري.", "Create a practical family home without compromising visual calm."],
+    concept: ["الضوء كعنصر معماري، والخامة كذاكرة يومية.", "Light as architecture, material as an everyday memory."],
+    materials: ["Warm ivory", "Walnut", "Fired clay", "Natural linen"],
+    services: ["Interior Design", "Space Planning", "Material Selection", "Site Supervision"],
+    gallery: ["https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=75", "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=75", "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=75"],
+    imageKind: ["صورة مرجعية — ليست إثباتاً لمشروع منفذ أو تصور 3D.", "Reference imagery — not proof of a built project or 3D visualisation."]
+  },
+  "cafe-namaa": {
+    statement: ["مساحة صغيرة، وذاكرة كبيرة.", "A small space with a lasting memory."],
+    intro: ["في نماء، كان التحدي أن يشعر المكان بالاتساع والترحيب من دون أن يفقد شخصيته. استخدمنا الأقواس، الضوء الطبيعي، وخامات صادقة تصنع خلفية لطيفة للحظات اليومية.", "For Namaa, the challenge was to make a compact space feel generous without losing character. Arches, daylight, and honest materials form a gentle backdrop for everyday moments."],
+    challenge: ["توسيع الإحساس بالمكان داخل مساحة تجارية محدودة.", "Make a compact commercial footprint feel more open and welcoming."],
+    concept: ["ترحيب هادئ يبدأ من المدخل ويمتد حتى آخر طاولة.", "A quiet welcome that begins at the entrance and reaches every table."],
+    materials: ["Limewash", "Natural oak", "Muted olive", "Handmade ceramic"],
+    services: ["Brand Space", "Interior Design", "3D Visualization", "Execution"],
+    gallery: ["https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=75", "https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1400&q=75", "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1400&q=75"],
+    imageKind: ["صورة مرجعية — ليست إثباتاً لمشروع منفذ أو تصور 3D.", "Reference imagery — not proof of a built project or 3D visualisation."]
+  },
+  "quiet-bedroom": {
+    statement: ["غرفة تجعل نهاية اليوم أهدأ.", "A room that softens the end of the day."],
+    intro: ["تصميم غرفة نوم بمفردات قليلة ومدروسة: حائط منحني، نسيج طبيعي، إضاءة منخفضة، وتفصيلة طينية تمنح المكان دفئه من غير ضوضاء.", "A bedroom shaped by a few deliberate gestures: a curved wall, natural textile, low light, and a clay detail that adds warmth without noise."],
+    challenge: ["تحويل غرفة يومية إلى مساحة راحة من دون ازدحام بصري.", "Turn an everyday bedroom into a restful space without visual noise."],
+    concept: ["الاقتصاد في العناصر، والكرم في الإحساس.", "Fewer elements, a richer feeling."],
+    materials: ["Linen", "Plaster", "Terracotta", "Brushed oak"],
+    services: ["Interior Design", "Lighting Mood", "Styling"],
+    gallery: ["https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1400&q=75", "https://images.unsplash.com/photo-1617104678098-de229db51175?auto=format&fit=crop&w=1400&q=75", "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=75"],
+    imageKind: ["صورة مرجعية — ليست إثباتاً لمشروع منفذ أو تصور 3D.", "Reference imagery — not proof of a built project or 3D visualisation."]
+  }
+};
+
+function ProjectGallery({ gallery, projectType, imageKind, ar, showBeforeAfter = true }: { gallery: Array<{ url: string; alt: string; order: number }>; projectType: string; imageKind: string; ar: boolean; showBeforeAfter?: boolean }) {
+  return <section className="detail-gallery section-pad"><div className="section-marker"><span>02</span><span>IMAGE ARCHIVE</span></div><div className="gallery-grid">{gallery.map((image, index) => <figure key={`${image.url}-${image.order}`}><img src={image.url} alt={image.alt} loading={index ? "lazy" : "eager"} /><figcaption><span>0{index + 1} / {projectType}</span><span>{imageKind}</span></figcaption></figure>)}</div>{!gallery.length && <p className="sr-only">{ar ? "لا توجد صور متاحة لهذا المشروع." : "No images are available for this project."}</p>}{showBeforeAfter && <div className="before-after-note"><Check size={16} /><span>{ar ? "صور قبل/بعد غير متاحة ضمن الأرشيف الحالي؛ ستظهر عند توفيرها واعتمادها." : "Before/after imagery is not available in the current archive; it can be added once supplied and approved."}</span></div>}</section>;
+}
 
 export default function ProjectDetail() {
   const [, params] = useRoute("/projects/:slug");
@@ -23,13 +64,34 @@ export default function ProjectDetail() {
   const { data: managedProject } = trpc.projects.bySlug.useQuery({ slug }, { enabled: Boolean(slug) });
   const fallback = projects.find((item) => item.slug === slug);
   if (!managedProject && !fallback) return <NotFound />;
-  const project = managedProject ? { number: "01", type: managedProject.designType === "architectural" ? "ARCHITECTURAL" : "INTERIOR", title: managedProject.title, location: managedProject.location, year: managedProject.year ? String(managedProject.year) : "—", image: managedProject.imageUrl, imageAlt: managedProject.imageAlt ?? undefined, galleryJson: managedProject.galleryJson ?? null, imageKind: managedProject.imageKind ?? undefined, slug: managedProject.slug } : fallback!;
-  const detail = cases[project.slug] ?? cases["private-residence"];
+
+  const project = managedProject
+    ? { number: "01", type: managedProject.projectType || "INTERIOR", title: managedProject.title, location: managedProject.location, year: managedProject.year ? String(managedProject.year) : "", image: managedProject.imageUrl, imageAlt: managedProject.imageAlt ?? undefined, galleryJson: managedProject.galleryJson ?? null, imageKind: managedProject.imageKind ?? "", slug: managedProject.slug }
+    : fallback!;
+  const fallbackCase = cases[project.slug] ?? cases["private-residence"];
   const coverAlt = project.imageAlt || `${project.title} — ${ar ? "صورة دراسة حالة" : "case study image"}`;
-  const gallery = managedProject ? parseProjectGallery(project.galleryJson, project.image, coverAlt) : detail.gallery.map((url, index) => ({ url, alt: `${project.title} — ${ar ? `تفصيل رقم ${index + 1}` : `detail ${index + 1}`}`, order: index + 1 }));
-  const imageKind = project.imageKind || detail.imageKind[ar ? 0 : 1];
+  const gallery = managedProject
+    ? parseProjectGallery(project.galleryJson, project.image, coverAlt)
+    : fallbackCase.gallery.map((url, index) => ({ url, alt: `${project.title} — ${ar ? `تفصيل رقم ${index + 1}` : `detail ${index + 1}`}`, order: index + 1 }));
+  const imageKind = project.imageKind || fallbackCase.imageKind[ar ? 0 : 1] || "";
   const title = managedProject?.title ?? (ar ? project.title : ({ "private-residence": "A house between light and shadow", "cafe-namaa": "Namaa café", "quiet-bedroom": "A quiet room" }[project.slug] ?? project.title));
-  const statement = managedProject ? managedProject.statement : detail.statement[ar ? 0 : 1];
-  const intro = managedProject ? managedProject.description : detail.intro[ar ? 0 : 1];
-  return <div className="detail-page page-transition"><div className="detail-back section-pad"><Link href="/projects"><ChevronLeft size={16} /> {ar ? "العودة إلى الأعمال" : "Back to work"}</Link><span>GLL / {project.number}</span></div><section className="detail-hero section-pad"><div className="detail-hero-copy"><p className="eyebrow">{project.type} / {project.location} / {project.year}</p><h1>{title}<br /><em>{statement}</em></h1><p className="detail-intro">{intro}</p><a className="text-link" href="#story">{ar ? "اقرئي قصة المشروع" : "Read the case study"} <ArrowDownLeft size={17} strokeWidth={1.4} /></a><ShareActions title={title} /></div><figure className="detail-hero-image"><img src={project.image} alt={coverAlt} fetchPriority="high" /><figcaption><span>{project.number} / {project.type}</span><span>{imageKind}</span></figcaption></figure></section><section className="detail-story section-pad" id="story"><div className="section-marker"><span>01</span><span>{ar ? "THE STORY" : "THE STORY"}</span></div><div className="story-columns"><div><p className="eyebrow">{ar ? "التحدي" : "THE CHALLENGE"}</p><h2>{ar ? <>نبدأ من السؤال،<br /><em>لا من الشكل.</em></> : <>Begin with the question,<br /><em>not the shape.</em></>}</h2></div><div className="story-body"><p>{managedProject ? intro : detail.challenge[ar ? 0 : 1]}</p><p>{managedProject ? intro : detail.concept[ar ? 0 : 1]}</p></div></div></section><section className="case-study-sections section-pad"><div className="case-study-block"><span className="footer-label">{ar ? "فكرة التصميم" : "DESIGN CONCEPT"}</span><p>{managedProject ? intro : detail.concept[ar ? 0 : 1]}</p></div><div className="case-study-block"><span className="footer-label">{ar ? "الألوان والخامات" : "PALETTE & MATERIALS"}</span><div className="material-list">{detail.materials.map((item) => <span key={item}>{item}</span>)}</div></div></section><section className="detail-gallery section-pad"><div className="section-marker"><span>02</span><span>{ar ? "IMAGE ARCHIVE" : "IMAGE ARCHIVE"}</span></div><div className="gallery-grid">{gallery.map((image, index) => <figure key={`${image.url}-${image.order}`}><img src={image.url} alt={image.alt} loading={index ? "lazy" : "eager"} /><figcaption><span>0{index + 1} / {project.type}</span><span>{imageKind}</span></figcaption></figure>)}</div><div className="before-after-note"><Check size={16} /><span>{ar ? "صور قبل/بعد غير متاحة ضمن الأرشيف الحالي؛ ستظهر عند توفيرها واعتمادها." : "Before/after imagery is not available in the current archive; it can be added once supplied and approved."}</span></div></section><section className="detail-info section-pad"><div className="info-block"><span className="footer-label">{ar ? "الخدمات" : "SERVICES"}</span>{detail.services.map((service) => <span className="info-line" key={service}>{service}</span>)}</div><div className="info-block"><span className="footer-label">{ar ? "المفردات" : "MATERIAL VOCABULARY"}</span>{detail.materials.map((color) => <span className="info-line" key={color}>{color}</span>)}</div><div className="info-block info-mark"><div className="monogram-small"><span /></div><span>GLLORIA<br />INTERIORS / STUDIO</span></div></section><section className="detail-next section-pad"><p className="eyebrow">{ar ? "المشروع التالي" : "NEXT PROJECT"}</p><Link href="/projects" className="next-link">{ar ? "شاهدي بقية الأرشيف" : "View the full archive"} <ArrowUpLeft size={19} /></Link></section><section className="detail-cta section-pad"><Check size={18} /><p>{ar ? "لديكِ مساحة تريدين أن تحكي عنها؟" : "Have a space you want to talk about?"}</p><Link href="/booking" className="dark-button">{ar ? "احجزي استشارتك" : "Book your consultation"} <ArrowUpLeft size={17} /></Link></section></div>;
+  const statement = managedProject ? "" : fallbackCase.statement[ar ? 0 : 1];
+  const intro = managedProject ? "" : fallbackCase.intro[ar ? 0 : 1];
+
+  return <div className="detail-page page-transition">
+    <div className="detail-back section-pad"><Link href="/projects"><ChevronLeft size={16} /> {ar ? "العودة إلى الأعمال" : "Back to work"}</Link><span>GLL / {project.number}</span></div>
+    <section className="detail-hero section-pad">
+      <div className="detail-hero-copy"><p className="eyebrow">{[project.type, project.location, project.year].filter(Boolean).join(" / ")}</p><h1>{title}{statement && <><br /><em>{statement}</em></>}</h1>{intro && <p className="detail-intro">{intro}</p>}{!managedProject && <a className="text-link" href="#story">{ar ? "اقرئي قصة المشروع" : "Read the case study"} <ArrowDownLeft size={17} strokeWidth={1.4} /></a>}<ShareActions title={title} /></div>
+      <figure className="detail-hero-image"><img src={project.image} alt={coverAlt} fetchPriority="high" /><figcaption><span>{project.number} / {project.type}</span>{imageKind && <span>{imageKind}</span>}</figcaption></figure>
+    </section>
+
+    {managedProject ? <ProjectGallery gallery={gallery} projectType={project.type} imageKind={imageKind} ar={ar} showBeforeAfter={false} /> : <>
+      <section className="detail-story section-pad" id="story"><div className="section-marker"><span>01</span><span>{ar ? "THE STORY" : "THE STORY"}</span></div><div className="story-columns"><div><p className="eyebrow">{ar ? "التحدي" : "THE CHALLENGE"}</p><h2>{ar ? <>نبدأ من السؤال،<br /><em>لا من الشكل.</em></> : <>Begin with the question,<br /><em>not the shape.</em></>}</h2></div><div className="story-body"><p>{fallbackCase.challenge[ar ? 0 : 1]}</p><p>{fallbackCase.concept[ar ? 0 : 1]}</p></div></div></section>
+      <section className="case-study-sections section-pad"><div className="case-study-block"><span className="footer-label">{ar ? "فكرة التصميم" : "DESIGN CONCEPT"}</span><p>{fallbackCase.concept[ar ? 0 : 1]}</p></div><div className="case-study-block"><span className="footer-label">{ar ? "الألوان والخامات" : "PALETTE & MATERIALS"}</span><div className="material-list">{fallbackCase.materials.map((item) => <span key={item}>{item}</span>)}</div></div></section>
+      <ProjectGallery gallery={gallery} projectType={project.type} imageKind={imageKind} ar={ar} />
+      <section className="detail-info section-pad"><div className="info-block"><span className="footer-label">{ar ? "الخدمات" : "SERVICES"}</span>{fallbackCase.services.map((service) => <span className="info-line" key={service}>{service}</span>)}</div><div className="info-block info-mark"><div className="monogram-small"><span /></div><span>GLLORIA<br />INTERIORS / STUDIO</span></div></section>
+    </>}
+
+    <section className="detail-next section-pad"><p className="eyebrow">{ar ? "المشروع التالي" : "NEXT PROJECT"}</p><Link href="/projects" className="next-link">{ar ? "شاهدي بقية الأرشيف" : "View the full archive"} <ArrowUpLeft size={19} /></Link></section><section className="detail-cta section-pad"><Check size={18} /><p>{ar ? "لديكِ مساحة تريدين أن تحكي عنها؟" : "Have a space you want to talk about?"}</p><Link href="/booking" className="dark-button">{ar ? "احجزي استشارتك" : "Book your consultation"} <ArrowUpLeft size={17} /></Link></section>
+  </div>;
 }

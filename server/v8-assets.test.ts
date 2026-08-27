@@ -28,3 +28,16 @@ describe("project gallery parsing", () => {
     ]);
   });
 });
+
+
+describe("approved minimal project galleries", () => {
+  it("preserves approved project-only alt text and ordering", () => {
+    expect(parseProjectGallery(JSON.stringify([
+      { url: "/boska-2.webp", alt: "BOSKA project image 2", order: 2 },
+      { url: "/boska-1.webp", alt: "BOSKA project image 1", order: 1 },
+    ]), "/boska-1.webp", "BOSKA project image")).toEqual([
+      { url: "/boska-1.webp", alt: "BOSKA project image 1", order: 1 },
+      { url: "/boska-2.webp", alt: "BOSKA project image 2", order: 2 },
+    ]);
+  });
+});
