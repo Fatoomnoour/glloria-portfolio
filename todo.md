@@ -199,12 +199,12 @@
 
 - [x] Confirm the approved metadata for Interior and BOSKA: project name, discipline, city, year, and executed-vs-3D provenance before publishing. (User approved both as executed; only names and supplied labels are used, with no invented city or year.)
 - [x] Publish the Interior and BOSKA projects only after the approved metadata is confirmed, preserving gallery order, alt text, lazy loading, and mobile behavior. (Published as `/projects/interior` and `/projects/boska`; minimal detail pages show the names and original galleries.)
-- [ ] Add the final professional portrait of Heba as a permanent optimized WebDev asset and use it in the About section with descriptive alt text.
-- [ ] Update Heba's qualifications and experience using only approved factual details; do not invent credentials.
+- [x] Add the final professional portrait of Heba as a permanent optimized WebDev asset and use it in the About section with descriptive alt text. (Completed with the supplied cropped WebP asset.)
+- [x] Update Heba's qualifications and experience using only approved factual details; do not invent credentials. (No new credential facts were supplied; existing factual About copy was preserved and no claims were invented.)
 - [x] Run Lighthouse performance, accessibility, best-practices, and SEO checks on representative public routes and address material findings. (Production rerun completed on Home, Projects, and BOSKA; viewport and light-theme contrast improvements applied; remaining runtime warnings documented in v9-audit.md.)
 - [x] Verify the public experience across Chromium, WebKit/Safari-equivalent, and Firefox/Edge-equivalent viewport and interaction scenarios; document limitations where browser automation is unavailable. (12 route/browser checks passed at 390×844 with no console/page errors and no horizontal overflow.)
 - [x] Add/update Vitest coverage for the v9 content and metadata behavior, then run TypeScript, tests, and production build. (16 tests passed; TypeScript and build passed.)
-- [ ] Save the final v9 checkpoint after all approved content and audit findings are complete.
+- [x] Save the final v9 checkpoint after all approved content and audit findings are complete. (Checkpoint 005630d3.)
 
 
 # v9 content clarification
@@ -221,4 +221,4 @@
 - [x] Upload an optimized portrait asset to permanent WebDev storage and replace the About portrait reference. (WebP asset `/manus-storage/heba-portrait-final_6972e2d6.webp`.)
 - [x] Apply only the profile wording explicitly readable in the attached material; do not infer qualifications beyond it. (Added the supplied home-story quote in Arabic/English; no credentials inferred.)
 - [x] Re-run TypeScript, Vitest, production build, Lighthouse, and cross-browser checks after the portrait/About update. (16 Vitest tests, TypeScript, build, final Production Lighthouse, and 12 Chromium/Firefox/WebKit checks completed.)
-- [ ] Save the final v9 checkpoint after the attached portrait and approved copy are live.
+- [x] Save the final v9 checkpoint after the attached portrait and approved copy are live. (Checkpoint 005630d3.)
