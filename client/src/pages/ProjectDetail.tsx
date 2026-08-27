@@ -5,6 +5,7 @@ import { Link, useRoute } from "wouter";
 import { trpc } from "../lib/trpc";
 import ShareActions from "../components/ShareActions";
 import ProjectLightbox from "../components/ProjectLightbox";
+import ResponsiveImage from "../components/ResponsiveImage";
 import { useLocale } from "../contexts/LocaleContext";
 import { parseProjectGallery } from "@shared/gallery";
 import NotFound from "./NotFound";
@@ -65,7 +66,7 @@ function ProjectGallery({
               }}
               aria-label={`${ar ? "فتح الصورة بالحجم الكامل" : "Open full-size image"}: ${image.alt}`}
             >
-              <img
+              <ResponsiveImage
                 src={image.url}
                 alt={image.alt}
                 loading="lazy"
@@ -222,7 +223,7 @@ function CaseStudySections({
             </div>
             <div className="before-after-grid">
               <figure>
-                <img
+                <ResponsiveImage
                   src={project.beforeImageUrl!}
                   alt={project.beforeImageAlt!}
                   loading="lazy"
@@ -230,7 +231,7 @@ function CaseStudySections({
                 <figcaption>{ar ? "قبل" : "Before"}</figcaption>
               </figure>
               <figure>
-                <img
+                <ResponsiveImage
                   src={project.afterImageUrl!}
                   alt={project.afterImageAlt!}
                   loading="lazy"
@@ -305,7 +306,7 @@ export default function ProjectDetail() {
           <ShareActions title={project.title} />
         </div>
         <figure className="detail-hero-image">
-          <img
+          <ResponsiveImage
             src={project.imageUrl}
             alt={coverAlt}
             fetchPriority="high"

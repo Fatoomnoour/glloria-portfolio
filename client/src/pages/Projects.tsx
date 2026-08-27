@@ -4,6 +4,7 @@ import { ArrowUpLeft, Loader2, SlidersHorizontal } from "lucide-react";
 import { Link } from "wouter";
 import { trpc } from "../lib/trpc";
 import { useLocale } from "../contexts/LocaleContext";
+import ResponsiveImage from "../components/ResponsiveImage";
 
 export type ProjectCard = {
   slug: string;
@@ -199,7 +200,7 @@ export default function Projects() {
                 key={project.slug}
               >
                 <div className="archive-image">
-                  <img
+                  <ResponsiveImage
                     src={project.image}
                     alt={
                       project.imageAlt ||

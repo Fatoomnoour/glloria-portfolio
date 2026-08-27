@@ -14,7 +14,7 @@ import { LocaleProvider, useLocale } from "./contexts/LocaleContext";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
-import { GLLORIA_CONFIRMATION_WHATSAPP_NUMBER } from "../../shared/whatsapp";
+import { buildGeneralWhatsAppUrl } from "../../shared/whatsapp";
 import RevealObserver from "./components/RevealObserver";
 
 const Projects = lazy(() => import("./pages/Projects"));
@@ -136,7 +136,7 @@ function SiteHeader() {
 }
 
 function SiteFooter() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const currentYear = new Date().getFullYear();
   return (
     <footer className="site-footer">
@@ -160,7 +160,7 @@ function SiteFooter() {
         <div className="footer-column">
           <span className="footer-label">{t("footer.contact")}</span>
           <a
-            href={`https://wa.me/${GLLORIA_CONFIRMATION_WHATSAPP_NUMBER}`}
+            href={buildGeneralWhatsAppUrl(locale)}
             target="_blank"
             rel="noreferrer"
           >
@@ -209,7 +209,7 @@ function MobileConversionBar() {
       }
     >
       <a
-        href={`https://wa.me/${GLLORIA_CONFIRMATION_WHATSAPP_NUMBER}`}
+        href={buildGeneralWhatsAppUrl(locale)}
         target="_blank"
         rel="noreferrer"
       >
@@ -224,7 +224,7 @@ function MobileConversionBar() {
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
-  const { dir } = useLocale();
+  const { dir, locale } = useLocale();
   return (
     <div className="site-shell" dir={dir}>
       <RevealObserver />
@@ -234,7 +234,7 @@ function Shell({ children }: { children: React.ReactNode }) {
       <MobileConversionBar />
       <a
         className="whatsapp-float"
-        href={`https://wa.me/${GLLORIA_CONFIRMATION_WHATSAPP_NUMBER}`}
+        href={buildGeneralWhatsAppUrl(locale)}
         target="_blank"
         rel="noreferrer"
         aria-label="تواصلي مع Glloria على واتساب"

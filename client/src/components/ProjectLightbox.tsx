@@ -2,6 +2,7 @@ import { useEffect, useRef, type RefObject } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "./ui/dialog";
 import { moveGalleryIndex } from "../../../shared/gallery";
+import ResponsiveImage from "./ResponsiveImage";
 
 type GalleryImage = { url: string; alt: string; order: number };
 
@@ -98,7 +99,12 @@ export default function ProjectLightbox({
             pointerX.current = null;
           }}
         >
-          <img src={current.url} alt={current.alt} />
+          <ResponsiveImage
+            src={current.url}
+            alt={current.alt}
+            sizes="100vw"
+            decoding="async"
+          />
           <div className="lightbox-caption">
             <span aria-live="polite">
               {String(index + 1).padStart(2, "0")} /{" "}

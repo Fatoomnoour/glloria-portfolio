@@ -22,7 +22,15 @@ export type PublicManagedProject = {
 
 export type PublicProjectRenderState = "loading" | "not-found" | "ready";
 
-export function getPublicProjectRenderState(isLoading: boolean, project: PublicManagedProject | null | undefined): PublicProjectRenderState {
+/** React Query query functions must resolve to a concrete value, never undefined. */
+export function toNullablePublicProject<T>(project: T | undefined): T | null {
+  return project ?? null;
+}
+
+export function getPublicProjectRenderState(
+  isLoading: boolean,
+  project: PublicManagedProject | null | undefined
+): PublicProjectRenderState {
   if (isLoading) return "loading";
   return project ? "ready" : "not-found";
 }
@@ -31,16 +39,28 @@ function hasText(value: string | null | undefined) {
   return Boolean(value?.trim());
 }
 
-export function hasApprovedCaseStudy(project: PublicManagedProject | null | undefined) {
+export function hasApprovedCaseStudy(
+  project: PublicManagedProject | null | undefined
+) {
   if (!project?.caseStudyApproved) return false;
-  return [project.challenge, project.concept, project.materials, project.palette, project.serviceScope].some(hasText) || hasBeforeAfterPair(project);
+  return (
+    [
+      project.challenge,
+      project.concept,
+      project.materials,
+      project.palette,
+      project.serviceScope,
+    ].some(hasText) || hasBeforeAfterPair(project)
+  );
 }
 
-export function hasBeforeAfterPair(project: PublicManagedProject | null | undefined) {
+export function hasBeforeAfterPair(
+  project: PublicManagedProject | null | undefined
+) {
   return Boolean(
     project?.beforeImageUrl?.trim() &&
-    project.beforeImageAlt?.trim() &&
-    project.afterImageUrl?.trim() &&
-    project.afterImageAlt?.trim(),
+      project.beforeImageAlt?.trim() &&
+      project.afterImageUrl?.trim() &&
+      project.afterImageAlt?.trim()
   );
 }

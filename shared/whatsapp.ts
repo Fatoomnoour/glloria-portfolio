@@ -1,7 +1,19 @@
 export const GLLORIA_CONFIRMATION_WHATSAPP_NUMBER = "201066646397";
 
+export type WhatsAppLocale = "ar" | "en";
+
+export function buildGeneralWhatsAppMessage(locale: WhatsAppLocale) {
+  return locale === "ar"
+    ? "مرحباً Glloria، أود حجز استشارة تصميم داخلي ومعرفة الخطوات المتاحة."
+    : "Hello Glloria, I would like to book an interior design consultation and learn about the next steps.";
+}
+
+export function buildGeneralWhatsAppUrl(locale: WhatsAppLocale) {
+  return `https://wa.me/${GLLORIA_CONFIRMATION_WHATSAPP_NUMBER}?text=${encodeURIComponent(buildGeneralWhatsAppMessage(locale))}`;
+}
+
 export type BookingConfirmationDetails = {
-  locale: "ar" | "en";
+  locale: WhatsAppLocale;
   bookingId: number | null;
   name: string;
   phone: string;
@@ -11,7 +23,9 @@ export type BookingConfirmationDetails = {
   time: string;
 };
 
-export function buildBookingConfirmationMessage(details: BookingConfirmationDetails) {
+export function buildBookingConfirmationMessage(
+  details: BookingConfirmationDetails
+) {
   const reference = details.bookingId ? `#${details.bookingId}` : "";
   if (details.locale === "ar") {
     return [
@@ -23,7 +37,9 @@ export function buildBookingConfirmationMessage(details: BookingConfirmationDeta
       `الخدمة: ${details.service}`,
       `الموعد المقترح: ${details.date} — ${details.time}`,
       "أرجو تأكيد التوفر والموعد النهائي.",
-    ].filter(Boolean).join("\n");
+    ]
+      .filter(Boolean)
+      .join("\n");
   }
 
   return [
@@ -35,10 +51,14 @@ export function buildBookingConfirmationMessage(details: BookingConfirmationDeta
     `Service: ${details.service}`,
     `Preferred time: ${details.date} — ${details.time}`,
     "Please confirm availability and the final appointment.",
-  ].filter(Boolean).join("\n");
+  ]
+    .filter(Boolean)
+    .join("\n");
 }
 
-export function buildBookingConfirmationUrl(details: BookingConfirmationDetails) {
+export function buildBookingConfirmationUrl(
+  details: BookingConfirmationDetails
+) {
   const message = buildBookingConfirmationMessage(details);
   return `https://wa.me/${GLLORIA_CONFIRMATION_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }

@@ -22,6 +22,7 @@ import {
   updateProject,
   updateTestimonial,
 } from "./db";
+import { toNullablePublicProject } from "@shared/project";
 
 const projectFields = {
   slug: z.string().trim().min(2).max(160),
@@ -58,14 +59,28 @@ const testimonialFields = {
   projectName: z.string().trim().max(255).optional().or(z.literal("")),
   imageUrl: z.string().trim().optional().or(z.literal("")),
   consentConfirmed: z.boolean().default(false),
-  verificationStatus: z.enum(["pending", "verified", "rejected"]).default("pending"),
+  verificationStatus: z
+    .enum(["pending", "verified", "rejected"])
+    .default("pending"),
   approved: z.boolean().default(false),
 };
 
-const consultationStatus = z.enum(["new", "reviewing", "contacted", "confirmed", "completed", "cancelled"]);
+const consultationStatus = z.enum([
+  "new",
+  "reviewing",
+  "contacted",
+  "confirmed",
+  "completed",
+  "cancelled",
+]);
 const consultationInput = z.object({
   fullName: z.string().trim().min(2).max(160),
-  phone: z.string().trim().min(7).max(40).regex(/^\+?[0-9 ()-]{7,}$/),
+  phone: z
+    .string()
+    .trim()
+    .min(7)
+    .max(40)
+    .regex(/^\+?[0-9 ()-]{7,}$/),
   email: z.string().trim().email().max(320).optional().or(z.literal("")),
   city: z.string().trim().min(2).max(160),
   propertyType: z.string().trim().min(2).max(160),
@@ -76,7 +91,14 @@ const consultationInput = z.object({
   preferredTime: z.string().trim().min(2).max(10),
   description: z.string().trim().min(10).max(5000),
   aestheticPreference: z.string().trim().max(500).nullable().optional(),
-  sourceProjectSlug: z.string().trim().min(2).max(160).regex(/^[a-z0-9-]+$/).nullable().optional(),
+  sourceProjectSlug: z
+    .string()
+    .trim()
+    .min(2)
+    .max(160)
+    .regex(/^[a-z0-9-]+$/)
+    .nullable()
+    .optional(),
   utmSource: z.string().trim().min(1).max(100).nullable().optional(),
   utmMedium: z.string().trim().min(1).max(100).nullable().optional(),
   utmCampaign: z.string().trim().min(1).max(160).nullable().optional(),
@@ -84,14 +106,27 @@ const consultationInput = z.object({
   honeypot: z.string().max(120).optional().default(""),
 });
 
-type TestimonialPublicationInput = { approved?: boolean; consentConfirmed?: boolean; verificationStatus?: "pending" | "verified" | "rejected" };
+type TestimonialPublicationInput = {
+  approved?: boolean;
+  consentConfirmed?: boolean;
+  verificationStatus?: "pending" | "verified" | "rejected";
+};
 function assertTestimonialPublication(input: TestimonialPublicationInput) {
-  if (input.approved === true && (input.consentConfirmed !== true || input.verificationStatus !== "verified")) {
-    throw new TRPCError({ code: "BAD_REQUEST", message: "لا يمكن نشر التقييم قبل تأكيد موافقة العميل وحالة التحقق." });
+  if (
+    input.approved === true &&
+    (input.consentConfirmed !== true || input.verificationStatus !== "verified")
+  ) {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "لا يمكن نشر التقييم قبل تأكيد موافقة العميل وحالة التحقق.",
+    });
   }
 }
 
-function consultationNotificationContent(input: z.infer<typeof consultationInput>, sourceProjectTitle?: string | null) {
+function consultationNotificationContent(
+  input: z.infer<typeof consultationInput>,
+  sourceProjectTitle?: string | null
+) {
   return [
     `الاسم: ${input.fullName}`,
     `الهاتف: ${input.phone}`,
@@ -103,16 +138,22 @@ function consultationNotificationContent(input: z.infer<typeof consultationInput
     `الميزانية: ${input.budget}`,
     `الموعد المقترح: ${input.preferredDate} — ${input.preferredTime}`,
     `الوصف: ${input.description}`,
-    input.aestheticPreference ? `الإحساس المطلوب: ${input.aestheticPreference}` : null,
+    input.aestheticPreference
+      ? `الإحساس المطلوب: ${input.aestheticPreference}`
+      : null,
     sourceProjectTitle ? `المشروع المرجعي: ${sourceProjectTitle}` : null,
-    input.utmSource || input.utmMedium || input.utmCampaign ? `الحملة: ${[input.utmSource, input.utmMedium, input.utmCampaign].filter(Boolean).join(" / ")}` : null,
-  ].filter(Boolean).join("\n");
+    input.utmSource || input.utmMedium || input.utmCampaign
+      ? `الحملة: ${[input.utmSource, input.utmMedium, input.utmCampaign].filter(Boolean).join(" / ")}`
+      : null,
+  ]
+    .filter(Boolean)
+    .join("\n");
 }
 
 export const appRouter = router({
   system: systemRouter,
   auth: router({
-    me: publicProcedure.query((opts) => opts.ctx.user),
+    me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
       const cookieOptions = getSessionCookieOptions(ctx.req);
       ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
@@ -120,36 +161,156 @@ export const appRouter = router({
     }),
   }),
   consultations: router({
-    create: publicProcedure.input(consultationInput).mutation(async ({ input }) => {
-      if (input.honeypot.trim()) throw new TRPCError({ code: "BAD_REQUEST", message: "تعذر قبول الطلب." });
-      const sourceProject = input.sourceProjectSlug ? await getProjectBySlug(input.sourceProjectSlug) : undefined;
-      const request = await createConsultationRequest({ ...input, email: input.email || null, aestheticPreference: input.aestheticPreference || null, sourceProjectSlug: sourceProject?.slug ?? null, sourceProjectTitle: sourceProject?.title ?? null, utmSource: input.utmSource || null, utmMedium: input.utmMedium || null, utmCampaign: input.utmCampaign || null, honeypot: null, status: "new" });
-      const notified = await notifyOwner({ title: `طلب استشارة جديد — ${input.fullName}`, content: consultationNotificationContent(input, sourceProject?.title) });
-      return { success: true as const, id: request?.id ?? null, notified };
-    }),
-    list: adminProcedure.input(z.object({ search: z.string().trim().max(160).optional(), city: z.string().trim().max(160).optional(), service: z.string().trim().max(180).optional(), status: consultationStatus.optional(), date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional() }).optional()).query(({ input }) => listConsultationRequests(input ?? {})),
-    get: adminProcedure.input(z.object({ id: z.number().int().positive() })).query(({ input }) => getConsultationRequest(input.id)),
+    create: publicProcedure
+      .input(consultationInput)
+      .mutation(async ({ input }) => {
+        if (input.honeypot.trim())
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "تعذر قبول الطلب.",
+          });
+        const sourceProject = input.sourceProjectSlug
+          ? await getProjectBySlug(input.sourceProjectSlug)
+          : undefined;
+        const request = await createConsultationRequest({
+          ...input,
+          email: input.email || null,
+          aestheticPreference: input.aestheticPreference || null,
+          sourceProjectSlug: sourceProject?.slug ?? null,
+          sourceProjectTitle: sourceProject?.title ?? null,
+          utmSource: input.utmSource || null,
+          utmMedium: input.utmMedium || null,
+          utmCampaign: input.utmCampaign || null,
+          honeypot: null,
+          status: "new",
+        });
+        const notified = await notifyOwner({
+          title: `طلب استشارة جديد — ${input.fullName}`,
+          content: consultationNotificationContent(input, sourceProject?.title),
+        });
+        return { success: true as const, id: request?.id ?? null, notified };
+      }),
+    list: adminProcedure
+      .input(
+        z
+          .object({
+            search: z.string().trim().max(160).optional(),
+            city: z.string().trim().max(160).optional(),
+            service: z.string().trim().max(180).optional(),
+            status: consultationStatus.optional(),
+            date: z
+              .string()
+              .regex(/^\d{4}-\d{2}-\d{2}$/)
+              .optional(),
+          })
+          .optional()
+      )
+      .query(({ input }) => listConsultationRequests(input ?? {})),
+    get: adminProcedure
+      .input(z.object({ id: z.number().int().positive() }))
+      .query(({ input }) => getConsultationRequest(input.id)),
     stats: adminProcedure.query(() => getConsultationStats()),
-    update: adminProcedure.input(z.object({ id: z.number().int().positive(), status: consultationStatus, adminNotes: z.string().max(5000).optional().or(z.literal("")) })).mutation(({ ctx, input }) => updateConsultationRequest(input.id, { status: input.status, adminNotes: input.adminNotes || null, lastEditedBy: ctx.user.id })),
-    export: adminProcedure.input(z.object({ search: z.string().trim().max(160).optional(), city: z.string().trim().max(160).optional(), service: z.string().trim().max(180).optional(), status: consultationStatus.optional(), date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional() }).optional()).query(({ input }) => listConsultationRequests(input ?? {})),
+    update: adminProcedure
+      .input(
+        z.object({
+          id: z.number().int().positive(),
+          status: consultationStatus,
+          adminNotes: z.string().max(5000).optional().or(z.literal("")),
+        })
+      )
+      .mutation(({ ctx, input }) =>
+        updateConsultationRequest(input.id, {
+          status: input.status,
+          adminNotes: input.adminNotes || null,
+          lastEditedBy: ctx.user.id,
+        })
+      ),
+    export: adminProcedure
+      .input(
+        z
+          .object({
+            search: z.string().trim().max(160).optional(),
+            city: z.string().trim().max(160).optional(),
+            service: z.string().trim().max(180).optional(),
+            status: consultationStatus.optional(),
+            date: z
+              .string()
+              .regex(/^\d{4}-\d{2}-\d{2}$/)
+              .optional(),
+          })
+          .optional()
+      )
+      .query(({ input }) => listConsultationRequests(input ?? {})),
   }),
   analytics: router({
-    overview: adminProcedure.input(z.object({ months: z.union([z.literal(6), z.literal(12), z.literal(24)]).optional() }).optional()).query(({ input }) => getAnalyticsTimeline(input?.months ?? 12)),
+    overview: adminProcedure
+      .input(
+        z
+          .object({
+            months: z
+              .union([z.literal(6), z.literal(12), z.literal(24)])
+              .optional(),
+          })
+          .optional()
+      )
+      .query(({ input }) => getAnalyticsTimeline(input?.months ?? 12)),
   }),
   projects: router({
-    list: publicProcedure.input(z.object({ designType: z.enum(["interior", "architectural"]).optional() }).optional()).query(({ input }) => listProjects(input?.designType)),
-    bySlug: publicProcedure.input(z.object({ slug: z.string().min(1) })).query(({ input }) => getProjectBySlug(input.slug)),
+    list: publicProcedure
+      .input(
+        z
+          .object({
+            designType: z.enum(["interior", "architectural"]).optional(),
+          })
+          .optional()
+      )
+      .query(({ input }) => listProjects(input?.designType)),
+    bySlug: publicProcedure
+      .input(z.object({ slug: z.string().min(1) }))
+      .query(async ({ input }) =>
+        toNullablePublicProject(await getProjectBySlug(input.slug))
+      ),
     adminList: adminProcedure.query(() => listProjects(undefined, true)),
-    create: adminProcedure.input(z.object(projectFields)).mutation(({ ctx, input }) => createProject({ ...input, ownerId: ctx.user.id })),
-    update: adminProcedure.input(z.object({ id: z.number().int().positive(), data: z.object(projectFields).partial() })).mutation(({ input }) => updateProject(input.id, input.data)),
-    delete: adminProcedure.input(z.object({ id: z.number().int().positive() })).mutation(({ input }) => deleteProject(input.id)),
+    create: adminProcedure
+      .input(z.object(projectFields))
+      .mutation(({ ctx, input }) =>
+        createProject({ ...input, ownerId: ctx.user.id })
+      ),
+    update: adminProcedure
+      .input(
+        z.object({
+          id: z.number().int().positive(),
+          data: z.object(projectFields).partial(),
+        })
+      )
+      .mutation(({ input }) => updateProject(input.id, input.data)),
+    delete: adminProcedure
+      .input(z.object({ id: z.number().int().positive() }))
+      .mutation(({ input }) => deleteProject(input.id)),
   }),
   testimonials: router({
     list: publicProcedure.query(() => listTestimonials(true)),
     adminList: adminProcedure.query(() => listTestimonials(false)),
-    create: adminProcedure.input(z.object(testimonialFields)).mutation(({ ctx, input }) => { assertTestimonialPublication(input); return createTestimonial({ ...input, ownerId: ctx.user.id }); }),
-    update: adminProcedure.input(z.object({ id: z.number().int().positive(), data: z.object(testimonialFields).partial() })).mutation(({ input }) => { assertTestimonialPublication(input.data); return updateTestimonial(input.id, input.data); }),
-    delete: adminProcedure.input(z.object({ id: z.number().int().positive() })).mutation(({ input }) => deleteTestimonial(input.id)),
+    create: adminProcedure
+      .input(z.object(testimonialFields))
+      .mutation(({ ctx, input }) => {
+        assertTestimonialPublication(input);
+        return createTestimonial({ ...input, ownerId: ctx.user.id });
+      }),
+    update: adminProcedure
+      .input(
+        z.object({
+          id: z.number().int().positive(),
+          data: z.object(testimonialFields).partial(),
+        })
+      )
+      .mutation(({ input }) => {
+        assertTestimonialPublication(input.data);
+        return updateTestimonial(input.id, input.data);
+      }),
+    delete: adminProcedure
+      .input(z.object({ id: z.number().int().positive() }))
+      .mutation(({ input }) => deleteTestimonial(input.id)),
   }),
 });
 

@@ -3,6 +3,7 @@ import { ArrowDownLeft, ArrowUpLeft, Check, MoveUpLeft } from "lucide-react";
 import { lazy, Suspense } from "react";
 import { Link } from "wouter";
 import { useLocale } from "../contexts/LocaleContext";
+import ResponsiveImage from "../components/ResponsiveImage";
 
 const TestimonialsSection = lazy(
   () => import("../components/TestimonialsSection")
@@ -156,7 +157,7 @@ export default function Home() {
     <div className="home-page">
       <section className="hero hero-immersive">
         <div className="hero-media">
-          <img
+          <ResponsiveImage
             className="hero-parallax-image"
             src={heroImage}
             alt={
@@ -282,7 +283,7 @@ export default function Home() {
         </div>
         <div className="manifesto-aside founder-card">
           <div className="founder-portrait">
-            <img
+            <ResponsiveImage
               src={hebaPortrait}
               alt={
                 isArabic
@@ -328,7 +329,7 @@ export default function Home() {
             className="project-card project-card-large"
           >
             <div className="project-image">
-              <img
+              <ResponsiveImage
                 src={projectImages.interior}
                 alt={
                   isArabic
@@ -351,7 +352,7 @@ export default function Home() {
           <div className="project-stack">
             <Link href="/projects/boska" className="project-card">
               <div className="project-image">
-                <img
+                <ResponsiveImage
                   src={projectImages.boska}
                   alt={
                     isArabic
