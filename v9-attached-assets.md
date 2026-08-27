@@ -1,0 +1,5 @@
+# v9 Attached Assets Review
+
+The attached wide banner is a PNG measuring 1080×283 pixels (aspect ratio 3.82:1). The clearly readable text is: “your home,, should tell the story of who you are <3” and “Interior Design Studio”. The punctuation appears as two commas after “home” in the source image and is preserved here as observed rather than corrected by inference.
+
+The attached portrait is a PNG measuring 693×960 pixels (aspect ratio 0.72:1). It shows Heba El Damarany in a head-and-shoulders/upper-body portrait with a patterned headscarf. Visible source marks/text include “Rüya Beauty”, Arabic text “د/ سارة علاء”, large Arabic promotional text across the lower portion, and “#HEBA_ELDAMARANY”. Because those marks are part of the supplied image, the asset should not be used as a clean About portrait without the user's explicit approval of retaining or removing them. The verified name visible in the hashtag is Heba El Damarany; no academic degree, years of experience, license, or other qualification is legible/approved in the attachment.

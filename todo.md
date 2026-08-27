@@ -213,3 +213,12 @@
 - [x] Publish the cafe project with the public name `BOSKA` only, using its original gallery images. (Live at `/projects/boska`.)
 - [x] Keep the second project label limited to the user-approved name and images until its exact public name is confirmed. (Live as `Interior` at `/projects/interior`.)
 - [x] Do not add or alter Heba's portrait or qualifications without the actual approved file and factual text. (Existing content preserved; no unverified replacement made.)
+
+
+# v9 attached portrait and profile copy
+
+- [x] Validate the newly attached portrait and header image dimensions and readable text before using them. (Portrait 693×960; banner 1080×283; verified visible text documented in v9-attached-assets.md.)
+- [x] Upload an optimized portrait asset to permanent WebDev storage and replace the About portrait reference. (WebP asset `/manus-storage/heba-portrait-final_6972e2d6.webp`.)
+- [x] Apply only the profile wording explicitly readable in the attached material; do not infer qualifications beyond it. (Added the supplied home-story quote in Arabic/English; no credentials inferred.)
+- [ ] Re-run TypeScript, Vitest, production build, Lighthouse, and cross-browser checks after the portrait/About update.
+- [ ] Save the final v9 checkpoint after the attached portrait and approved copy are live.
