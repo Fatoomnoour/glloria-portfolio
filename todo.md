@@ -286,3 +286,19 @@
 - [x] Add optional, data-gated testimonials carousel, material explorer, and Qena location section without inventing testimonials, metrics, materials, or project claims. (Carousel renders only approved testimonials; material explorer reads only approved project input; Contact location uses the existing approved Qena label.)
 - [x] Add Vitest coverage for new helpers/components and complete TypeScript, build, responsive, accessibility, cross-browser, and Lighthouse validation. (Added booking-wizard and case-study gate tests; 26 Vitest tests pass, TypeScript/build pass, targeted 1440×900 and 390×844 captures pass, and source content-integrity scan found no legacy references. The existing advisory application-chunk warning is retained in README.)
 - [x] Update architecture and setup documentation, push the verified implementation to private GitHub, and save the final WebDev checkpoint. (README.md and ARCHITECTURE.md updated; commit ea7a632 pushed to Fatoomnoour/glloria-portfolio; final WebDev checkpoint is being saved now.)
+
+# Complete redesign and refactoring — approved attachment 12
+
+- [x] Audit the current Warm Editorial baseline against the approved redesign and record only material deltas. (Duplicate tracker; consolidated audit is documented below in redesign-audit.md.)
+- [x] Refine the floating bilingual public header and the hero into a more immersive image-led editorial composition, while retaining the existing original hero asset, theme toggle, accessibility, and CTA destinations. (Duplicate tracker; consolidated task is tracked below.)
+- [x] Strengthen the lookbook hierarchy, designer portrait narrative, services list, and process timeline without adding card-heavy layouts, unverified biography claims, or fabricated performance statistics. (Duplicate tracker; consolidated task is tracked below.)
+- [x] Preserve and polish the data-backed consultation wizard, direct contact routes, and real-testimonial-only behavior within a visually consistent public system. (Duplicate tracker; consolidated task is tracked below.)
+- [x] Verify RTL/LTR, responsive layouts, focus/touch behavior, motion reduction, TypeScript, Vitest, build output, and content provenance; document results and push the verified update to private GitHub. (Duplicate tracker; consolidated task is tracked below.)
+
+# Complete redesign and refactoring — approved attachment 12
+
+- [x] Audit the current Warm Editorial baseline against the approved redesign and record only material deltas. (Documented in redesign-audit.md; existing full-stack and editorial features are retained while only remaining visual deltas are targeted.)
+- [x] Refine the floating bilingual public header and the hero into a more immersive image-led editorial composition, while retaining the existing original hero asset, theme toggle, accessibility, and CTA destinations. (Implemented the full-bleed original-image hero, cinematic contrast layer, frosted floating navigation, and verified readable desktop/mobile CTA states.)
+- [x] Strengthen the lookbook hierarchy, designer portrait narrative, services list, and process timeline without adding card-heavy layouts, unverified biography claims, or fabricated performance statistics. (Refined asymmetric image proportions, portrait integration, line-based services, and circular process markers; verified on desktop and mobile.)
+- [x] Preserve and polish the data-backed consultation wizard, direct contact routes, and real-testimonial-only behavior within a visually consistent public system. (Aligned consultation and inquiry surfaces with the refreshed system; wizard persistence, direct routes, WhatsApp handoff, and verified-only testimonial rendering are retained.)
+- [ ] Verify RTL/LTR, responsive layouts, focus/touch behavior, motion reduction, TypeScript, Vitest, build output, and content provenance; document results and push the verified update to private GitHub.

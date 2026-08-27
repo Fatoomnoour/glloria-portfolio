@@ -32,7 +32,7 @@ export default function RevealObserver() {
       observer.observe(element);
     });
 
-    const heroImage = document.querySelector<HTMLElement>(".hero-visual-frame img");
+    const heroImage = document.querySelector<HTMLElement>(".hero-parallax-image");
     let frame = 0;
     const updateParallax = () => {
       if (!heroImage || frame) return;

@@ -35,3 +35,15 @@ The 1440×900 archive capture shows the existing asymmetric lookbook with the ne
 ## Approved-plan phase 4–5 check
 
 Desktop captures show the consultation wizard as a progressive editorial form: step title, five-step progress, and contact fields are separated with thin rules rather than dense cards. The Contact page keeps the existing WhatsApp and social actions and now ends with a restrained Qena location section. The 390×844 captures show the mobile header, hero, wizard fields, and location section without visible horizontal overflow; the progress labels remain legible and the next action is reachable after the fields.
+
+## Attachment 12 — shell and hero check
+
+The redesigned desktop hero now uses the approved original hero image as a full-bleed composition with a low-contrast cinematic wash and readable editorial copy. The floating translucent header remains distinct from the image while retaining language, theme, and booking controls. At 390×844, the capsule header remains clear and the Arabic headline, primary consultation action, secondary work action, captions, and scroll cue stay readable within the viewport.
+
+## Attachment 12 — editorial sections check
+
+The full desktop capture shows a more open magazine-spread relationship between the selected project images, their labels, the founder portrait, and the line-based services/process sections. The mobile capture preserves this hierarchy with the portrait visible, organic image edges, compact process markers, readable Arabic headings, and no horizontal overflow visible in the full-page view.
+
+## Attachment 12 — booking and contact check
+
+The refreshed Booking page keeps the five-step consultation wizard clear beside its editorial explanation, with thin-rule input fields and no card grid. Contact retains its direct inquiry flow, WhatsApp/email/social actions, and the approved Qena location label in the same visual system. Both desktop captures preserve readable contrast and the footer remains concise.
