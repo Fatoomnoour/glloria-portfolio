@@ -258,3 +258,20 @@
 - [x] Verify lazy-loaded routes do not regress deep links, bilingual navigation, theme, booking, admin access, or gallery behavior. (TypeScript, 17 Vitest tests, build, and mobile/desktop route screenshots pass; route-level QA remains covered by the final browser pass.)
 - [ ] Re-run TypeScript, Vitest, production build, responsive/browser checks, and Lighthouse Production; compare bundle and performance results.
 - [ ] Document results and save a new checkpoint after all changes are verified.
+
+
+# GitHub private export and Full-Stack / UX/UI review
+
+- [ ] Create or update a private GitHub repository for Glloria using the authenticated GitHub CLI, without committing secrets, local media, build output, or audit artifacts that should remain outside the app.
+- [ ] Audit repository hygiene, environment handling, authentication/OAuth boundaries, admin authorization, tRPC procedures, database schema, storage references, booking flow, WhatsApp handoff, and error/loading states.
+- [ ] Audit UX/UI across public and admin routes with emphasis on removing excessive rectangular cards, reducing border-box density, and preserving the Warm Editorial hierarchy.
+- [ ] Apply material UX/UI improvements identified by the audit, keeping bilingual RTL/LTR, mobile touch targets, dark mode, accessibility, and original project assets intact.
+- [ ] Run TypeScript, Vitest, production build, responsive/browser QA, and Lighthouse after the review changes.
+- [ ] Commit the reviewed source to the private GitHub repository, document setup and architecture, and save a final WebDev checkpoint after verification.
+
+# Final review finding — content integrity
+
+- [x] Remove legacy Unsplash/Namaa fallback case-study data from ProjectDetail so public routes never fall back to unapproved reference imagery when managed content is unavailable. (Public detail is now fail-closed; the source tree contains no legacy reference imagery.)
+- [x] Align ShareActions accessible names with their visible labels and keep the copied state name synchronized. (Updated native share, social, and copy controls and added icon aria-hidden semantics.)
+- [x] Prevent motion-ready from causing first-paint/layout shifts on public routes while preserving the restrained reveal and reduced-motion behavior. (motion-ready now initializes in useLayoutEffect; motion contract and build checks pass.)
+- [ ] Reduce font-induced layout shift in the public header without removing the Alexandria/IBM Plex Arabic design system.

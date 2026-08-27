@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 
 export const REVEAL_SELECTOR = [
   ".home-page > section",
@@ -9,7 +9,7 @@ export const REVEAL_SELECTOR = [
 ].join(", ");
 
 export default function RevealObserver() {
-  useEffect(() => {
+  useLayoutEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced || !("IntersectionObserver" in window)) return;
 
