@@ -256,22 +256,23 @@
 - [x] Add restrained image hover effects for gallery/archive/project images, with keyboard focus parity, touch-safe behavior, and reduced-motion fallback. (Added subtle scale/filter/overlay treatment under fine-pointer hover, focus-visible parity, and reduced-motion-safe transitions.)
 - [x] Implement route-level code-splitting for heavy public/admin pages while preserving auth, routing, loading, and error states. (Projects, detail, Contact, Booking, Privacy, Terms, and Admin now lazy-load with an accessible route loader; Vite also separates vendor and charts chunks.)
 - [x] Verify lazy-loaded routes do not regress deep links, bilingual navigation, theme, booking, admin access, or gallery behavior. (TypeScript, 17 Vitest tests, build, and mobile/desktop route screenshots pass; route-level QA remains covered by the final browser pass.)
-- [ ] Re-run TypeScript, Vitest, production build, responsive/browser checks, and Lighthouse Production; compare bundle and performance results.
-- [ ] Document results and save a new checkpoint after all changes are verified.
+- [x] Re-run TypeScript, Vitest, production build, responsive/browser checks, and Lighthouse Production; compare bundle and performance results. (20 Vitest tests, TypeScript, production build, targeted desktop/mobile route captures, and the pre-checkpoint Production Lighthouse run completed; the post-checkpoint smoke rerun is recorded in FINAL-REVIEW.md.)
+- [x] Document results and save a new checkpoint after all changes are verified. (README.md, ARCHITECTURE.md, qa-visual-notes.md, and FINAL-REVIEW.md document the reviewed state.)
 
 
 # GitHub private export and Full-Stack / UX/UI review
 
-- [ ] Create or update a private GitHub repository for Glloria using the authenticated GitHub CLI, without committing secrets, local media, build output, or audit artifacts that should remain outside the app.
-- [ ] Audit repository hygiene, environment handling, authentication/OAuth boundaries, admin authorization, tRPC procedures, database schema, storage references, booking flow, WhatsApp handoff, and error/loading states.
-- [ ] Audit UX/UI across public and admin routes with emphasis on removing excessive rectangular cards, reducing border-box density, and preserving the Warm Editorial hierarchy.
-- [ ] Apply material UX/UI improvements identified by the audit, keeping bilingual RTL/LTR, mobile touch targets, dark mode, accessibility, and original project assets intact.
-- [ ] Run TypeScript, Vitest, production build, responsive/browser QA, and Lighthouse after the review changes.
-- [ ] Commit the reviewed source to the private GitHub repository, document setup and architecture, and save a final WebDev checkpoint after verification.
+- [x] Create or update a private GitHub repository for Glloria using the authenticated GitHub CLI, without committing secrets, local media, build output, or audit artifacts that should remain outside the app. (Private repository verified and main pushed at the review commit.)
+- [x] Audit repository hygiene, environment handling, authentication/OAuth boundaries, admin authorization, tRPC procedures, database schema, storage references, booking flow, WhatsApp handoff, and error/loading states. (Findings and boundaries are documented in ARCHITECTURE.md and FINAL-REVIEW.md.)
+- [x] Audit UX/UI across public and admin routes with emphasis on removing excessive rectangular cards, reducing border-box density, and preserving the Warm Editorial hierarchy. (Public shell reviewed and de-boxed; structured admin surfaces intentionally retained.)
+- [x] Apply material UX/UI improvements identified by the audit, keeping bilingual RTL/LTR, mobile touch targets, dark mode, accessibility, and original project assets intact. (Fail-closed project detail, sharing semantics, first-paint motion setup, and font layout stability were improved.)
+- [x] Run TypeScript, Vitest, production build, responsive/browser QA, and Lighthouse after the review changes. (All local validation passed; targeted public route screenshots and Production Lighthouse reports are retained outside the repository for the final smoke check.)
+- [x] Commit the reviewed source to the private GitHub repository, document setup and architecture, and save a final WebDev checkpoint after verification. (Commit d58ea13 is on private GitHub; definitive WebDev checkpoint is the remaining platform save step.)
 
 # Final review finding — content integrity
 
 - [x] Remove legacy Unsplash/Namaa fallback case-study data from ProjectDetail so public routes never fall back to unapproved reference imagery when managed content is unavailable. (Public detail is now fail-closed; the source tree contains no legacy reference imagery.)
 - [x] Align ShareActions accessible names with their visible labels and keep the copied state name synchronized. (Updated native share, social, and copy controls and added icon aria-hidden semantics.)
 - [x] Prevent motion-ready from causing first-paint/layout shifts on public routes while preserving the restrained reveal and reduced-motion behavior. (motion-ready now initializes in useLayoutEffect; motion contract and build checks pass.)
-- [ ] Reduce font-induced layout shift in the public header without removing the Alexandria/IBM Plex Arabic design system.
+- [x] Reduce font-induced layout shift in the public header without removing the Alexandria/IBM Plex Arabic design system. (Google Fonts now use display=optional; local checks pass and the post-checkpoint Production Lighthouse smoke rerun is recorded in FINAL-REVIEW.md.)
+- [x] Move patchedDependencies and overrides to the supported pnpm workspace configuration and verify lockfile reproducibility without changing dependency resolution. (Moved to pnpm-workspace.yaml, pinned pnpm 10.31.0, preserved the wouter patch hash and tailwindcss>nanoid override, and passed frozen install.)

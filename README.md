@@ -33,7 +33,7 @@ The public project records currently use only the approved labels **Private Resi
 
 ## Local development
 
-Use Node.js 22 or later and pnpm. Install dependencies, then run the development server:
+Use Node.js 22 or later and the pinned pnpm 10.31.0 toolchain. Install dependencies, then run the development server:
 
 ```bash
 pnpm install
