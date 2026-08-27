@@ -25,7 +25,13 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ["react", "react-dom", "wouter"],
-          charts: ["recharts"],
+          icons: ["lucide-react"],
+          data: [
+            "@tanstack/react-query",
+            "@trpc/client",
+            "@trpc/react-query",
+            "superjson",
+          ],
         },
       },
     },

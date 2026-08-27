@@ -186,14 +186,13 @@
 - [x] Hide empty public qualification and testimonial states, update copyright year dynamically, and preserve truthful content behavior.
 - [x] Add/update project-gallery tests and run TypeScript, Vitest, production build, and responsive visual checks at the requested mobile sizes. (15 tests passed; build passed; public and draft-slug responsive checks completed.)
 - [x] Create explicit unpublished draft project records for the supplied interior and BOSKA image groups without publishing them to visitors.
+
 # v8 verification follow-up
 
 - [x] Make the mobile hero order explicit and verify the homepage has no page-level horizontal overflow after the header changes. (Hero order and direct width measurement verified at 390×844.)
 - [x] Measure homepage mobile `documentElement.scrollWidth` against `clientWidth` after v8 header/hero changes and document the result. (390 = 390 for both document and body widths.)
 - [x] Inspect and update the public testimonials empty state so it is hidden or clearly truthful, then verify the public behavior. (Empty public testimonials now render no section; admin remains available for approved stories.)
 - [x] Save a new checkpoint after the original-asset update and all verification items are complete. (Checkpoint fafc0278.)
-
-
 
 # Glloria v9 — Approved content, portrait, and cross-browser audit
 
@@ -206,14 +205,12 @@
 - [x] Add/update Vitest coverage for the v9 content and metadata behavior, then run TypeScript, tests, and production build. (16 tests passed; TypeScript and build passed.)
 - [x] Save the final v9 checkpoint after all approved content and audit findings are complete. (Checkpoint 005630d3.)
 
-
 # v9 content clarification
 
 - [x] Confirm the two drafts are approved as executed projects and publish only the minimal labels supplied by the user; do not add invented descriptions, city, year, or marketing copy. (Confirmed and applied.)
 - [x] Publish the cafe project with the public name `BOSKA` only, using its original gallery images. (Live at `/projects/boska`.)
 - [x] Keep the second project label limited to the user-approved name and images until its exact public name is confirmed. (Live as `Interior` at `/projects/interior`.)
 - [x] Do not add or alter Heba's portrait or qualifications without the actual approved file and factual text. (Existing content preserved; no unverified replacement made.)
-
 
 # v9 attached portrait and profile copy
 
@@ -222,7 +219,6 @@
 - [x] Apply only the profile wording explicitly readable in the attached material; do not infer qualifications beyond it. (Added the supplied home-story quote in Arabic/English; no credentials inferred.)
 - [x] Re-run TypeScript, Vitest, production build, Lighthouse, and cross-browser checks after the portrait/About update. (16 Vitest tests, TypeScript, build, final Production Lighthouse, and 12 Chromium/Firefox/WebKit checks completed.)
 - [x] Save the final v9 checkpoint after the attached portrait and approved copy are live. (Checkpoint 005630d3.)
-
 
 # New brief — Editorial luxury refinement
 
@@ -238,7 +234,6 @@
 - [x] Run final Lighthouse performance/accessibility/best-practices/SEO checks, address material application findings, and document platform/runtime limitations. (Production scores and remaining platform/bundle warnings documented in brief-gap-audit.md.)
 - [x] Update Vitest coverage for any new behavior, run TypeScript/tests/build, and save a new checkpoint only after all verified changes are complete. (RevealObserver contract added; 17 tests, TypeScript, build, responsive QA, and final Production Lighthouse pass completed.)
 
-
 # New brief — original asset separation and case-study refinement
 
 - [x] Review the newly attached brief against the live v9 asset map and confirm which original images belong to Private Residence versus BOSKA Café & Restaurant without mixing galleries. (Database galleries remain separated: 12 Interior/Private Residence images and 6 BOSKA images.)
@@ -249,7 +244,6 @@
 - [x] Verify booking/admin/WhatsApp/bilingual/dark-mode behavior remains intact after the content and asset changes. (Existing protected consultation/admin tests and prior browser flows remain passing; this round changed only public content, assets, and gallery presentation.)
 - [x] Re-run responsive, keyboard, link, image, console, Lighthouse, and cross-browser checks, then add/update Vitest coverage and save a final checkpoint. (84 cross-browser cases passed with zero exceptions/overflow/control failures; 17 Vitest tests, TypeScript, build, and final Production Lighthouse completed and documented.)
 
-
 # Performance and gallery interaction refinement
 
 - [x] Inventory image-gallery hover targets and current production bundle composition before changing implementation. (Existing project/archive/detail image targets and the 1.36MB entry were inventoried.)
@@ -258,7 +252,6 @@
 - [x] Verify lazy-loaded routes do not regress deep links, bilingual navigation, theme, booking, admin access, or gallery behavior. (TypeScript, 17 Vitest tests, build, and mobile/desktop route screenshots pass; route-level QA remains covered by the final browser pass.)
 - [x] Re-run TypeScript, Vitest, production build, responsive/browser checks, and Lighthouse Production; compare bundle and performance results. (20 Vitest tests, TypeScript, production build, targeted desktop/mobile route captures, and the pre-checkpoint Production Lighthouse run completed; the post-checkpoint smoke rerun is recorded in FINAL-REVIEW.md.)
 - [x] Document results and save a new checkpoint after all changes are verified. (README.md, ARCHITECTURE.md, qa-visual-notes.md, and FINAL-REVIEW.md document the reviewed state.)
-
 
 # GitHub private export and Full-Stack / UX/UI review
 
@@ -309,3 +302,13 @@
 - [x] Improve the five-step booking experience with an accessible progress announcement, review-led final step, and session-only recovery of non-sensitive unfinished input. (The live step remains announced via `aria-live`; only project preferences are session-saved, while name, phone, email, and description remain browser-memory only.)
 - [x] Add privacy-aware campaign attribution from UTM parameters to booking submissions and protected admin exports without profiling visitors or adding third-party trackers. (Only source, medium, and campaign are bounded and persisted; no referrer, IP, click identifier, fingerprint, or third-party tracker was added.)
 - [x] Add unit coverage and complete TypeScript, build, visual, content-integrity, and booking-flow validation; update documentation, push the verified commit, and save a WebDev checkpoint. (Added attribution parser coverage; 28 Vitest tests, TypeScript, production build, content-integrity scan, and desktop/mobile project-to-booking QA pass. README documents privacy-aware attribution.)
+
+# Approved attachment 13 — premium production audit and delivery
+
+- [x] Audit the post-rebase frontend/backend/deployment configuration, existing SEO, image handling, route refresh support, and available checks; document material gaps only. (Findings and unresolved platform conditions are recorded in `attachment-13-audit.md`.)
+- [x] Add an accessible, lazy-loaded project-gallery lightbox with counter, keyboard controls, Escape close, mobile gesture support, original-image captions, and no distracting motion. (Radix dialog provides focus trap; the implementation restores focus to its originating image.)
+- [x] Simplify the booking presentation into three user-facing logical stages while preserving the existing five-step persisted data contract, privacy consent, anti-spam, recovery, and WhatsApp handoff. (New unit coverage confirms the five-to-three grouping.)
+- [x] Add a mobile-only safe-area action bar with secondary WhatsApp and primary consultation actions without obscuring content or weakening CTA hierarchy. (Reviewed in a 390px viewport.)
+- [x] Audit and improve image delivery, LCP/CLS safeguards, accessibility semantics, route SEO metadata/structured data, error/loading behavior, and bundle split boundaries without adding fake content or tracking data. (Primary bundle reduced from 562.59 kB to 438.04 kB raw; project/booking CLS corrected to 0 in local Lighthouse.)
+- [x] Validate public/admin/auth and API behavior, Arabic/English RTL/LTR, dark/light modes, mobile/tablet/desktop, builds/tests, production Lighthouse, and Vercel-compatible free deployment configuration; document conclusions and limitations. (32 Vitest tests, TypeScript, build, direct-route smoke, screenshots, and local Lighthouse passed; Vercel publication itself remains pending an enabled connection.)
+- [x] Push the verified source to private GitHub, save a WebDev checkpoint, and provide the available live URL plus Vercel deployment steps/required variable names without exposing secrets. (Verified source pushed to private `main` at `c8bac1c`; the checkpoint created immediately after this tracker update is the published restoration point.)

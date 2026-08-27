@@ -10,7 +10,11 @@ export type BookingAttribution = {
   utmCampaign: string | null;
 };
 
-const readSearchValue = (params: URLSearchParams, key: string, maximum: number) => {
+const readSearchValue = (
+  params: URLSearchParams,
+  key: string,
+  maximum: number
+) => {
   const value = params.get(key)?.trim();
   return value && value.length <= maximum ? value : null;
 };
@@ -23,7 +27,10 @@ export function parseBookingAttribution(search: string): BookingAttribution {
   const params = new URLSearchParams(search);
   const candidateProject = readSearchValue(params, "project", 160);
   return {
-    sourceProjectSlug: candidateProject && /^[a-z0-9-]+$/i.test(candidateProject) ? candidateProject.toLowerCase() : null,
+    sourceProjectSlug:
+      candidateProject && /^[a-z0-9-]+$/i.test(candidateProject)
+        ? candidateProject.toLowerCase()
+        : null,
     utmSource: readSearchValue(params, "utm_source", 100),
     utmMedium: readSearchValue(params, "utm_medium", 100),
     utmCampaign: readSearchValue(params, "utm_campaign", 160),
@@ -46,12 +53,47 @@ export type BookingValidationDraft = {
 
 export type BookingStep = 1 | 2 | 3 | 4 | 5;
 
+export type BookingPresentationStage = {
+  stage: 1 | 2 | 3;
+  position: 1 | 2;
+  totalPositions: 1 | 2;
+};
+
+/**
+ * The form validates and persists five focused steps, while the public-facing
+ * progress language groups them into three calmer consultation stages.
+ */
+export function getBookingPresentationStage(
+  step: BookingStep
+): BookingPresentationStage {
+  if (step === 1) return { stage: 1, position: 1, totalPositions: 2 };
+  if (step === 2) return { stage: 1, position: 2, totalPositions: 2 };
+  if (step === 3) return { stage: 2, position: 1, totalPositions: 2 };
+  if (step === 4) return { stage: 2, position: 2, totalPositions: 2 };
+  return { stage: 3, position: 1, totalPositions: 1 };
+}
+
 const hasValue = (value: string | undefined) => Boolean(value?.trim());
 
-export function isBookingStepComplete(step: BookingStep, draft: BookingValidationDraft) {
+export function isBookingStepComplete(
+  step: BookingStep,
+  draft: BookingValidationDraft
+) {
   if (step === 1) return hasValue(draft.fullName) && hasValue(draft.phone);
-  if (step === 2) return hasValue(draft.city) && hasValue(draft.propertyType) && hasValue(draft.area);
+  if (step === 2)
+    return (
+      hasValue(draft.city) &&
+      hasValue(draft.propertyType) &&
+      hasValue(draft.area)
+    );
   if (step === 3) return hasValue(draft.service) && hasValue(draft.budget);
-  if (step === 4) return hasValue(draft.preferredDate) && hasValue(draft.preferredTime) && Boolean(draft.description?.trim() && draft.description.trim().length >= 10);
+  if (step === 4)
+    return (
+      hasValue(draft.preferredDate) &&
+      hasValue(draft.preferredTime) &&
+      Boolean(
+        draft.description?.trim() && draft.description.trim().length >= 10
+      )
+    );
   return draft.privacyConsent === true;
 }
