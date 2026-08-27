@@ -20,3 +20,10 @@ The current app still loads the production React bundle as one large first-party
 The production build passed TypeScript and 17 Vitest tests. Responsive QA covered 35 Chromium cases across 320×568, 360×800, 375×812, 390×844, 412×915, 430×932, and 1440×900; it found zero exceptions, zero horizontal-overflow failures, zero empty-link failures, and zero keyboard-focus failures. The broader browser suite covered 84 Chromium/Firefox/WebKit route combinations with zero overflow, zero control failures, and no test-run exceptions.
 
 Final Production Lighthouse scores after deployment were: Home 68 Performance / 90 Accessibility / 77 Best Practices / 100 SEO; Projects 65 / 92 / 77 / 100; BOSKA 56 / 90 / 77 / 100. Remaining Lighthouse findings include the large first-party React bundle, initial server response time, external/runtime console and font conditions, source-map/deprecation diagnostics, and a small set of contrast/name/touch-target audits. The application remains functional and the warnings are documented for a future code-splitting and accessibility pass rather than hidden.
+
+
+## Production validation after original-project reconciliation
+
+The final deployed audit was rerun after publishing the Private Residence and Boska Café & Restaurant labels, replacing Home and Projects fallbacks, and adding the clean About portrait plus swipe/full-size gallery behavior. Lighthouse Production scores were Home: 48 Performance, 90 Accessibility, 77 Best Practices, 100 SEO; Projects: 52 Performance, 92 Accessibility, 77 Best Practices, 100 SEO; BOSKA: 62 Performance, 90 Accessibility, 77 Best Practices, 100 SEO. The lower Performance scores are consistent with the large first-party bundle, image loading, and platform/runtime conditions already noted; no functional regression was observed.
+
+The final browser QA covered 84 combinations across Chromium, Firefox, and WebKit at all requested viewport sizes, with zero exceptions, zero horizontal-overflow failures, zero control failures, and all project gallery full-size links present. The remaining three console-error rows were external font/runtime requests, not application exceptions.
