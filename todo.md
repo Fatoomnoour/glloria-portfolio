@@ -139,5 +139,20 @@
 
 # Final published verification checkpoint
 
-- [ ] Save a fresh checkpoint after the confirmed /privacy, /terms, and /booking production-route checks.
-- [ ] Optionally re-open the intended public domain after that checkpoint to confirm the verified routes remain live.
+- [x] Save a fresh checkpoint after the confirmed /privacy, /terms, and /booking production-route checks. (Checkpoint 5fcf655c.)
+- [x] Optionally re-open the intended public domain after that checkpoint to confirm the verified routes remain live. (Confirmed on the intended domain.)
+
+# Final route retention proof
+
+- [x] Re-open and verify /privacy, /terms, and /booking on the intended published domain after checkpoint 5fcf655c. (All three routes confirmed live.)
+
+# Glloria v7 — Analytics, Dark Mode, and WhatsApp handoff
+
+- [x] Add protected time-series analytics for consultation bookings and projects with empty-period buckets.
+- [x] Add interactive admin charts with range controls, tooltips, legends, and responsive layout.
+- [x] Enable persistent dark-mode switching across public pages and the admin dashboard.
+- [x] Audit dark-mode contrast, forms, tables, navigation, charts, focus states, and mobile overflow.
+- [x] Add a post-booking WhatsApp Business handoff to +20 10 66646397 with a prefilled, encoded confirmation message.
+- [x] Add tests for analytics permissions/aggregation and WhatsApp URL/message generation.
+- [x] Run TypeScript, Vitest, production build, and desktop/mobile visual verification.
+- [ ] Save a new checkpoint after all v7 changes and verification are complete.

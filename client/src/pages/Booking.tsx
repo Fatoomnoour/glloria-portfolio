@@ -4,6 +4,7 @@ import { ArrowUpLeft, CalendarDays, Check, Clock3, Loader2 } from "lucide-react"
 import { Link } from "wouter";
 import { useLocale } from "../contexts/LocaleContext";
 import { trpc } from "../lib/trpc";
+import { buildBookingConfirmationUrl } from "../../../shared/whatsapp";
 
 const timeOptions = [
   { value: "10:00", ar: "10:00 صباحاً", en: "10:00 AM" },
@@ -11,8 +12,6 @@ const timeOptions = [
   { value: "14:00", ar: "02:00 مساءً", en: "2:00 PM" },
   { value: "16:00", ar: "04:00 مساءً", en: "4:00 PM" },
 ];
-const whatsappNumber = "201097430973";
-
 type BookingState = {
   name: string;
   phone: string;
@@ -48,14 +47,27 @@ const initialBooking: BookingState = {
 export default function Booking() {
   const { t, locale } = useLocale();
   const [submitted, setSubmitted] = useState(false);
+  const [bookingId, setBookingId] = useState<number | null>(null);
   const [booking, setBooking] = useState<BookingState>(initialBooking);
   const minDate = useMemo(() => new Date().toISOString().split("T")[0], []);
   const selectedTime = timeOptions.find((item) => item.value === booking.time) ?? timeOptions[0];
   const createConsultation = trpc.consultations.create.useMutation({
-    onSuccess: () => setSubmitted(true),
+    onSuccess: (result) => {
+      setBookingId(result.id);
+      setSubmitted(true);
+    },
   });
 
-  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`${locale === "ar" ? "مرحباً Glloria، أود تأكيد طلب استشارة." : "Hello Glloria, I would like to confirm a consultation request."}\n${t("booking.fullName")}: ${booking.name}\n${t("booking.phone")}: ${booking.phone}\n${locale === "ar" ? "البريد الإلكتروني" : "Email"}: ${booking.email || "—"}\n${t("booking.city")}: ${booking.city}\n${t("booking.property")}: ${booking.property}\n${t("booking.area")}: ${booking.area}\n${t("booking.service")}: ${booking.service}\n${t("booking.budget")}: ${booking.budget}\n${t("booking.date")}: ${booking.date} — ${locale === "ar" ? selectedTime.ar : selectedTime.en}\n${t("booking.description")}: ${booking.description}`)}`;
+  const whatsappUrl = buildBookingConfirmationUrl({
+    locale,
+    bookingId,
+    name: booking.name,
+    phone: booking.phone,
+    city: booking.city,
+    service: booking.service,
+    date: booking.date,
+    time: locale === "ar" ? selectedTime.ar : selectedTime.en,
+  });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -100,8 +112,9 @@ export default function Booking() {
               <p className="eyebrow">{t("booking.successEyebrow")}</p>
               <h2>{t("booking.successTitle")}<br /><em>{t("booking.successAccent")}</em></h2>
               <p>{t("booking.successBody")}</p>
+              <p className="booking-whatsapp-note">{t("booking.whatsappHandoff")}</p>
               <a className="dark-button" href={whatsappUrl} target="_blank" rel="noreferrer">{t("booking.confirm")} <ArrowUpLeft size={18} /></a>
-              <button className="text-link booking-reset" onClick={() => { setSubmitted(false); setBooking(initialBooking); }}>{t("booking.edit")} <ArrowUpLeft size={16} /></button>
+              <button className="text-link booking-reset" onClick={() => { setSubmitted(false); setBookingId(null); setBooking(initialBooking); }}>{t("booking.edit")} <ArrowUpLeft size={16} /></button>
             </div>
           ) : (
             <form onSubmit={handleSubmit}>

@@ -1,6 +1,6 @@
 /* Glloria Design Direction: Warm Editorial Atelier — bilingual shell, quiet utility labels, fired-clay accents, and editorial navigation. */
 import { Link, Route, Switch, useLocation } from "wouter";
-import { ArrowUpLeft, Globe2, Instagram, Menu, X } from "lucide-react";
+import { ArrowUpLeft, Globe2, Instagram, Menu, Moon, Sun, X } from "lucide-react";
 import { useState } from "react";
 import Home from "./pages/Home";
 import Projects from "./pages/Projects";
@@ -12,6 +12,8 @@ import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 import Admin from "./pages/Admin";
 import { LocaleProvider, useLocale } from "./contexts/LocaleContext";
+import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
+import { GLLORIA_CONFIRMATION_WHATSAPP_NUMBER } from "../../shared/whatsapp";
 
 const navItems = [
   { key: "nav.home", href: "/" },
@@ -26,6 +28,8 @@ function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [location] = useLocation();
   const { t, toggleLocale, locale } = useLocale();
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
   return (
     <header className="site-header">
       <div className="header-inner">
@@ -35,6 +39,7 @@ function SiteHeader() {
           {navItems.map((item) => <a key={item.href} href={item.href} className={location === item.href ? "is-active" : ""} onClick={() => setOpen(false)}>{t(item.key)}</a>)}
           <Link href="/booking" className="nav-cta" onClick={() => setOpen(false)}>{t("nav.primary")} <ArrowUpLeft size={15} strokeWidth={1.5} /></Link>
           <button type="button" className="language-toggle" onClick={toggleLocale} aria-label={`Switch language to ${t("nav.language")}`}><Globe2 size={14} /> {t("nav.language")}<span>{locale.toUpperCase()}</span></button>
+          <button type="button" className="theme-toggle" onClick={() => toggleTheme?.()} aria-label={isDark ? (locale === "ar" ? "التبديل إلى الوضع الفاتح" : "Switch to light mode") : (locale === "ar" ? "التبديل إلى الوضع الداكن" : "Switch to dark mode")} title={isDark ? (locale === "ar" ? "الوضع الفاتح" : "Light mode") : (locale === "ar" ? "الوضع الداكن" : "Dark mode")}><span aria-hidden="true">{isDark ? <Sun size={14} /> : <Moon size={14} />}</span><span className="theme-toggle-label">{isDark ? (locale === "ar" ? "فاتح" : "Light") : (locale === "ar" ? "داكن" : "Dark")}</span></button>
         </nav>
         <div className="header-note">{locale === "ar" ? "قنا، مصر" : "Qena, Egypt"} <span>·</span> 2024—</div>
       </div>
@@ -44,12 +49,12 @@ function SiteHeader() {
 
 function SiteFooter() {
   const { t } = useLocale();
-  return <footer className="site-footer"><div className="footer-topline" /><div className="footer-grid"><div><Link href="/" className="footer-brand">Glloria<span>®</span></Link><p className="footer-statement">{t("footer.statement").split("\n").map((line) => <span key={line}>{line}<br /></span>)}</p></div><div className="footer-column"><span className="footer-label">{t("footer.contact")}</span><a href="https://wa.me/201097430973" target="_blank" rel="noreferrer">WhatsApp ↗</a><a href="mailto:hello@glloria.studio">hello@glloria.studio</a></div><div className="footer-column"><span className="footer-label">{t("footer.follow")}</span><a href="https://www.facebook.com/glloriaaa" target="_blank" rel="noreferrer">Facebook ↗</a><a href="https://www.instagram.com/glloriaaa" target="_blank" rel="noreferrer"><Instagram size={14} /> Instagram ↗</a></div><div className="footer-column footer-legal"><span className="footer-label">{t("footer.legal") || "Legal"}</span><Link href="/privacy">{t("footer.privacy") || "Privacy"}</Link><Link href="/terms">{t("footer.terms") || "Terms"}</Link></div><div className="footer-end"><span>GLL / 01</span><span>© 2024 Glloria Studio</span></div></div></footer>;
+  return <footer className="site-footer"><div className="footer-topline" /><div className="footer-grid"><div><Link href="/" className="footer-brand">Glloria<span>®</span></Link><p className="footer-statement">{t("footer.statement").split("\n").map((line) => <span key={line}>{line}<br /></span>)}</p></div><div className="footer-column"><span className="footer-label">{t("footer.contact")}</span><a href={`https://wa.me/${GLLORIA_CONFIRMATION_WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer">WhatsApp ↗</a><a href="mailto:hello@glloria.studio">hello@glloria.studio</a></div><div className="footer-column"><span className="footer-label">{t("footer.follow")}</span><a href="https://www.facebook.com/glloriaaa" target="_blank" rel="noreferrer">Facebook ↗</a><a href="https://www.instagram.com/glloriaaa" target="_blank" rel="noreferrer"><Instagram size={14} /> Instagram ↗</a></div><div className="footer-column footer-legal"><span className="footer-label">{t("footer.legal") || "Legal"}</span><Link href="/privacy">{t("footer.privacy") || "Privacy"}</Link><Link href="/terms">{t("footer.terms") || "Terms"}</Link></div><div className="footer-end"><span>GLL / 01</span><span>© 2024 Glloria Studio</span></div></div></footer>;
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
   const { dir } = useLocale();
-  return <div className="site-shell" dir={dir}><SiteHeader /><main>{children}</main><SiteFooter /><a className="whatsapp-float" href="https://wa.me/201097430973" target="_blank" rel="noreferrer" aria-label="تواصلي مع Glloria على واتساب"><span>واتساب</span><ArrowUpLeft size={17} strokeWidth={1.5} /></a></div>;
+  return <div className="site-shell" dir={dir}><SiteHeader /><main>{children}</main><SiteFooter /><a className="whatsapp-float" href={`https://wa.me/${GLLORIA_CONFIRMATION_WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer" aria-label="تواصلي مع Glloria على واتساب"><span>واتساب</span><ArrowUpLeft size={17} strokeWidth={1.5} /></a></div>;
 }
 
 function AppContent() {
@@ -58,4 +63,4 @@ function AppContent() {
   return <Shell><Switch><Route path="/" component={Home} /><Route path="/projects" component={Projects} /><Route path="/projects/:slug" component={ProjectDetail} /><Route path="/contact" component={Contact} /><Route path="/booking" component={Booking} /><Route path="/privacy" component={Privacy} /><Route path="/terms" component={Terms} /><Route component={NotFound} /></Switch></Shell>;
 }
 
-export default function App() { return <LocaleProvider><AppContent /></LocaleProvider>; }
+export default function App() { return <ThemeProvider defaultTheme="light" switchable><LocaleProvider><AppContent /></LocaleProvider></ThemeProvider>; }

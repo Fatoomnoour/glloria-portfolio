@@ -13,6 +13,7 @@ import {
   deleteTestimonial,
   getConsultationRequest,
   getConsultationStats,
+  getAnalyticsTimeline,
   getProjectBySlug,
   listConsultationRequests,
   listProjects,
@@ -109,6 +110,9 @@ export const appRouter = router({
     stats: adminProcedure.query(() => getConsultationStats()),
     update: adminProcedure.input(z.object({ id: z.number().int().positive(), status: consultationStatus, adminNotes: z.string().max(5000).optional().or(z.literal("")) })).mutation(({ ctx, input }) => updateConsultationRequest(input.id, { status: input.status, adminNotes: input.adminNotes || null, lastEditedBy: ctx.user.id })),
     export: adminProcedure.input(z.object({ search: z.string().trim().max(160).optional(), city: z.string().trim().max(160).optional(), service: z.string().trim().max(180).optional(), status: consultationStatus.optional(), date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional() }).optional()).query(({ input }) => listConsultationRequests(input ?? {})),
+  }),
+  analytics: router({
+    overview: adminProcedure.input(z.object({ months: z.union([z.literal(6), z.literal(12), z.literal(24)]).optional() }).optional()).query(({ input }) => getAnalyticsTimeline(input?.months ?? 12)),
   }),
   projects: router({
     list: publicProcedure.input(z.object({ designType: z.enum(["interior", "architectural"]).optional() }).optional()).query(({ input }) => listProjects(input?.designType)),

@@ -1,5 +1,6 @@
-import { and, count, desc, eq, like } from "drizzle-orm";
+import { and, count, desc, eq, gte, like, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
+import { buildAnalyticsTimeline, type AnalyticsRange, type BookingAggregateRow, type ProjectAggregateRow } from "../shared/analytics";
 import {
   InsertConsultationRequest,
   InsertProject,
@@ -192,4 +193,36 @@ export async function getConsultationStats() {
   for (const row of rows) stats[row.status] = Number(row.count);
   stats.total = rows.reduce((total, row) => total + Number(row.count), 0);
   return stats;
+}
+
+export async function getAnalyticsTimeline(months: AnalyticsRange) {
+  const db = await getDb();
+  const now = new Date();
+  const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - (months - 1), 1));
+  if (!db) {
+    return { range: months, points: buildAnalyticsTimeline(months, [], [], now) };
+  }
+
+  const bookingMonth = sql<string>`DATE_FORMAT(${consultationRequests.createdAt}, '%Y-%m')`;
+  const projectMonth = sql<string>`DATE_FORMAT(${projects.createdAt}, '%Y-%m')`;
+  const bookingRows = await db
+    .select({ month: bookingMonth, status: consultationRequests.status, count: count() })
+    .from(consultationRequests)
+    .where(gte(consultationRequests.createdAt, start))
+    .groupBy(bookingMonth, consultationRequests.status);
+  const projectRows = await db
+    .select({ month: projectMonth, designType: projects.designType, count: count() })
+    .from(projects)
+    .where(gte(projects.createdAt, start))
+    .groupBy(projectMonth, projects.designType);
+
+  return {
+    range: months,
+    points: buildAnalyticsTimeline(
+      months,
+      bookingRows as BookingAggregateRow[],
+      projectRows as ProjectAggregateRow[],
+      now,
+    ),
+  };
 }
