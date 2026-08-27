@@ -59,7 +59,7 @@ pnpm check
 pnpm build
 ```
 
-The current reviewed source passes **26 Vitest tests**, the TypeScript check, and the production build. The build deliberately keeps an application entry chunk above Vite's advisory 500 kB threshold because the shared public shell still contains the editorial runtime and UI dependencies; heavy page routes, vendor code, and Recharts are split into dedicated chunks.
+The current reviewed source passes **28 Vitest tests**, the TypeScript check, and the production build. The build deliberately keeps an application entry chunk above Vite's advisory 500 kB threshold because the shared public shell still contains the editorial runtime and UI dependencies; heavy page routes, vendor code, and Recharts are split into dedicated chunks.
 
 ## Data and migration workflow
 
@@ -70,6 +70,10 @@ Project images are referenced through permanent storage URLs rather than committ
 ## Hosting and domain
 
 The intended hosting target is Vercel with a custom domain. `DOMAIN_SETUP.md` documents the Vercel project setup, DNS, HTTPS, canonical URL, social metadata, and post-cutover checks. Set the final canonical URL and social preview metadata together before production launch.
+
+## Project referral and campaign attribution
+
+Project-detail CTAs may pass a published project slug into the consultation flow. The server repeats the public-project check before storing its title with the protected booking record. Booking attribution retains only bounded URL values for `utm_source`, `utm_medium`, and `utm_campaign`; it does not retain referrers, IP addresses, click identifiers, browser fingerprints, or third-party tracking payloads. The visitor's name, phone, email, and project description are never written to browser storage; only non-sensitive space preferences may be kept in `sessionStorage` until the current tab/session ends.
 
 ## Repository hygiene
 

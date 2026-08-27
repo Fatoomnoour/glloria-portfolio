@@ -3,6 +3,33 @@ export function parseBookingIdFromSearch(search: string): number | null {
   return Number.isInteger(value) && value > 0 ? value : null;
 }
 
+export type BookingAttribution = {
+  sourceProjectSlug: string | null;
+  utmSource: string | null;
+  utmMedium: string | null;
+  utmCampaign: string | null;
+};
+
+const readSearchValue = (params: URLSearchParams, key: string, maximum: number) => {
+  const value = params.get(key)?.trim();
+  return value && value.length <= maximum ? value : null;
+};
+
+/**
+ * Parses only the campaign fields we explicitly retain. We do not collect a
+ * referrer, IP, ad click id, or any browser fingerprint in the booking flow.
+ */
+export function parseBookingAttribution(search: string): BookingAttribution {
+  const params = new URLSearchParams(search);
+  const candidateProject = readSearchValue(params, "project", 160);
+  return {
+    sourceProjectSlug: candidateProject && /^[a-z0-9-]+$/i.test(candidateProject) ? candidateProject.toLowerCase() : null,
+    utmSource: readSearchValue(params, "utm_source", 100),
+    utmMedium: readSearchValue(params, "utm_medium", 100),
+    utmCampaign: readSearchValue(params, "utm_campaign", 160),
+  };
+}
+
 export type BookingValidationDraft = {
   fullName?: string;
   phone?: string;

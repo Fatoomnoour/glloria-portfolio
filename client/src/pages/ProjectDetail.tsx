@@ -120,7 +120,7 @@ export default function ProjectDetail() {
       <CaseStudySections project={project} ar={ar} />
       <ProjectGallery gallery={gallery} projectType={projectType} imageKind={imageKind} ar={ar} markerNumber={showCaseStudy ? "03" : "02"} />
       <section className="detail-next section-pad"><p className="eyebrow">{ar ? "الأرشيف" : "THE ARCHIVE"}</p><Link href="/projects" className="next-link">{ar ? "شاهدي بقية الأرشيف" : "View the full archive"} <ArrowUpLeft size={19} /></Link></section>
-      <section className="detail-cta section-pad"><Check size={18} /><p>{ar ? "لديكِ مساحة تريدين أن تحكي عنها؟" : "Have a space you want to talk about?"}</p><Link href="/booking" className="dark-button">{ar ? "احجزي استشارتك" : "Book your consultation"} <ArrowUpLeft size={17} /></Link></section>
+      <section className="detail-cta section-pad"><Check size={18} /><p>{ar ? "أعجبك إحساس هذه المساحة؟" : "Does this space feel like you?"}</p><Link href={`/booking?project=${encodeURIComponent(project.slug)}`} className="dark-button">{ar ? "أريد مساحة بهذا الإحساس" : "I want a space with this feeling"} <ArrowUpLeft size={17} /></Link></section>
     </div>
   );
 }

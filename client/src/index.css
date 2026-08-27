@@ -1200,6 +1200,9 @@ img { display: block; max-width: 100%; }
 .inquiry-panel input, .inquiry-panel textarea, .inquiry-panel select, .booking-panel input, .booking-panel textarea, .booking-panel select { transition: border-color .2s var(--ease-out), box-shadow .2s var(--ease-out), background .2s var(--ease-out); }
 .inquiry-panel input:focus, .inquiry-panel textarea:focus, .inquiry-panel select:focus, .booking-panel input:focus, .booking-panel textarea:focus, .booking-panel select:focus { background: color-mix(in srgb, var(--paper-light) 38%, transparent); }
 .contact-booking-link { padding-inline: 0; }
+.booking-project-context { display: inline-flex; flex-direction: column; gap: 5px; margin: -16px 0 30px !important; padding-inline-start: 13px; border-inline-start: 2px solid var(--clay); color: var(--muted-foreground); font-size: 10px !important; line-height: 1.35 !important; }
+.booking-project-context span { color: var(--clay); font: 8px var(--mono); letter-spacing: .08em; }
+.booking-project-context strong { color: var(--ink); font: 500 16px/1.2 var(--serif); }
 .testimonial-card { padding: 6px 0 25px; border: 0; border-bottom: 1px solid var(--line); background: transparent; }
 .testimonial-card .verified-note { padding-top: 13px; border-top: 1px solid var(--line); }
 .testimonial-controls { margin-top: 2px; }

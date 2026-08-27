@@ -47,3 +47,7 @@ The full desktop capture shows a more open magazine-spread relationship between 
 ## Attachment 12 — booking and contact check
 
 The refreshed Booking page keeps the five-step consultation wizard clear beside its editorial explanation, with thin-rule input fields and no card grid. Contact retains its direct inquiry flow, WhatsApp/email/social actions, and the approved Qena location label in the same visual system. Both desktop captures preserve readable contrast and the footer remains concise.
+
+## Project-to-booking attribution check
+
+Desktop and 390px captures of `/projects/interior` and the linked booking URL confirm that the published project remains image-led and that the booking page identifies **Private Residence** as the inspiring project without crowding the header or step-one fields. The reference is visually separated as a small editorial note, and no horizontal overflow is visible in the mobile capture.
