@@ -78,10 +78,12 @@ export async function listProjects(designType?: "interior" | "architectural", in
   return db.select().from(projects).where(filters.length ? and(...filters) : undefined).orderBy(desc(projects.createdAt));
 }
 
-export async function getProjectBySlug(slug: string) {
+export async function getProjectBySlug(slug: string, includeUnpublished = false) {
   const db = await getDb();
   if (!db) return undefined;
-  const result = await db.select().from(projects).where(eq(projects.slug, slug)).limit(1);
+  const conditions = [eq(projects.slug, slug)];
+  if (!includeUnpublished) conditions.push(eq(projects.published, true));
+  const result = await db.select().from(projects).where(and(...conditions)).limit(1);
   return result[0];
 }
 
@@ -89,7 +91,7 @@ export async function createProject(project: InsertProject) {
   const db = await getDb();
   if (!db) throw new Error("Database unavailable");
   await db.insert(projects).values(project);
-  return getProjectBySlug(project.slug);
+  return getProjectBySlug(project.slug, true);
 }
 
 export async function updateProject(id: number, project: Partial<InsertProject>) {

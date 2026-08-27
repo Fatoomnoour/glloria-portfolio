@@ -44,3 +44,28 @@ The authenticated desktop capture showed the bookings dashboard with status KPI 
 - A direct responsive capture at 390x844 with the query link showed the detail card itself below the bookings table, with stacked fields and full-width controls. The bookings table remained contained by its internal scroll wrapper.
 - The authenticated browser toggled the open detail view between light and dark palettes; headings, labels, inputs, borders, actions, and status surfaces remained readable. The responsive capture confirmed the detail card in the dark-surface treatment at phone width.
 - The second QA request was deleted using an exact ID/name/email guard after the evidence was captured, and the database was checked for cleanup.
+
+
+## v8 original photography update
+
+- Prepared individual WebP copies from the supplied original photos without cropping or stretching, then uploaded them as durable WebDev storage assets.
+- Created two protected admin project drafts: `interior-originals-draft` (database id 1) and `boska-originals-draft` (database id 30001).
+- Both drafts use gallery JSON with individual image URLs and descriptive pending-approval alt text; both have `published = 0` and no year or executed-vs-3D claim.
+- The public `/projects` archive remains unchanged until project names, cities, years, and provenance are approved. Direct public draft slugs now render NotFound instead of falling back to the first public project.
+- Updated public typography to Alexandria and IBM Plex Sans Arabic with `display=swap`, enlarged the mobile brand/header touch targets, and made the footer year dynamic.
+- Validation: TypeScript passed, Vitest passed (15 tests), production build passed, public `/projects` and both draft slugs were checked at 390x844; draft slugs rendered NotFound while the public archive remained populated only by published content.
+
+
+## v8 mobile hero and public empty-state verification
+
+- Opened the v8 homepage in a separate Chromium DevTools session at a 390×844 mobile viewport after the final header/hero CSS edit.
+- Direct measurements: `document.documentElement.clientWidth = 390`, `document.documentElement.scrollWidth = 390`, `document.body.clientWidth = 390`, and `document.body.scrollWidth = 390`; therefore no page-level horizontal overflow was present.
+- Computed visibility confirmed the mobile intro was `block`, mobile actions were `flex`, desktop intro was `none`, and desktop actions were `none` at the mobile breakpoint. The visual order is title/copy region, hero image, then mobile intro/actions inside the visual region.
+- Public testimonials now return no section when the approved testimonials query is empty; the protected admin editor remains available for adding real, verified stories later.
+
+
+## Final v8 responsive capture
+
+- Captured the full homepage and `/projects` archive at 390×844 after the final hero CSS override.
+- The homepage now presents the mobile copy in the intended sequence without duplicate desktop actions; the archive remains limited to published projects, while the supplied photo groups remain private drafts.
+- The empty testimonials state is absent from the public homepage; the page continues directly into the closing CTA.

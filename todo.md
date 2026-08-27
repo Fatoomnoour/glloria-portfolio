@@ -172,3 +172,24 @@
 - [x] Save a fresh checkpoint only after the mobile booking detail form verification is directly evidenced. (Evidence captured; checkpoint follows.)
 - [x] Capture and review direct authenticated mobile evidence of the open booking detail form in both light and dark modes, then document the specific screenshot results. (Direct 390×844 detail capture plus authenticated light/dark review documented.)
 - [x] Save a fresh checkpoint after the post-verification fixes and documented booking-detail QA are complete. (Checkpoint 7f56915d.)
+
+# Glloria v8 — Original project photography and mobile-first refinement
+
+- [ ] Confirm which images belong to each project and approve project name, type, city, year, and executed-vs-3D status before public publishing.
+- [x] Upload the supplied original project images to WebDev storage as individual assets without using WhatsApp screenshots or collages.
+- [ ] Replace the existing project imagery with the approved originals while preserving aspect ratios, lazy loading, alt text, and mobile gallery behavior.
+- [x] Add or update project metadata and gallery image ordering through the protected admin workflow without inventing claims. (Created two private draft records with pending-approval metadata.)
+- [x] Add gallery metadata storage and block public `bySlug` access to unpublished draft projects.
+- [x] Prevent ProjectDetail from rendering the first fallback project for unknown or unpublished slugs; show NotFound instead.
+- [x] Apply Alexandria and IBM Plex Sans Arabic typography with swap loading, readable Arabic line-height, and suitable Latin fallbacks.
+- [x] Enlarge and rebalance the mobile logo/header/menu, improve the mobile hero order, and preserve touch targets and no page-level horizontal overflow.
+- [x] Hide empty public qualification and testimonial states, update copyright year dynamically, and preserve truthful content behavior.
+- [x] Add/update project-gallery tests and run TypeScript, Vitest, production build, and responsive visual checks at the requested mobile sizes. (15 tests passed; build passed; public and draft-slug responsive checks completed.)
+- [x] Create explicit unpublished draft project records for the supplied interior and BOSKA image groups without publishing them to visitors.
+# v8 verification follow-up
+
+- [x] Make the mobile hero order explicit and verify the homepage has no page-level horizontal overflow after the header changes. (Hero order and direct width measurement verified at 390×844.)
+- [x] Measure homepage mobile `documentElement.scrollWidth` against `clientWidth` after v8 header/hero changes and document the result. (390 = 390 for both document and body widths.)
+- [x] Inspect and update the public testimonials empty state so it is hidden or clearly truthful, then verify the public behavior. (Empty public testimonials now render no section; admin remains available for approved stories.)
+- [ ] Save a new checkpoint after the original-asset update and all verification items are complete.
+
