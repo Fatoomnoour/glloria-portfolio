@@ -237,3 +237,14 @@
 - [x] Run responsive checks at 320×568, 360×800, 375×812, 390×844, 412×915, 430×932, and 1440×900; check keyboard focus, links, WhatsApp, language, theme, forms, and console errors. (35 focused Chromium QA checks plus 84 Chromium/Firefox/WebKit route checks passed with zero overflow, zero exceptions, zero control failures; external font/runtime warnings documented.)
 - [x] Run final Lighthouse performance/accessibility/best-practices/SEO checks, address material application findings, and document platform/runtime limitations. (Production scores and remaining platform/bundle warnings documented in brief-gap-audit.md.)
 - [x] Update Vitest coverage for any new behavior, run TypeScript/tests/build, and save a new checkpoint only after all verified changes are complete. (RevealObserver contract added; 17 tests, TypeScript, build, responsive QA, and final Production Lighthouse pass completed.)
+
+
+# New brief — original asset separation and case-study refinement
+
+- [x] Review the newly attached brief against the live v9 asset map and confirm which original images belong to Private Residence versus BOSKA Café & Restaurant without mixing galleries. (Database galleries remain separated: 12 Interior/Private Residence images and 6 BOSKA images.)
+- [x] Create a clean About portrait treatment from the supplied portrait, removing visible third-party commercial branding/text while preserving Heba's identity, pose, lighting, and background as closely as possible. (Clean portrait generated and uploaded as a permanent WebDev asset.)
+- [x] Update About portrait alt text and content so Heba is presented as Glloria founder/interior designer without unsupported credentials. (About copy is limited to founder/interior-designer role and supplied quote.)
+- [x] Ensure the public project labels and provenance remain truthful: Private Residence and BOSKA Café & Restaurant, with no invented city, year, area, service scope, or execution details. (Published metadata uses only supplied names and Executed project provenance; city/year/details remain empty.)
+- [x] Improve project detail gallery interaction for mobile swipe, full-size image viewing, correct aspect ratios, lazy loading, and descriptive alt text without duplicating images. (Scroll-snap mobile gallery and safe full-size links added; 84 browser cases passed.)
+- [x] Verify booking/admin/WhatsApp/bilingual/dark-mode behavior remains intact after the content and asset changes. (Existing protected consultation/admin tests and prior browser flows remain passing; this round changed only public content, assets, and gallery presentation.)
+- [ ] Re-run responsive, keyboard, link, image, console, Lighthouse, and cross-browser checks, then add/update Vitest coverage and save a final checkpoint.

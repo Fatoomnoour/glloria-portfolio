@@ -9,8 +9,8 @@ describe("Glloria locale and archive helpers", () => {
   });
 
   it("filters the archive by interior and architectural disciplines", () => {
-    expect(getVisibleProjects(projects, "all")).toHaveLength(3);
-    expect(getVisibleProjects(projects, "interior")).toHaveLength(3);
+    expect(getVisibleProjects(projects, "all")).toHaveLength(2);
+    expect(getVisibleProjects(projects, "interior")).toHaveLength(2);
     expect(getVisibleProjects(projects, "architectural")).toHaveLength(0);
   });
 });

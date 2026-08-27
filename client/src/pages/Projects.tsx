@@ -8,14 +8,13 @@ import { useLocale } from "../contexts/LocaleContext";
 export type ProjectCard = { slug: string; number: string; category: string; type: string; designType: "interior" | "architectural"; title: string; location: string; year: string; image: string; imageAlt?: string; galleryJson?: string | null; imageKind?: string; intro: string; };
 
 export const projects: ProjectCard[] = [
-  { slug: "private-residence", number: "01", category: "سكني", type: "RESIDENTIAL", designType: "interior", title: "بيت بين الضوء والظل", location: "قنا، مصر", year: "2024", image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=75", intro: "بيت هادئ لعائلة تحب اجتماع التفاصيل حول مائدة واحدة." },
-  { slug: "cafe-namaa", number: "02", category: "تجاري", type: "HOSPITALITY", designType: "interior", title: "مقهى نماء", location: "قنا، مصر", year: "2023", image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=75", intro: "مساحة صغيرة تحمل إحساساً كبيراً بالترحيب." },
-  { slug: "quiet-bedroom", number: "03", category: "سكني", type: "RESIDENTIAL", designType: "interior", title: "غرفة هادئة", location: "قنا، مصر", year: "2024", image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1400&q=75", intro: "زاوية يومية صُممت لتبطئ إيقاع اليوم." },
+  { slug: "interior", number: "01", category: "Interior", type: "INTERIOR", designType: "interior", title: "Private Residence", location: "", year: "", image: "/manus-storage/original-01_ebedc055.webp", imageAlt: "Private Residence project image", intro: "" },
+  { slug: "boska", number: "02", category: "Cafe", type: "CAFE", designType: "interior", title: "Boska Café & Restaurant", location: "", year: "", image: "/manus-storage/original-05_2f557110.webp", imageAlt: "Boska Café & Restaurant project image", intro: "" },
 ];
 
 const filters = [{ value: "all", label: "projects.all" }, { value: "interior", label: "projects.interior" }, { value: "architectural", label: "projects.architectural" }] as const;
 type FilterValue = (typeof filters)[number]["value"];
-const englishTitles: Record<string, [string, string]> = { "private-residence": ["A house between light and shadow", "A quiet home for a family who gathers around the details."], "cafe-namaa": ["Namaa café", "A small space carrying a generous sense of welcome."], "quiet-bedroom": ["A quiet room", "An everyday corner designed to slow the rhythm of the day."] };
+const englishTitles: Record<string, [string, string]> = { interior: ["Private Residence", ""], boska: ["Boska Café & Restaurant", ""] };
 
 export function getVisibleProjects(items: ProjectCard[], filter: FilterValue) {
   return items.filter((project) => filter === "all" || project.designType === filter);

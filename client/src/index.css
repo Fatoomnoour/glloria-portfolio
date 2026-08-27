@@ -705,7 +705,9 @@ img { display: block; max-width: 100%; }
 .gallery-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 22px; margin-top: 46px; }
 .gallery-grid figure { margin: 0; }
 .gallery-grid figure:first-child { grid-row: span 2; }
-.gallery-grid img { width: 100%; aspect-ratio: 1.15 / 1; object-fit: cover; filter: saturate(.86) sepia(.055) contrast(.98); }
+.gallery-image-link { display: block; overflow: hidden; }
+.gallery-grid img { display: block; width: 100%; aspect-ratio: 1.15 / 1; object-fit: cover; filter: saturate(.86) sepia(.055) contrast(.98); transition: transform 320ms var(--ease-out), filter 320ms var(--ease-out); }
+.gallery-image-link:hover img, .gallery-image-link:focus-visible img { transform: scale(1.018); filter: saturate(.92) sepia(.035) contrast(1); }
 .gallery-grid figure:not(:first-child) img { aspect-ratio: 1.42 / 1; }
 .gallery-grid figcaption { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; color: var(--muted-foreground); direction: ltr; font: 8px var(--mono); letter-spacing: .06em; }
 .before-after-note { display: flex; align-items: center; gap: 10px; margin-top: 45px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted-foreground); font-size: 10px; }
@@ -716,8 +718,8 @@ img { display: block; max-width: 100%; }
   .case-study-block + .case-study-block { margin-top: 42px; }
   .case-study-block > p { font-size: 11px; }
   .detail-gallery { padding-top: 70px; padding-bottom: 80px; }
-  .gallery-grid { display: block; margin-top: 36px; }
-  .gallery-grid figure { margin-bottom: 30px; }
+  .gallery-grid { display: flex; gap: 16px; overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory; margin-top: 36px; margin-inline: -1rem; padding-inline: 1rem 2.5rem; scrollbar-width: thin; }
+  .gallery-grid figure, .gallery-grid figure:first-child { flex: 0 0 min(86vw, 340px); margin-bottom: 10px; scroll-snap-align: start; }
   .gallery-grid img, .gallery-grid figure:not(:first-child) img { aspect-ratio: 1.12 / 1; }
   .before-after-note { align-items: flex-start; margin-top: 30px; line-height: 1.8; }
 }
