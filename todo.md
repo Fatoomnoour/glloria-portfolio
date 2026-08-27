@@ -171,4 +171,4 @@
 - [x] Support an admin-only URL query deep link for opening a selected booking detail during responsive verification without auto-opening details on normal `/admin#bookings` visits.
 - [x] Save a fresh checkpoint only after the mobile booking detail form verification is directly evidenced. (Evidence captured; checkpoint follows.)
 - [x] Capture and review direct authenticated mobile evidence of the open booking detail form in both light and dark modes, then document the specific screenshot results. (Direct 390×844 detail capture plus authenticated light/dark review documented.)
-- [ ] Save a fresh checkpoint after the post-verification fixes and documented booking-detail QA are complete.
+- [x] Save a fresh checkpoint after the post-verification fixes and documented booking-detail QA are complete. (Checkpoint 7f56915d.)
