@@ -220,6 +220,8 @@ img { display: block; max-width: 100%; }
   .motion-ready .home-page > section, .motion-ready .archive-page > *, .motion-ready .detail-page > *, .motion-ready .contact-page > *, .motion-ready .booking-page > * { opacity: 1 !important; transform: none !important; transition: none !important; }
   .hero-marquee-track { animation: none; white-space: normal; flex-wrap: wrap; }
   .hero-visual-frame img, .hero-visual-frame:hover img { transform: none !important; will-change: auto; }
+  .project-card:hover .project-image img, .archive-card:hover .archive-image img, .gallery-image-link:hover img { transform: none !important; filter: none !important; }
+  .project-card:hover .project-image::after, .archive-card:hover .archive-image::after, .gallery-image-link:hover::after { opacity: 0 !important; }
 }
 .archive-page { padding-top: 170px; padding-bottom: 115px; }
 .page-intro-row { display: grid; grid-template-columns: 14% 1fr; min-height: 390px; }
