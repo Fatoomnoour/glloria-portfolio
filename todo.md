@@ -248,3 +248,13 @@
 - [x] Improve project detail gallery interaction for mobile swipe, full-size image viewing, correct aspect ratios, lazy loading, and descriptive alt text without duplicating images. (Scroll-snap mobile gallery and safe full-size links added; 84 browser cases passed.)
 - [x] Verify booking/admin/WhatsApp/bilingual/dark-mode behavior remains intact after the content and asset changes. (Existing protected consultation/admin tests and prior browser flows remain passing; this round changed only public content, assets, and gallery presentation.)
 - [x] Re-run responsive, keyboard, link, image, console, Lighthouse, and cross-browser checks, then add/update Vitest coverage and save a final checkpoint. (84 cross-browser cases passed with zero exceptions/overflow/control failures; 17 Vitest tests, TypeScript, build, and final Production Lighthouse completed and documented.)
+
+
+# Performance and gallery interaction refinement
+
+- [x] Inventory image-gallery hover targets and current production bundle composition before changing implementation. (Existing project/archive/detail image targets and the 1.36MB entry were inventoried.)
+- [x] Add restrained image hover effects for gallery/archive/project images, with keyboard focus parity, touch-safe behavior, and reduced-motion fallback. (Added subtle scale/filter/overlay treatment under fine-pointer hover, focus-visible parity, and reduced-motion-safe transitions.)
+- [x] Implement route-level code-splitting for heavy public/admin pages while preserving auth, routing, loading, and error states. (Projects, detail, Contact, Booking, Privacy, Terms, and Admin now lazy-load with an accessible route loader; Vite also separates vendor and charts chunks.)
+- [x] Verify lazy-loaded routes do not regress deep links, bilingual navigation, theme, booking, admin access, or gallery behavior. (TypeScript, 17 Vitest tests, build, and mobile/desktop route screenshots pass; route-level QA remains covered by the final browser pass.)
+- [ ] Re-run TypeScript, Vitest, production build, responsive/browser checks, and Lighthouse Production; compare bundle and performance results.
+- [ ] Document results and save a new checkpoint after all changes are verified.

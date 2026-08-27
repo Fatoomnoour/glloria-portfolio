@@ -1,21 +1,21 @@
 /* Glloria Design Direction: Warm Editorial Atelier — bilingual shell, quiet utility labels, fired-clay accents, and editorial navigation. */
 import { Link, Route, Switch, useLocation } from "wouter";
 import { ArrowUpLeft, Globe2, Instagram, Menu, Moon, Sun, X } from "lucide-react";
-import { useState } from "react";
-import Home from "./pages/Home";
-import Projects from "./pages/Projects";
-import ProjectDetail from "./pages/ProjectDetail";
-import Contact from "./pages/Contact";
-import Booking from "./pages/Booking";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
-import NotFound from "./pages/NotFound";
-import Admin from "./pages/Admin";
+import { lazy, Suspense, useState } from "react";
 import { LocaleProvider, useLocale } from "./contexts/LocaleContext";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
+import Home from "./pages/Home";
+import NotFound from "./pages/NotFound";
 import { GLLORIA_CONFIRMATION_WHATSAPP_NUMBER } from "../../shared/whatsapp";
 import RevealObserver from "./components/RevealObserver";
 
+const Projects = lazy(() => import("./pages/Projects"));
+const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Booking = lazy(() => import("./pages/Booking"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const Terms = lazy(() => import("./pages/Terms"));
+const Admin = lazy(() => import("./pages/Admin"));
 const navItems = [
   { key: "nav.home", href: "/" },
   { key: "nav.projects", href: "/projects" },
@@ -59,10 +59,14 @@ function Shell({ children }: { children: React.ReactNode }) {
   return <div className="site-shell" dir={dir}><RevealObserver /><SiteHeader /><main>{children}</main><SiteFooter /><a className="whatsapp-float" href={`https://wa.me/${GLLORIA_CONFIRMATION_WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer" aria-label="تواصلي مع Glloria على واتساب"><span>واتساب</span><ArrowUpLeft size={17} strokeWidth={1.5} /></a></div>;
 }
 
+function PageLoader() {
+  return <div className="route-loader" role="status" aria-live="polite"><span className="route-loader-mark" aria-hidden="true" /><span>Glloria / loading</span></div>;
+}
+
 function AppContent() {
   const [location] = useLocation();
-  if (location.startsWith("/admin")) return <Admin />;
-  return <Shell><Switch><Route path="/" component={Home} /><Route path="/projects" component={Projects} /><Route path="/projects/:slug" component={ProjectDetail} /><Route path="/contact" component={Contact} /><Route path="/booking" component={Booking} /><Route path="/privacy" component={Privacy} /><Route path="/terms" component={Terms} /><Route component={NotFound} /></Switch></Shell>;
+  if (location.startsWith("/admin")) return <Suspense fallback={<PageLoader />}><Admin /></Suspense>;
+  return <Shell><Suspense fallback={<PageLoader />}><Switch><Route path="/" component={Home} /><Route path="/projects" component={Projects} /><Route path="/projects/:slug" component={ProjectDetail} /><Route path="/contact" component={Contact} /><Route path="/booking" component={Booking} /><Route path="/privacy" component={Privacy} /><Route path="/terms" component={Terms} /><Route component={NotFound} /></Switch></Suspense></Shell>;
 }
 
 export default function App() { return <ThemeProvider defaultTheme="light" switchable><LocaleProvider><AppContent /></LocaleProvider></ThemeProvider>; }

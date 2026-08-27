@@ -148,13 +148,20 @@ img { display: block; max-width: 100%; }
 .project-feature-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 62px; direction: ltr; }
 .project-card { display: block; direction: rtl; }
 .project-image { position: relative; overflow: hidden; background: var(--secondary); }
-.project-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease-out), filter .4s; }
+.project-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--ease-out), filter .35s var(--ease-out); }
+.project-image::after, .archive-image::after { position: absolute; z-index: 0; inset: 0; background: linear-gradient(180deg, transparent 52%, rgba(39,37,34,.2)); content: ""; opacity: 0; pointer-events: none; transition: opacity .35s var(--ease-out); }
 .project-card-large .project-image { aspect-ratio: 1.18 / 1; }
 .project-card .project-image { aspect-ratio: 1.26 / 1; }
 .project-card-mini .project-image { aspect-ratio: 1.7 / 1; }
-.project-card:hover .project-image img { filter: saturate(1.05); transform: scale(1.035); }
-.project-arrow { position: absolute; display: grid; place-items: center; width: 38px; height: 38px; left: 14px; bottom: 14px; background: var(--paper-light); color: var(--clay); opacity: 0; transform: translateY(8px); transition: opacity .3s var(--ease-out), transform .3s var(--ease-out); }
-.project-card:hover .project-arrow { opacity: 1; transform: translateY(0); }
+.project-arrow { position: absolute; z-index: 1; display: grid; place-items: center; width: 38px; height: 38px; left: 14px; bottom: 14px; background: var(--paper-light); color: var(--clay); opacity: 0; transform: translateY(8px); transition: opacity .3s var(--ease-out), transform .3s var(--ease-out), background .2s, color .2s; }
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover .project-image img, .archive-card:hover .archive-image img { filter: saturate(1.08) contrast(1.015); transform: scale(1.04); }
+  .project-card:hover .project-image::after, .archive-card:hover .archive-image::after { opacity: 1; }
+  .project-card:hover .project-arrow, .archive-card:hover .project-arrow { opacity: 1; transform: translateY(0); }
+}
+.project-card:focus-visible .project-image img, .archive-card:focus-visible .archive-image img { filter: saturate(1.08) contrast(1.015); transform: scale(1.025); }
+.project-card:focus-visible .project-image::after, .archive-card:focus-visible .archive-image::after { opacity: 1; }
+.project-card:focus-visible .project-arrow, .archive-card:focus-visible .project-arrow { opacity: 1; transform: translateY(0); }
 .project-meta { display: flex; justify-content: space-between; gap: 12px; padding-top: 12px; color: var(--muted-foreground); direction: ltr; font: 9px var(--mono); letter-spacing: .09em; }
 .project-card h3 { margin: 11px 0 0; color: var(--ink); font-size: 25px; font-weight: 500; line-height: 1.35; }
 .project-card h3 em { color: var(--clay); font-family: var(--serif); font-size: 1.2em; font-weight: 500; }
@@ -198,6 +205,9 @@ img { display: block; max-width: 100%; }
 
 /* Archive */
 .page-transition { animation: reveal .55s var(--ease-out) both; }
+.route-loader { display: grid; place-items: center; align-content: center; gap: 16px; min-height: 55vh; color: var(--muted-foreground); direction: ltr; font: 9px var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+.route-loader-mark { display: block; width: 20px; height: 20px; border: 1px solid var(--clay); transform: rotate(45deg); animation: route-loader-pulse 1.2s var(--ease-in-out) infinite alternate; }
+@keyframes route-loader-pulse { from { opacity: .35; transform: rotate(45deg) scale(.88); } to { opacity: 1; transform: rotate(45deg) scale(1); } }
 @keyframes reveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 .motion-ready .home-page > section, .motion-ready .archive-page > *, .motion-ready .detail-page > *, .motion-ready .contact-page > *, .motion-ready .booking-page > * { opacity: 0; transform: translateY(18px); transition: opacity .55s var(--ease-out), transform .55s var(--ease-out); transition-delay: var(--reveal-delay, 0ms); }
 .motion-ready .home-page > section.is-revealed, .motion-ready .archive-page > *.is-revealed, .motion-ready .detail-page > *.is-revealed, .motion-ready .contact-page > *.is-revealed, .motion-ready .booking-page > *.is-revealed { opacity: 1; transform: translateY(0); }
@@ -705,9 +715,12 @@ img { display: block; max-width: 100%; }
 .gallery-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 22px; margin-top: 46px; }
 .gallery-grid figure { margin: 0; }
 .gallery-grid figure:first-child { grid-row: span 2; }
-.gallery-image-link { display: block; overflow: hidden; }
+.gallery-image-link { position: relative; display: block; overflow: hidden; }
 .gallery-grid img { display: block; width: 100%; aspect-ratio: 1.15 / 1; object-fit: cover; filter: saturate(.86) sepia(.055) contrast(.98); transition: transform 320ms var(--ease-out), filter 320ms var(--ease-out); }
-.gallery-image-link:hover img, .gallery-image-link:focus-visible img { transform: scale(1.018); filter: saturate(.92) sepia(.035) contrast(1); }
+.gallery-image-link::after { position: absolute; inset: 0; border: 1px solid rgba(255,255,255,.28); background: linear-gradient(180deg, transparent 55%, rgba(39,37,34,.16)); content: ""; opacity: 0; pointer-events: none; transition: opacity 280ms var(--ease-out); }
+@media (hover: hover) and (pointer: fine) { .gallery-image-link:hover img { transform: scale(1.026); filter: saturate(.94) sepia(.035) contrast(1.01); } .gallery-image-link:hover::after { opacity: 1; } }
+.gallery-image-link:focus-visible img { transform: scale(1.018); filter: saturate(.92) sepia(.035) contrast(1); }
+.gallery-image-link:focus-visible::after { opacity: 1; }
 .gallery-grid figure:not(:first-child) img { aspect-ratio: 1.42 / 1; }
 .gallery-grid figcaption { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; color: var(--muted-foreground); direction: ltr; font: 8px var(--mono); letter-spacing: .06em; }
 .before-after-note { display: flex; align-items: center; gap: 10px; margin-top: 45px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted-foreground); font-size: 10px; }
