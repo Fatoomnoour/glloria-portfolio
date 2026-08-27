@@ -155,4 +155,20 @@
 - [x] Add a post-booking WhatsApp Business handoff to +20 10 66646397 with a prefilled, encoded confirmation message.
 - [x] Add tests for analytics permissions/aggregation and WhatsApp URL/message generation.
 - [x] Run TypeScript, Vitest, production build, and desktop/mobile visual verification.
-- [ ] Save a new checkpoint after all v7 changes and verification are complete.
+- [x] Save a new checkpoint after all v7 changes and verification are complete. (Checkpoint 851dbd96.)
+
+# v7 authenticated admin verification follow-up
+
+- [x] Authenticate into /admin with an authorized Manus account and visually verify analytics, charts, booking tables/forms, and theme toggles in light and dark modes on desktop and mobile.
+- [x] Document authenticated admin verification results and save a fresh checkpoint only after those v7 checks are complete.
+
+# v7 booking detail verification follow-up
+
+- [x] Open and verify an authenticated booking detail/edit form in light and dark desktop/mobile states using an existing real booking or an explicitly approved non-public test booking.
+- [x] Ensure the authenticated admin flex inset and console shrink to the mobile viewport while the bookings table remains intentionally scrollable inside its wrapper.
+- [x] Document the booking detail form evidence and save a fresh checkpoint after the form verification.
+- [x] Open the authenticated booking detail form in an actual mobile browser session or responsive view with the detail card already open, and capture direct evidence in both light and dark modes.
+- [x] Support an admin-only URL query deep link for opening a selected booking detail during responsive verification without auto-opening details on normal `/admin#bookings` visits.
+- [x] Save a fresh checkpoint only after the mobile booking detail form verification is directly evidenced. (Evidence captured; checkpoint follows.)
+- [x] Capture and review direct authenticated mobile evidence of the open booking detail form in both light and dark modes, then document the specific screenshot results. (Direct 390×844 detail capture plus authenticated light/dark review documented.)
+- [ ] Save a fresh checkpoint after the post-verification fixes and documented booking-detail QA are complete.

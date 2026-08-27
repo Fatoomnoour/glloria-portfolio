@@ -3,6 +3,7 @@ import { appRouter } from "./routers";
 import type { TrpcContext } from "./_core/context";
 import { buildAnalyticsTimeline, getAnalyticsMonthKeys } from "../shared/analytics";
 import { buildBookingConfirmationMessage, buildBookingConfirmationUrl } from "../shared/whatsapp";
+import { parseBookingIdFromSearch } from "../shared/booking";
 
 function contextFor(role: "user" | "admin" | null): TrpcContext {
   return {
@@ -47,6 +48,15 @@ describe("v7 analytics helpers", () => {
   it("blocks non-admin users from analytics data", async () => {
     const caller = appRouter.createCaller(contextFor("user"));
     await expect(caller.analytics.overview({ months: 6 })).rejects.toMatchObject({ code: "FORBIDDEN" });
+  });
+});
+
+describe("v7 booking detail deep link", () => {
+  it("accepts only positive integer booking ids from the search string", () => {
+    expect(parseBookingIdFromSearch("?booking=42")).toBe(42);
+    expect(parseBookingIdFromSearch("?booking=0")).toBeNull();
+    expect(parseBookingIdFromSearch("?booking=not-a-number")).toBeNull();
+    expect(parseBookingIdFromSearch("")).toBeNull();
   });
 });
 

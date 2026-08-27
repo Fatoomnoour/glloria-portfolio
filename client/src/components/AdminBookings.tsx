@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { CalendarCheck, Download, ExternalLink, Mail, MessageCircle, Save, Search } from "lucide-react";
 import { trpc } from "../lib/trpc";
+import { parseBookingIdFromSearch } from "@shared/booking";
 
 type Status = "new" | "reviewing" | "contacted" | "confirmed" | "completed" | "cancelled";
 
@@ -14,6 +15,11 @@ const statusLabels: Record<Status, string> = {
 };
 
 const emptyFilters = { search: "", city: "", service: "", status: undefined as Status | undefined, date: "" };
+
+function initialSelectedBookingId() {
+  if (typeof window === "undefined") return null;
+  return parseBookingIdFromSearch(window.location.search);
+}
 
 function downloadCsv(rows: Array<Record<string, unknown>>) {
   const headers = ["ID", "Created at", "Full name", "Phone", "Email", "City", "Property", "Area", "Service", "Budget", "Preferred date", "Preferred time", "Status", "Admin notes"];
@@ -30,7 +36,7 @@ function downloadCsv(rows: Array<Record<string, unknown>>) {
 
 export default function AdminBookings() {
   const [filters, setFilters] = useState(emptyFilters);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<number | null>(initialSelectedBookingId);
   const [statusDraft, setStatusDraft] = useState<Status>("new");
   const [notesDraft, setNotesDraft] = useState("");
   const queryInput = useMemo(() => ({ search: filters.search || undefined, city: filters.city || undefined, service: filters.service || undefined, status: filters.status, date: filters.date || undefined }), [filters]);

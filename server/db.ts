@@ -203,8 +203,8 @@ export async function getAnalyticsTimeline(months: AnalyticsRange) {
     return { range: months, points: buildAnalyticsTimeline(months, [], [], now) };
   }
 
-  const bookingMonth = sql<string>`DATE_FORMAT(${consultationRequests.createdAt}, '%Y-%m')`;
-  const projectMonth = sql<string>`DATE_FORMAT(${projects.createdAt}, '%Y-%m')`;
+  const bookingMonth = sql<string>`DATE_FORMAT(createdAt, '%Y-%m')`;
+  const projectMonth = sql<string>`DATE_FORMAT(createdAt, '%Y-%m')`;
   const bookingRows = await db
     .select({ month: bookingMonth, status: consultationRequests.status, count: count() })
     .from(consultationRequests)
