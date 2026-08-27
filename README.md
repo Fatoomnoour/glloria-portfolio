@@ -6,30 +6,30 @@ Production URL: configure the final custom domain in Vercel after deployment. Th
 
 ## Product surface
 
-| Area | Route | Purpose |
-|---|---|---|
-| Home | `/` | Editorial introduction, About, selected work, services, process, FAQ, and truthful testimonials behavior |
-| Project archive | `/projects` | Public archive with interior/architectural filtering |
-| Project detail | `/projects/interior`, `/projects/boska` | Managed original gallery, provenance label, optional approved case-study sections, sharing actions, and consultation CTA |
-| Booking | `/booking` | Five-step bilingual consultation wizard with validation, privacy consent, persistence, owner notification, and WhatsApp follow-up |
-| Contact | `/contact` | Direct WhatsApp, email, social links, and inquiry form |
-| Legal | `/privacy`, `/terms` | Privacy and terms pages linked from the booking flow |
-| Admin | `/admin` | OAuth-protected project, testimonial, booking, export, and analytics management |
+| Area            | Route                                   | Purpose                                                                                                                                                           |
+| --------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Home            | `/`                                     | Editorial introduction, About, selected work, services, process, FAQ, and truthful testimonials behavior                                                          |
+| Project archive | `/projects`                             | Public archive with interior/architectural filtering                                                                                                              |
+| Project detail  | `/projects/interior`, `/projects/boska` | Managed original gallery, provenance label, optional approved case-study sections, sharing actions, consultation CTA, and accessible lightbox                     |
+| Booking         | `/booking`                              | Three perceived consultation stages implemented across five validated/persisted steps, with privacy consent, recovery, owner notification, and WhatsApp follow-up |
+| Contact         | `/contact`                              | Direct WhatsApp, email, social links, and inquiry form                                                                                                            |
+| Legal           | `/privacy`, `/terms`                    | Privacy and terms pages linked from the booking flow                                                                                                              |
+| Admin           | `/admin`                                | OAuth-protected project, testimonial, booking, export, and analytics management                                                                                   |
 
 The public project records currently use only the approved labels **Private Residence** and **Boska Café & Restaurant**. The site does not invent city, year, area, client, scope, materials, or execution claims when those facts have not been supplied. Optional case-study fields and before/after comparisons are private until explicitly approved by an administrator. Public testimonials are suppressed unless they are real, consented, verified, and explicitly approved by an administrator; approved stories render through a small accessible carousel.
 
 ## Technology
 
-| Layer | Implementation |
-|---|---|
-| Frontend | React 19, TypeScript, Vite, Tailwind CSS 4, Wouter |
-| UI and motion | Warm Editorial CSS system, asymmetric lookbook treatment, Lucide icons, Intersection Observer, requestAnimationFrame parallax, reduced-motion fallbacks |
-| Server | Express 4, tRPC 11, managed Express runtime |
-| Data | Drizzle ORM, MySQL/TiDB-compatible schema, schema-first migrations |
-| Authentication | OAuth with server-side session validation and role-aware procedures |
-| Storage | Permanent S3-compatible storage references for original image assets |
-| Analytics | Protected tRPC timeline endpoint and Recharts admin charts |
-| Quality | Vitest, TypeScript checks, production Vite/esbuild build, responsive and cross-browser QA |
+| Layer          | Implementation                                                                                                                                          |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Frontend       | React 19, TypeScript, Vite, Tailwind CSS 4, Wouter                                                                                                      |
+| UI and motion  | Warm Editorial CSS system, asymmetric lookbook treatment, Lucide icons, Intersection Observer, requestAnimationFrame parallax, reduced-motion fallbacks |
+| Server         | Express 4, tRPC 11, managed Express runtime                                                                                                             |
+| Data           | Drizzle ORM, MySQL/TiDB-compatible schema, schema-first migrations                                                                                      |
+| Authentication | OAuth with server-side session validation and role-aware procedures                                                                                     |
+| Storage        | Permanent S3-compatible storage references for original image assets                                                                                    |
+| Analytics      | Protected tRPC timeline endpoint and Recharts admin charts                                                                                              |
+| Quality        | Vitest, TypeScript checks, production Vite/esbuild build, Lighthouse, responsive and cross-browser QA                                                   |
 
 ## Local development
 
@@ -47,7 +47,7 @@ pnpm build
 pnpm start
 ```
 
-The repository intentionally does not contain `.env` files, media bytes, database credentials, or generated deployment metadata. For local or Vercel deployment, provide the environment values listed in `.env.example`: `DATABASE_URL`, `JWT_SECRET`, OAuth (`VITE_APP_ID`, `OAUTH_SERVER_URL`, `VITE_OAUTH_PORTAL_URL`), owner identity (`OWNER_OPEN_ID`, `OWNER_NAME`), and the optional Forge API variables. Never commit their values.
+The repository intentionally does not contain `.env` files, media bytes, database credentials, or generated deployment metadata. For local or Vercel deployment, provide the environment values listed in [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md), including database, session, OAuth, owner, storage-proxy, and optional analytics names. Never commit their values.
 
 ## Verification commands
 
@@ -59,7 +59,7 @@ pnpm check
 pnpm build
 ```
 
-The current reviewed source passes **28 Vitest tests**, the TypeScript check, and the production build. The build deliberately keeps an application entry chunk above Vite's advisory 500 kB threshold because the shared public shell still contains the editorial runtime and UI dependencies; heavy page routes, vendor code, and Recharts are split into dedicated chunks.
+The current reviewed source passes **32 Vitest tests**, the TypeScript check, formatting verification, and the production build. Route components, testimonials, icons, and the data layer are split into dedicated chunks. The primary bundle decreased from **562.59 kB** to **438.04 kB** raw in the comparable production build; admin charts remain an admin-only lazy dependency. Local Lighthouse evidence and its runtime limitations are recorded in [attachment-13-audit.md](./attachment-13-audit.md).
 
 ## Data and migration workflow
 
@@ -69,7 +69,7 @@ Project images are referenced through permanent storage URLs rather than committ
 
 ## Hosting and domain
 
-The intended hosting target is Vercel with a custom domain. `DOMAIN_SETUP.md` documents the Vercel project setup, DNS, HTTPS, canonical URL, social metadata, and post-cutover checks. Set the final canonical URL and social preview metadata together before production launch.
+The current Manus review host is [glloriaport-marmsbvo.manus.space](https://glloriaport-marmsbvo.manus.space/). The intended free external target is Vercel; [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) documents the private-repository import, required variable **names**, OAuth callback registration, and post-deploy checks. `DOMAIN_SETUP.md` documents custom-domain, HTTPS, canonical URL, social metadata, and cutover checks. No `*.vercel.app` URL is claimed until an enabled Vercel connection completes a deployment successfully.
 
 ## Project referral and campaign attribution
 
