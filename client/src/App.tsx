@@ -14,6 +14,7 @@ import Admin from "./pages/Admin";
 import { LocaleProvider, useLocale } from "./contexts/LocaleContext";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import { GLLORIA_CONFIRMATION_WHATSAPP_NUMBER } from "../../shared/whatsapp";
+import RevealObserver from "./components/RevealObserver";
 
 const navItems = [
   { key: "nav.home", href: "/" },
@@ -55,7 +56,7 @@ function SiteFooter() {
 
 function Shell({ children }: { children: React.ReactNode }) {
   const { dir } = useLocale();
-  return <div className="site-shell" dir={dir}><SiteHeader /><main>{children}</main><SiteFooter /><a className="whatsapp-float" href={`https://wa.me/${GLLORIA_CONFIRMATION_WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer" aria-label="تواصلي مع Glloria على واتساب"><span>واتساب</span><ArrowUpLeft size={17} strokeWidth={1.5} /></a></div>;
+  return <div className="site-shell" dir={dir}><RevealObserver /><SiteHeader /><main>{children}</main><SiteFooter /><a className="whatsapp-float" href={`https://wa.me/${GLLORIA_CONFIRMATION_WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer" aria-label="تواصلي مع Glloria على واتساب"><span>واتساب</span><ArrowUpLeft size={17} strokeWidth={1.5} /></a></div>;
 }
 
 function AppContent() {

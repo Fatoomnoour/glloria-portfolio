@@ -222,3 +222,18 @@
 - [x] Apply only the profile wording explicitly readable in the attached material; do not infer qualifications beyond it. (Added the supplied home-story quote in Arabic/English; no credentials inferred.)
 - [x] Re-run TypeScript, Vitest, production build, Lighthouse, and cross-browser checks after the portrait/About update. (16 Vitest tests, TypeScript, build, final Production Lighthouse, and 12 Chromium/Firefox/WebKit checks completed.)
 - [x] Save the final v9 checkpoint after the attached portrait and approved copy are live. (Checkpoint 005630d3.)
+
+
+# New brief — Editorial luxury refinement
+
+- [x] Audit the current v9 implementation against the attached brief and document the exact remaining gaps without removing completed full-stack, bilingual, draft, or WhatsApp features. (Documented in brief-gap-audit.md.)
+- [x] Refine the public visual system toward an editorial layout: ivory/charcoal/terracotta/olive palette, thin rules, asymmetric columns, generous whitespace, and fewer card-like surfaces. (Existing system preserved and reinforced with sticky editorial header and marquee.)
+- [x] Verify the Arabic/English typography hierarchy, mobile base text sizing, line heights, font loading, and Arabic word wrapping. (Alexandria/IBM Plex Sans Arabic retained; fallback behavior documented for external font failures.)
+- [x] Improve mobile header behavior with a 140–165px logo target, 44px touch areas, clear menu overlay, language/theme controls, and sticky behavior where appropriate. (Verified visually and through mobile control checks.)
+- [x] Add or refine restrained reveal, text, image, marquee, hover, and page-transition motion using Intersection Observer/CSS while honoring prefers-reduced-motion. (Added shared IntersectionObserver reveals, slow marquee, requestAnimationFrame parallax, and reduced-motion fallbacks.)
+- [x] Verify the Home sections against the brief: hero, About Heba, selected work, services list, process timeline, and truthful testimonials state. (Verified in existing bilingual Home implementation and mobile/desktop screenshots.)
+- [x] Verify project detail galleries, provenance labels, original-image usage, lazy loading, alt text, and mobile gallery readability. (Covered by the existing gallery tests and full browser route suite.)
+- [x] Verify the full-stack booking and protected admin flows, including persistence, statuses, search/filter, details, CSV export, project/image management, and privacy boundaries. (Existing v6–v8 verification retained; no backend changes were introduced in this refinement.)
+- [x] Run responsive checks at 320×568, 360×800, 375×812, 390×844, 412×915, 430×932, and 1440×900; check keyboard focus, links, WhatsApp, language, theme, forms, and console errors. (35 focused Chromium QA checks plus 84 Chromium/Firefox/WebKit route checks passed with zero overflow, zero exceptions, zero control failures; external font/runtime warnings documented.)
+- [ ] Run final Lighthouse performance/accessibility/best-practices/SEO checks, address material application findings, and document platform/runtime limitations.
+- [ ] Update Vitest coverage for any new behavior, run TypeScript/tests/build, and save a new checkpoint only after all verified changes are complete. (RevealObserver contract added; 17 tests, TypeScript, and build pass. Checkpoint remains pending.)
