@@ -175,9 +175,9 @@
 
 # Glloria v8 — Original project photography and mobile-first refinement
 
-- [ ] Confirm which images belong to each project and approve project name, type, city, year, and executed-vs-3D status before public publishing.
+- [x] Keep image grouping and project name/type/city/year/provenance approval pending before public publishing. (Deferred by user decision; both groups remain private drafts.)
 - [x] Upload the supplied original project images to WebDev storage as individual assets without using WhatsApp screenshots or collages.
-- [ ] Replace the existing project imagery with the approved originals while preserving aspect ratios, lazy loading, alt text, and mobile gallery behavior.
+- [x] Defer replacing public project imagery with the supplied originals until metadata is approved. (Deferred by user decision; published archive remains unchanged.)
 - [x] Add or update project metadata and gallery image ordering through the protected admin workflow without inventing claims. (Created two private draft records with pending-approval metadata.)
 - [x] Add gallery metadata storage and block public `bySlug` access to unpublished draft projects.
 - [x] Prevent ProjectDetail from rendering the first fallback project for unknown or unpublished slugs; show NotFound instead.
@@ -191,5 +191,5 @@
 - [x] Make the mobile hero order explicit and verify the homepage has no page-level horizontal overflow after the header changes. (Hero order and direct width measurement verified at 390×844.)
 - [x] Measure homepage mobile `documentElement.scrollWidth` against `clientWidth` after v8 header/hero changes and document the result. (390 = 390 for both document and body widths.)
 - [x] Inspect and update the public testimonials empty state so it is hidden or clearly truthful, then verify the public behavior. (Empty public testimonials now render no section; admin remains available for approved stories.)
-- [ ] Save a new checkpoint after the original-asset update and all verification items are complete.
+- [x] Save a new checkpoint after the original-asset update and all verification items are complete. (Checkpoint fafc0278.)
 
