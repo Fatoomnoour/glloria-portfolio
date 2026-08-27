@@ -23,3 +23,15 @@ The desktop and 390px captures of `/projects/interior` and `/projects/boska` sho
 ## Typography and motion regression check
 
 After `font-display=optional` and `useLayoutEffect`, desktop and 390px captures retain the Alexandria/IBM Plex Sans Arabic hierarchy, project photography, editorial rules, and mobile form flow. No horizontal overflow is visible in the reviewed routes, and the public CTA/WhatsApp affordance remains reachable without adding filled card surfaces.
+
+## Approved-plan phase 2 baseline check
+
+A 1440×900 Home capture after the Warm Editorial interaction update shows the hero image with a restrained lower-corner organic curve, balanced Arabic headline hierarchy, visible bilingual navigation, and a small scroll cue leading to the studio story. The cue behaves as an editorial link rather than a filled card, and no visual regression or new surface density was observed.
+
+## Approved-plan phase 3 check
+
+The 1440×900 archive capture shows the existing asymmetric lookbook with the new curved image silhouettes and no card-wall regression. The BOSKA detail capture remains image-led with title, project label, sharing controls, and original hero photography. Because the database records currently have `caseStudyApproved = false`, the optional case-study section correctly remains absent rather than displaying empty headings or invented copy.
+
+## Approved-plan phase 4–5 check
+
+Desktop captures show the consultation wizard as a progressive editorial form: step title, five-step progress, and contact fields are separated with thin rules rather than dense cards. The Contact page keeps the existing WhatsApp and social actions and now ends with a restrained Qena location section. The 390×844 captures show the mobile header, hero, wizard fields, and location section without visible horizontal overflow; the progress labels remain legible and the next action is reachable after the fields.

@@ -10,20 +10,20 @@ The live site is available at [glloriaport-marmsbvo.manus.space](https://glloria
 |---|---|---|
 | Home | `/` | Editorial introduction, About, selected work, services, process, FAQ, and truthful testimonials behavior |
 | Project archive | `/projects` | Public archive with interior/architectural filtering |
-| Project detail | `/projects/interior`, `/projects/boska` | Managed original gallery, provenance label, sharing actions, and consultation CTA |
-| Booking | `/booking` | Consultation request form with validation, privacy consent, persistence, owner notification, and WhatsApp follow-up |
+| Project detail | `/projects/interior`, `/projects/boska` | Managed original gallery, provenance label, optional approved case-study sections, sharing actions, and consultation CTA |
+| Booking | `/booking` | Five-step bilingual consultation wizard with validation, privacy consent, persistence, owner notification, and WhatsApp follow-up |
 | Contact | `/contact` | Direct WhatsApp, email, social links, and inquiry form |
 | Legal | `/privacy`, `/terms` | Privacy and terms pages linked from the booking flow |
 | Admin | `/admin` | Manus OAuth-protected project, testimonial, booking, export, and analytics management |
 
-The public project records currently use only the approved labels **Private Residence** and **Boska Café & Restaurant**. The site does not invent city, year, area, client, scope, or execution claims when those facts have not been supplied. Public testimonials are suppressed unless they are real, consented, verified, and explicitly approved by an administrator.
+The public project records currently use only the approved labels **Private Residence** and **Boska Café & Restaurant**. The site does not invent city, year, area, client, scope, materials, or execution claims when those facts have not been supplied. Optional case-study fields and before/after comparisons are private until explicitly approved by an administrator. Public testimonials are suppressed unless they are real, consented, verified, and explicitly approved by an administrator; approved stories render through a small accessible carousel.
 
 ## Technology
 
 | Layer | Implementation |
 |---|---|
 | Frontend | React 19, TypeScript, Vite, Tailwind CSS 4, Wouter |
-| UI and motion | Warm Editorial CSS system, Lucide icons, Intersection Observer, requestAnimationFrame parallax, reduced-motion fallbacks |
+| UI and motion | Warm Editorial CSS system, asymmetric lookbook treatment, Lucide icons, Intersection Observer, requestAnimationFrame parallax, reduced-motion fallbacks |
 | Server | Express 4, tRPC 11, Manus WebDev runtime |
 | Data | Drizzle ORM, MySQL/TiDB-compatible schema, schema-first migrations |
 | Authentication | Manus OAuth with server-side session validation and role-aware procedures |
@@ -59,13 +59,13 @@ pnpm check
 pnpm build
 ```
 
-The current reviewed source passes **20 Vitest tests**, the TypeScript check, and the production build. The build deliberately keeps an application entry chunk above Vite's advisory 500 kB threshold because the shared public shell still contains the editorial runtime and UI dependencies; heavy page routes, vendor code, and Recharts are split into dedicated chunks.
+The current reviewed source passes **26 Vitest tests**, the TypeScript check, and the production build. The build deliberately keeps an application entry chunk above Vite's advisory 500 kB threshold because the shared public shell still contains the editorial runtime and UI dependencies; heavy page routes, vendor code, and Recharts are split into dedicated chunks.
 
 ## Data and migration workflow
 
 The schema lives in `drizzle/schema.ts`, query helpers live in `server/db.ts`, and the tRPC contract is defined in `server/routers.ts`. For a local database, `pnpm db:push` runs the Drizzle generation/migration script. In the managed WebDev environment, review generated SQL before applying it through the managed database workflow; do not use destructive SQL against production data.
 
-Project images are referenced through permanent storage URLs rather than committed into the repository. The admin project editor stores gallery metadata as JSON containing a URL, descriptive alt text, and display order. The public detail route is fail-closed: it waits for the managed record and renders the branded 404 when no published record exists, rather than falling back to unapproved reference imagery.
+Project images are referenced through permanent storage URLs rather than committed into the repository. The admin project editor stores gallery metadata as JSON containing a URL, descriptive alt text, and display order. It also supports nullable case-study copy, optional before/after image metadata, and an explicit approval gate. Booking requests include an optional aesthetic preference that remains protected in admin detail and CSV export. The public detail route is fail-closed: it waits for the managed record and renders the branded 404 when no published record exists, rather than falling back to unapproved reference imagery.
 
 ## Hosting and domain
 

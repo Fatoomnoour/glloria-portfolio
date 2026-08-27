@@ -37,6 +37,16 @@ const projectFields = {
   intro: z.string().trim().min(2),
   statement: z.string().trim().min(2),
   description: z.string().trim().min(2),
+  challenge: z.string().trim().max(5000).nullable().optional(),
+  concept: z.string().trim().max(5000).nullable().optional(),
+  materials: z.string().trim().max(5000).nullable().optional(),
+  palette: z.string().trim().max(2000).nullable().optional(),
+  serviceScope: z.string().trim().max(3000).nullable().optional(),
+  beforeImageUrl: z.string().trim().max(2000).nullable().optional(),
+  beforeImageAlt: z.string().trim().max(500).nullable().optional(),
+  afterImageUrl: z.string().trim().max(2000).nullable().optional(),
+  afterImageAlt: z.string().trim().max(500).nullable().optional(),
+  caseStudyApproved: z.boolean().default(false),
   published: z.boolean().default(true),
 };
 
@@ -65,6 +75,7 @@ const consultationInput = z.object({
   preferredDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   preferredTime: z.string().trim().min(2).max(10),
   description: z.string().trim().min(10).max(5000),
+  aestheticPreference: z.string().trim().max(500).nullable().optional(),
   privacyConsent: z.literal(true),
   honeypot: z.string().max(120).optional().default(""),
 });
@@ -88,6 +99,7 @@ function consultationNotificationContent(input: z.infer<typeof consultationInput
     `الميزانية: ${input.budget}`,
     `الموعد المقترح: ${input.preferredDate} — ${input.preferredTime}`,
     `الوصف: ${input.description}`,
+    input.aestheticPreference ? `الإحساس المطلوب: ${input.aestheticPreference}` : null,
   ].filter(Boolean).join("\n");
 }
 
@@ -104,7 +116,7 @@ export const appRouter = router({
   consultations: router({
     create: publicProcedure.input(consultationInput).mutation(async ({ input }) => {
       if (input.honeypot.trim()) throw new TRPCError({ code: "BAD_REQUEST", message: "تعذر قبول الطلب." });
-      const request = await createConsultationRequest({ ...input, email: input.email || null, honeypot: null, status: "new" });
+      const request = await createConsultationRequest({ ...input, email: input.email || null, aestheticPreference: input.aestheticPreference || null, honeypot: null, status: "new" });
       const notified = await notifyOwner({ title: `طلب استشارة جديد — ${input.fullName}`, content: consultationNotificationContent(input) });
       return { success: true as const, id: request?.id ?? null, notified };
     }),

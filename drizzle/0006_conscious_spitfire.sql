@@ -1,0 +1,1 @@
+ALTER TABLE `consultation_requests` ADD `aestheticPreference` text;

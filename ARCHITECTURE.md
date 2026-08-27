@@ -44,13 +44,13 @@ The public visual language is implemented in `client/src/index.css`. The base sy
 
 The schema in `drizzle/schema.ts` contains `users`, `projects`, `testimonials`, and `consultation_requests`. Project and testimonial rows retain `ownerId`; consultation requests retain optional ownership, lifecycle status, admin notes, and last-editor metadata. Search and status fields have indexes for the admin booking workflow.
 
-The booking form collects full name, phone, optional email, city, property type, area, requested service, budget, preferred date and time, project description, privacy consent, and a honeypot field. The server validates format and length with Zod before persistence. The follow-up WhatsApp URL is generated in the browser with an encoded confirmation message; this is a handoff to WhatsApp, not a server-side automatic message sent from the business account.
+The booking form is a five-step bilingual wizard. It collects full name, phone, optional email, city, property type, area, requested service, budget, optional aesthetic preference, preferred date and time, project description, privacy consent, and a honeypot field. The server validates format and length with Zod before persistence; the optional aesthetic preference is stored in `consultation_requests.aestheticPreference` and remains inside the protected admin detail/CSV workflow. The follow-up WhatsApp URL is generated in the browser with an encoded confirmation message; this is a handoff to WhatsApp, not a server-side automatic message sent from the business account.
 
 ## Content and storage boundaries
 
 Original project assets are uploaded to permanent WebDev storage and referenced through `/manus-storage/...` URLs. The repository contains no image bytes. Gallery JSON is parsed and sorted by `shared/gallery.ts`; the public detail route now fails closed when its published managed query returns no record, so an unavailable or unknown slug cannot display a legacy reference gallery.
 
-The approved public labels are **Private Residence** and **Boska Café & Restaurant**, with executed-project provenance. Where a city, year, area, client name, or service scope has not been supplied, the UI leaves it absent rather than creating a marketing claim. The public testimonials section remains hidden while there are no approved real stories.
+The approved public labels are **Private Residence** and **Boska Café & Restaurant**, with executed-project provenance. Where a city, year, area, client name, or service scope has not been supplied, the UI leaves it absent rather than creating a marketing claim. Optional case-study fields (`challenge`, `concept`, `materials`, `palette`, `serviceScope`, before/after image metadata) are nullable and render only when `caseStudyApproved` is true and content is present. The public testimonials section remains hidden while there are no approved real stories; when approved stories exist, the carousel renders only the verified, consented records returned by the public procedure. The Contact page shows the approved high-level location label `Qena, Egypt` without exposing an unverified street address.
 
 ## Change workflow
 
