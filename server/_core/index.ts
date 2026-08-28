@@ -22,7 +22,7 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
     }
   }
   throw new Error(
-    'No available port found starting from ${startPort}'
+    `No available port found starting from ${startPort}`
   );
 }
 
