@@ -63,13 +63,13 @@ The current reviewed source passes **32 Vitest tests**, the TypeScript check, fo
 
 ## Data and migration workflow
 
-The schema lives in `drizzle/schema.ts`, query helpers live in `server/db.ts`, and the tRPC contract is defined in `server/routers.ts`. For a local database, `pnpm db:push` runs the Drizzle generation/migration script. In the managed WebDev environment, review generated SQL before applying it through the managed database workflow; do not use destructive SQL against production data.
+The schema lives in `drizzle/schema.ts`, query helpers live in `server/db.ts`, and the tRPC contract is defined in `server/routers.ts`. For a local database, `pnpm db:push` runs the Drizzle generation/migration script. In production, review generated SQL before applying it through the configured database workflow; do not use destructive SQL against production data.
 
 Project images are referenced through permanent storage URLs rather than committed into the repository. The admin project editor stores gallery metadata as JSON containing a URL, descriptive alt text, and display order. It also supports nullable case-study copy, optional before/after image metadata, and an explicit approval gate. Booking requests include an optional aesthetic preference that remains protected in admin detail and CSV export. The public detail route is fail-closed: it waits for the managed record and renders the branded 404 when no published record exists, rather than falling back to unapproved reference imagery.
 
 ## Hosting and domain
 
-The current Manus review host is [glloriaport-marmsbvo.manus.space](https://glloriaport-marmsbvo.manus.space/). The intended free external target is Vercel; [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) documents the private-repository import, required variable **names**, OAuth callback registration, and post-deploy checks. `DOMAIN_SETUP.md` documents custom-domain, HTTPS, canonical URL, social metadata, and cutover checks. No `*.vercel.app` URL is claimed until an enabled Vercel connection completes a deployment successfully.
+The intended hosting target is Vercel; `DOMAIN_SETUP.md` documents the private-repository import, required variable names, OAuth callback registration, custom-domain, HTTPS, canonical URL, social metadata, and post-deploy checks. No public URL is claimed until a Vercel deployment completes successfully.
 
 ## Project referral and campaign attribution
 
