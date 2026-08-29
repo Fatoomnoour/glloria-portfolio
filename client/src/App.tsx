@@ -16,6 +16,7 @@ import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import { buildGeneralWhatsAppUrl } from "../../shared/whatsapp";
 import RevealObserver from "./components/RevealObserver";
+import { logoImage } from "./data/projectImages";
 
 const Projects = lazy(() => import("./pages/Projects"));
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
@@ -56,7 +57,12 @@ function SiteHeader() {
         </button>
         <Link href="/" className="brand-lockup" onClick={() => setOpen(false)}>
           <span className="brand-mark" aria-hidden="true">
-            <img src="/manus-storage/glloria-logo_c03b6188.png" alt="" />
+            <img
+              src={logoImage.src}
+              alt=""
+              width={logoImage.width}
+              height={logoImage.height}
+            />
           </span>
           <span className="brand-name">Glloria</span>
           <span className="brand-sub">INTERIORS / STUDIO</span>

@@ -4,17 +4,17 @@ import { lazy, Suspense } from "react";
 import { Link } from "wouter";
 import { useLocale } from "../contexts/LocaleContext";
 import ResponsiveImage from "../components/ResponsiveImage";
+import {
+  heroImage,
+  privateResidenceImage,
+  boskaCafeImage,
+  founderPortraitImage,
+  logoImage,
+} from "../data/projectImages";
 
 const TestimonialsSection = lazy(
   () => import("../components/TestimonialsSection")
 );
-
-const heroImage = "/manus-storage/glloria-hero_b9a954a0.jpg";
-const hebaPortrait = "/manus-storage/heba-portrait-clean_30012c25.png";
-const projectImages = {
-  interior: "/manus-storage/original-01_ebedc055.webp",
-  boska: "/manus-storage/original-05_2f557110.webp",
-};
 const services = [
   {
     number: "01",
@@ -159,12 +159,10 @@ export default function Home() {
         <div className="hero-media">
           <ResponsiveImage
             className="hero-parallax-image"
-            src={heroImage}
-            alt={
-              isArabic
-                ? "مساحة معيشة دافئة من تصميم Glloria"
-                : "Warm living space designed by Glloria"
-            }
+            src={heroImage.src}
+            width={heroImage.width}
+            height={heroImage.height}
+            alt={isArabic ? heroImage.alt.ar : heroImage.alt.en}
             fetchPriority="high"
             decoding="async"
             sizes="100vw"
@@ -284,11 +282,13 @@ export default function Home() {
         <div className="manifesto-aside founder-card">
           <div className="founder-portrait">
             <ResponsiveImage
-              src={hebaPortrait}
+              src={founderPortraitImage.src}
+              width={founderPortraitImage.width}
+              height={founderPortraitImage.height}
               alt={
                 isArabic
-                  ? "المهندسة هبة الدمراني، مؤسسة Glloria"
-                  : "Heba El Damarany, founder of Glloria"
+                  ? founderPortraitImage.alt.ar
+                  : founderPortraitImage.alt.en
               }
               loading="lazy"
               decoding="async"
@@ -302,8 +302,10 @@ export default function Home() {
           </p>
           <div className="studio-seal">
             <img
-              src="/manus-storage/glloria-logo_c03b6188.png"
-              alt="Glloria logo"
+              src={logoImage.src}
+              alt={isArabic ? logoImage.alt.ar : logoImage.alt.en}
+              width={logoImage.width}
+              height={logoImage.height}
               loading="lazy"
               decoding="async"
             />
@@ -330,11 +332,13 @@ export default function Home() {
           >
             <div className="project-image">
               <ResponsiveImage
-                src={projectImages.interior}
+                src={privateResidenceImage.src}
+                width={privateResidenceImage.width}
+                height={privateResidenceImage.height}
                 alt={
                   isArabic
-                    ? "منزل خاص — صورة أصلية للمشروع"
-                    : "Private Residence — original project image"
+                    ? privateResidenceImage.alt.ar
+                    : privateResidenceImage.alt.en
                 }
                 loading="lazy"
                 decoding="async"
@@ -353,11 +357,11 @@ export default function Home() {
             <Link href="/projects/boska" className="project-card">
               <div className="project-image">
                 <ResponsiveImage
-                  src={projectImages.boska}
+                  src={boskaCafeImage.src}
+                  width={boskaCafeImage.width}
+                  height={boskaCafeImage.height}
                   alt={
-                    isArabic
-                      ? "BOSKA كافيه ومطعم — صورة أصلية للمشروع"
-                      : "Boska Café & Restaurant — original project image"
+                    isArabic ? boskaCafeImage.alt.ar : boskaCafeImage.alt.en
                   }
                   loading="lazy"
                   decoding="async"

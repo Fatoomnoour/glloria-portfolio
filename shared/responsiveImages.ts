@@ -5,6 +5,36 @@ export type ResponsiveImageSource = {
 };
 
 const responsiveImages: Record<string, ResponsiveImageSource> = {
+  // --- Locally-hosted placeholder images (see client/src/data/projectImages.ts) ---
+  "/images/hero-living-room-1920w.webp": {
+    width: 1920,
+    height: 1280,
+    srcSet:
+      "/images/hero-living-room-480w.webp 480w, /images/hero-living-room-768w.webp 768w, /images/hero-living-room-1024w.webp 1024w, /images/hero-living-room-1440w.webp 1440w, /images/hero-living-room-1920w.webp 1920w",
+  },
+  "/images/project-private-residence-1200w.webp": {
+    width: 1200,
+    height: 800,
+    srcSet:
+      "/images/project-private-residence-480w.webp 480w, /images/project-private-residence-768w.webp 768w, /images/project-private-residence-960w.webp 960w, /images/project-private-residence-1200w.webp 1200w",
+  },
+  "/images/project-boska-cafe-1200w.webp": {
+    width: 1200,
+    height: 800,
+    srcSet:
+      "/images/project-boska-cafe-480w.webp 480w, /images/project-boska-cafe-768w.webp 768w, /images/project-boska-cafe-960w.webp 960w, /images/project-boska-cafe-1200w.webp 1200w",
+  },
+  "/images/founder-portrait-placeholder-800w.webp": {
+    width: 800,
+    height: 1200,
+    srcSet:
+      "/images/founder-portrait-placeholder-480w.webp 480w, /images/founder-portrait-placeholder-640w.webp 640w, /images/founder-portrait-placeholder-800w.webp 800w",
+  },
+  // --- Legacy Manus Forge entries (kept for the existing test suite and any
+  // legacy /manus-storage/* references still stored in the database from
+  // before this migration; the Manus Forge backend itself is not configured
+  // on this Vercel deployment, so these will only resolve if the storage
+  // proxy is configured) ---
   "/manus-storage/glloria-hero_b9a954a0.jpg": {
     width: 1920,
     height: 1280,
