@@ -5767,3 +5767,19 @@ img {
     padding-top: 0;
   }
 }
+
+/* Graceful broken-image fallback used by ResponsiveImage.tsx. Matches the
+   image containers it replaces (fills the parent, keeps aspect-ratio via
+   inline style to avoid layout shift) so no raw browser broken-image icon
+   is ever visible on the public site. */
+.responsive-image-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+  background: var(--clay-light, #eee2d6);
+  color: var(--foreground, #272522);
+  opacity: 0.55;
+}

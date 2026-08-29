@@ -5,6 +5,7 @@ import { Link } from "wouter";
 import { trpc } from "../lib/trpc";
 import { useLocale } from "../contexts/LocaleContext";
 import ResponsiveImage from "../components/ResponsiveImage";
+import { privateResidenceImage, boskaCafeImage } from "../data/projectImages";
 
 export type ProjectCard = {
   slug: string;
@@ -32,8 +33,8 @@ export const projects: ProjectCard[] = [
     title: "Private Residence",
     location: "",
     year: "",
-    image: "/manus-storage/original-01_ebedc055.webp",
-    imageAlt: "Private Residence project image",
+    image: privateResidenceImage.src,
+    imageAlt: privateResidenceImage.alt.en,
     intro: "",
   },
   {
@@ -45,8 +46,8 @@ export const projects: ProjectCard[] = [
     title: "Boska Café & Restaurant",
     location: "",
     year: "",
-    image: "/manus-storage/original-05_2f557110.webp",
-    imageAlt: "Boska Café & Restaurant project image",
+    image: boskaCafeImage.src,
+    imageAlt: boskaCafeImage.alt.en,
     intro: "",
   },
 ];

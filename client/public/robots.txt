@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# Update this sitemap URL together with canonical and Open Graph metadata after a final domain cutover.
-Sitemap: https://glloriaport-marmsbvo.manus.space/sitemap.xml
+Sitemap: https://glloria-portfolio.vercel.app/sitemap.xml
