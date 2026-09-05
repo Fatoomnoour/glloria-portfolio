@@ -9,7 +9,7 @@ import {
   Sun,
   X,
 } from "lucide-react";
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { LocaleProvider, useLocale } from "./contexts/LocaleContext";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
@@ -17,6 +17,10 @@ import NotFound from "./pages/NotFound";
 import { buildGeneralWhatsAppUrl } from "../../shared/whatsapp";
 import RevealObserver from "./components/RevealObserver";
 import { logoImage } from "./data/projectImages";
+import {
+  isNavItemActive,
+  useSectionNavigation,
+} from "./hooks/useSectionNavigation";
 
 const Projects = lazy(() => import("./pages/Projects"));
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
@@ -31,7 +35,7 @@ const navItems = [
   { key: "nav.about", href: "/#about" },
   { key: "nav.services", href: "/#services" },
   { key: "nav.booking", href: "/booking" },
-  { key: "nav.testimonials", href: "/#testimonials" },
+  { key: "nav.contact", href: "/contact" },
 ];
 
 function SiteHeader() {
@@ -39,15 +43,64 @@ function SiteHeader() {
   const [location] = useLocation();
   const { t, toggleLocale, locale } = useLocale();
   const { theme, toggleTheme } = useTheme();
+  const navigate = useSectionNavigation();
+  const navRef = useRef<HTMLElement | null>(null);
+  const toggleRef = useRef<HTMLButtonElement | null>(null);
   const isDark = theme === "dark";
+
+  // The open mobile menu is a modal surface: lock the page behind it, close it
+  // on Escape, and keep Tab inside it. Without this the visitor could scroll
+  // and tab into content hidden underneath the panel.
+  useEffect(() => {
+    if (!open) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        toggleRef.current?.focus();
+        return;
+      }
+      if (event.key !== "Tab" || !navRef.current) return;
+
+      const focusable = navRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open]);
+
+  // Any route change closes the panel — otherwise it stays open over the new page.
+  useEffect(() => setOpen(false), [location]);
+
   return (
     <header className="site-header">
       <div className="header-inner">
         <button
+          ref={toggleRef}
           className="menu-toggle"
           onClick={() => setOpen(!open)}
           aria-label={open ? "إغلاق القائمة" : "فتح القائمة"}
           aria-expanded={open}
+          aria-controls="primary-navigation"
         >
           {open ? (
             <X size={22} strokeWidth={1.5} />
@@ -68,19 +121,40 @@ function SiteHeader() {
           <span className="brand-sub">INTERIORS / STUDIO</span>
         </Link>
         <nav
+          ref={navRef}
+          id="primary-navigation"
           className={`main-nav ${open ? "is-open" : ""}`}
           aria-label="Primary navigation"
         >
-          {navItems.map(item => (
-            <a
-              key={item.href}
-              href={item.href}
-              className={location === item.href ? "is-active" : ""}
-              onClick={() => setOpen(false)}
-            >
-              {t(item.key)}
-            </a>
-          ))}
+          {navItems.map(item => {
+            const active = isNavItemActive(item.href, location);
+            return (
+              <a
+                key={item.href}
+                href={item.href}
+                className={active ? "is-active" : ""}
+                aria-current={active ? "page" : undefined}
+                onClick={event => {
+                  // Let modified clicks (new tab, download, middle click) use
+                  // the real href so the menu still behaves like the web.
+                  if (
+                    event.defaultPrevented ||
+                    event.metaKey ||
+                    event.ctrlKey ||
+                    event.shiftKey ||
+                    event.altKey ||
+                    event.button !== 0
+                  )
+                    return;
+                  event.preventDefault();
+                  setOpen(false);
+                  navigate(item.href);
+                }}
+              >
+                {t(item.key)}
+              </a>
+            );
+          })}
           <Link
             href="/booking"
             className="nav-cta"
@@ -230,12 +304,17 @@ function MobileConversionBar() {
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
-  const { dir, locale } = useLocale();
+  const { dir, locale, t } = useLocale();
   return (
     <div className="site-shell" dir={dir}>
+      <a className="skip-link" href="#main-content">
+        {t("nav.skip")}
+      </a>
       <RevealObserver />
       <SiteHeader />
-      <main>{children}</main>
+      <main id="main-content" tabIndex={-1}>
+        {children}
+      </main>
       <SiteFooter />
       <MobileConversionBar />
       <a

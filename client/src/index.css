@@ -45,7 +45,7 @@
   --accent-foreground: #fffaf3;
   --border: #d8d0c5;
   --input: #d8d0c5;
-  --ring: #b65e45;
+  --ring: #9e503a;
   --clay: #9e503a;
   --clay-light: #d38b70;
   --olive: #7b8064;
@@ -65,6 +65,37 @@
 }
 html {
   scroll-behavior: smooth;
+}
+/* Vestibular safety: a global smooth scroll is disorienting for visitors who
+   ask their OS to reduce motion, and it applies to every anchor jump on the
+   site — including the skip link. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+/* Keyboard users land here first; it stays off-screen until focused. */
+.skip-link {
+  position: absolute;
+  top: 0;
+  inset-inline-start: 0;
+  z-index: 200;
+  padding: 12px 20px;
+  transform: translateY(-120%);
+  background: var(--ink);
+  color: var(--paper);
+  font: 12px var(--mono);
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition: transform 0.18s var(--ease-out);
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid var(--clay);
+  outline-offset: 2px;
+}
+main:focus {
+  outline: none;
 }
 section[id] {
   scroll-margin-top: 104px;
@@ -1467,13 +1498,13 @@ img {
 }
 .inquiry-panel input::placeholder,
 .inquiry-panel textarea::placeholder {
-  color: #a39d93;
+  color: #6f6860;
 }
 .inquiry-panel textarea {
   resize: vertical;
 }
 .inquiry-panel select {
-  color: #a39d93;
+  color: #6f6860;
 }
 .form-submit {
   align-self: flex-start;
