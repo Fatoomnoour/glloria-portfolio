@@ -1,11 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://glloria-portfolio.vercel.app/</loc></url>
-  <url><loc>https://glloria-portfolio.vercel.app/projects</loc></url>
-  <url><loc>https://glloria-portfolio.vercel.app/projects/interior</loc></url>
-  <url><loc>https://glloria-portfolio.vercel.app/projects/boska</loc></url>
-  <url><loc>https://glloria-portfolio.vercel.app/booking</loc></url>
-  <url><loc>https://glloria-portfolio.vercel.app/contact</loc></url>
-  <url><loc>https://glloria-portfolio.vercel.app/privacy</loc></url>
-  <url><loc>https://glloria-portfolio.vercel.app/terms</loc></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://glloria-portfolio.vercel.app/</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://glloria-portfolio.vercel.app/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://glloria-portfolio.vercel.app/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://glloria-portfolio.vercel.app/" />
+  </url>
+  <url>
+    <loc>https://glloria-portfolio.vercel.app/projects</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://glloria-portfolio.vercel.app/projects" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://glloria-portfolio.vercel.app/projects" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://glloria-portfolio.vercel.app/projects" />
+  </url>
+  <url>
+    <loc>https://glloria-portfolio.vercel.app/booking</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://glloria-portfolio.vercel.app/booking" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://glloria-portfolio.vercel.app/booking" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://glloria-portfolio.vercel.app/booking" />
+  </url>
+  <url>
+    <loc>https://glloria-portfolio.vercel.app/contact</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://glloria-portfolio.vercel.app/contact" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://glloria-portfolio.vercel.app/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://glloria-portfolio.vercel.app/contact" />
+  </url>
+  <url>
+    <loc>https://glloria-portfolio.vercel.app/privacy</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://glloria-portfolio.vercel.app/privacy" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://glloria-portfolio.vercel.app/privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://glloria-portfolio.vercel.app/privacy" />
+  </url>
+  <url>
+    <loc>https://glloria-portfolio.vercel.app/terms</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://glloria-portfolio.vercel.app/terms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://glloria-portfolio.vercel.app/terms" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://glloria-portfolio.vercel.app/terms" />
+  </url>
+  <url>
+    <loc>https://glloria-portfolio.vercel.app/projects/boska</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://glloria-portfolio.vercel.app/projects/boska" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://glloria-portfolio.vercel.app/projects/boska" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://glloria-portfolio.vercel.app/projects/boska" />
+  </url>
+  <url>
+    <loc>https://glloria-portfolio.vercel.app/projects/elite</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://glloria-portfolio.vercel.app/projects/elite" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://glloria-portfolio.vercel.app/projects/elite" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://glloria-portfolio.vercel.app/projects/elite" />
+  </url>
+  <url>
+    <loc>https://glloria-portfolio.vercel.app/projects/sara-alaa</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://glloria-portfolio.vercel.app/projects/sara-alaa" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://glloria-portfolio.vercel.app/projects/sara-alaa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://glloria-portfolio.vercel.app/projects/sara-alaa" />
+  </url>
+  <url>
+    <loc>https://glloria-portfolio.vercel.app/projects/classic-white-clinic</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://glloria-portfolio.vercel.app/projects/classic-white-clinic" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://glloria-portfolio.vercel.app/projects/classic-white-clinic" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://glloria-portfolio.vercel.app/projects/classic-white-clinic" />
+  </url>
+  <url>
+    <loc>https://glloria-portfolio.vercel.app/projects/private-villa</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://glloria-portfolio.vercel.app/projects/private-villa" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://glloria-portfolio.vercel.app/projects/private-villa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://glloria-portfolio.vercel.app/projects/private-villa" />
+  </url>
+  <url>
+    <loc>https://glloria-portfolio.vercel.app/projects/private-residence</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://glloria-portfolio.vercel.app/projects/private-residence" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://glloria-portfolio.vercel.app/projects/private-residence" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://glloria-portfolio.vercel.app/projects/private-residence" />
+  </url>
 </urlset>

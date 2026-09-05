@@ -1,0 +1,52 @@
+name: CI
+
+# The suite grew from 36 to 107 tests during the September 2026 audit, but
+# nothing enforced it — a broken commit could reach main unnoticed. This runs
+# the same three gates used locally: types, tests, production build.
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  # A new push to the same branch cancels the previous run.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.31.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check formatting
+        run: pnpm exec prettier --check "client/src/**/*.{ts,tsx,css}" "server/**/*.ts" "shared/**/*.ts"
+
+      - name: Type-check
+        run: pnpm exec tsc --noEmit
+
+      - name: Test
+        run: pnpm exec vitest run
+
+      - name: Build
+        run: pnpm exec vite build
+
+      - name: Verify security headers
+        # Guards the CSP added in the audit against silent weakening.
+        run: node scripts/check-csp.mjs

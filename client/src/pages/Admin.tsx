@@ -1,5 +1,5 @@
 /* Glloria Design Direction: Warm Editorial Atelier — internal studio console, using the template dashboard shell with the same clay/ivory vocabulary. */
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, Suspense, lazy, useEffect, useState } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import DashboardLayout from "@/components/DashboardLayout";
 import { trpc } from "@/lib/trpc";
@@ -19,7 +19,10 @@ import {
   X,
 } from "lucide-react";
 import AdminBookings from "../components/AdminBookings";
-import AdminAnalytics from "../components/AdminAnalytics";
+// Recharts is ~380 kB of the admin bundle and is only needed once the
+// analytics tab is opened, so it loads on demand rather than with the console.
+const AdminAnalytics = lazy(() => import("../components/AdminAnalytics"));
+import "../admin.css";
 import { Link } from "wouter";
 
 type DesignType = "interior" | "architectural";
@@ -345,7 +348,13 @@ function AdminPageContent() {
         </button>
       </div>
       {tab === "analytics" ? (
-        <AdminAnalytics />
+        <Suspense
+          fallback={
+            <div className="analytics-state">جارٍ تحميل التحليلات…</div>
+          }
+        >
+          <AdminAnalytics />
+        </Suspense>
       ) : tab === "projects" ? (
         <div className="admin-workspace">
           <section className="admin-editor">
