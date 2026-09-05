@@ -261,6 +261,42 @@ export default function ProjectDetail() {
     isLoading,
     managedProject as PublicManagedProject | null | undefined
   );
+
+  // Hooks must run in the same order on every render, so this sits ABOVE the
+  // loading / not-found early returns rather than next to the render code it
+  // describes. It no-ops until the project resolves.
+  //
+  // Without per-project metadata every case study inherited the home page's
+  // title and, worse, its canonical — telling Google the real page was the
+  // homepage. The project's own image becomes the social preview.
+  const seoProject = managedProject as CaseStudyProject | null | undefined;
+  useSeo({
+    path: seoProject?.slug
+      ? `/projects/${seoProject.slug}`
+      : `/projects/${slug}`,
+    type: "article",
+    noIndex: renderState === "not-found",
+    title: seoProject?.title
+      ? ar
+        ? `${seoProject.title} | مشروع تصميم داخلي — Glloria`
+        : `${seoProject.title} | Interior Design Project — Glloria`
+      : ar
+        ? "مشروع | Glloria"
+        : "Project | Glloria",
+    description:
+      seoProject?.concept?.trim() ||
+      seoProject?.challenge?.trim() ||
+      (seoProject?.title
+        ? ar
+          ? `${seoProject.title} — مشروع من أعمال استوديو Glloria للتصميم الداخلي والتنفيذ بقنا.`
+          : `${seoProject.title} — a project by Glloria, an interior design and fit-out studio in Qena, Egypt.`
+        : ar
+          ? "مشروع من أعمال استوديو Glloria للتصميم الداخلي والتنفيذ بقنا."
+          : "A project by Glloria, an interior design and fit-out studio in Qena, Egypt."),
+    image: seoProject?.imageUrl,
+    imageAlt: seoProject?.title,
+  });
+
   if (renderState === "loading")
     return (
       <div className="route-loader" role="status" aria-live="polite">
@@ -291,25 +327,6 @@ export default function ProjectDetail() {
     .filter(Boolean)
     .join(" / ");
   const showCaseStudy = hasApprovedCaseStudy(project);
-
-  // Per-project metadata. Without this every case study inherited the home
-  // page's title and, worse, its canonical — telling Google the real page was
-  // the homepage. The project's own image becomes the social preview.
-  useSeo({
-    path: `/projects/${project.slug}`,
-    type: "article",
-    title: ar
-      ? `${project.title} | مشروع تصميم داخلي — Glloria`
-      : `${project.title} | Interior Design Project — Glloria`,
-    description:
-      project.concept?.trim() ||
-      project.challenge?.trim() ||
-      (ar
-        ? `${project.title} — مشروع من أعمال استوديو Glloria للتصميم الداخلي والتنفيذ بقنا.`
-        : `${project.title} — a project by Glloria, an interior design and fit-out studio in Qena, Egypt.`),
-    image: project.imageUrl,
-    imageAlt: project.title,
-  });
 
   return (
     <div className="detail-page page-transition">

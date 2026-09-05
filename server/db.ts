@@ -20,10 +20,33 @@ import { ENV } from "./_core/env";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
+/**
+ * Lazily creates the Drizzle client.
+ *
+ * SERVERLESS CONNECTION BUDGET
+ * ----------------------------
+ * `drizzle(connectionString)` builds a mysql2 pool whose default limit is 10
+ * connections. On Vercel every concurrent invocation is its own isolate with
+ * its own pool, so N warm instances can hold N x 10 sockets open and exhaust
+ * the database's connection limit under modest traffic — the failure looks
+ * like random "too many connections" errors rather than slow queries.
+ *
+ * One connection per isolate is the right shape here: each invocation handles a
+ * single request, so a pool buys nothing while multiplying sockets. The short
+ * idle timeout lets the server reclaim sockets from isolates Vercel has frozen.
+ */
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
-      _db = drizzle(process.env.DATABASE_URL);
+      _db = drizzle({
+        connection: {
+          uri: process.env.DATABASE_URL,
+          connectionLimit: 1,
+          idleTimeout: 30_000,
+          enableKeepAlive: true,
+          keepAliveInitialDelay: 10_000,
+        },
+      });
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;

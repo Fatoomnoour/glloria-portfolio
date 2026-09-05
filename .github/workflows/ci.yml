@@ -38,6 +38,9 @@ jobs:
       - name: Check formatting
         run: pnpm exec prettier --check "client/src/**/*.{ts,tsx,css}" "server/**/*.ts" "shared/**/*.ts"
 
+      - name: Lint
+        run: pnpm exec eslint .
+
       - name: Type-check
         run: pnpm exec tsc --noEmit
 

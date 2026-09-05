@@ -45,7 +45,10 @@ export function useAuth(options?: UseAuthOptions) {
       try {
         sessionStorage.removeItem("glloria-cookie");
         sessionStorage.removeItem("manus-cookie");
-      } catch {}
+      } catch {
+        // sessionStorage can throw in private browsing; the backend cookie is
+        // cleared by the logout mutation regardless, so this is non-fatal.
+      }
       utils.auth.me.setData(undefined, null);
       await utils.auth.me.invalidate();
     }
