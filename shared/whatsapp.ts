@@ -12,6 +12,43 @@ export function buildGeneralWhatsAppUrl(locale: WhatsAppLocale) {
   return `https://wa.me/${GLLORIA_CONFIRMATION_WHATSAPP_NUMBER}?text=${encodeURIComponent(buildGeneralWhatsAppMessage(locale))}`;
 }
 
+export type ContactInquiryDetails = {
+  locale: WhatsAppLocale;
+  name: string;
+  phone: string;
+  projectType: string;
+  message: string;
+};
+
+export function buildContactInquiryMessage(details: ContactInquiryDetails) {
+  if (details.locale === "ar") {
+    return [
+      "مرحباً Glloria، لدي استفسار عن مشروع.",
+      `الاسم: ${details.name}`,
+      `رقم التواصل: ${details.phone}`,
+      details.projectType ? `نوع المشروع: ${details.projectType}` : null,
+      `التفاصيل: ${details.message}`,
+    ]
+      .filter(Boolean)
+      .join("\n");
+  }
+
+  return [
+    "Hello Glloria, I have an enquiry about a project.",
+    `Name: ${details.name}`,
+    `Contact number: ${details.phone}`,
+    details.projectType ? `Project type: ${details.projectType}` : null,
+    `Details: ${details.message}`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
+export function buildContactInquiryUrl(details: ContactInquiryDetails) {
+  const message = buildContactInquiryMessage(details);
+  return `https://wa.me/${GLLORIA_CONFIRMATION_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
 export type BookingConfirmationDetails = {
   locale: WhatsAppLocale;
   bookingId: number | null;

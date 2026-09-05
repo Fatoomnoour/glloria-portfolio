@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import { AlertTriangle, RotateCcw } from "lucide-react";
 import { Component, ReactNode } from "react";
 
@@ -11,6 +10,14 @@ interface State {
   error: Error | null;
 }
 
+/**
+ * Last line of defence for the public site.
+ *
+ * Without this mounted, a single render-time exception anywhere in the tree
+ * unmounts the whole React root and the visitor is left with a blank white
+ * page. Here we keep the Glloria voice, offer a recovery action and a direct
+ * WhatsApp fallback, and only expose the raw stack in development.
+ */
 class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -21,41 +28,45 @@ class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error };
   }
 
+  componentDidCatch(error: Error, info: unknown) {
+    console.error("[ErrorBoundary]", error, info);
+  }
+
   render() {
-    if (this.state.hasError) {
-      return (
-        <div className="flex items-center justify-center min-h-screen p-8 bg-background">
-          <div className="flex flex-col items-center w-full max-w-2xl p-8">
-            <AlertTriangle
-              size={48}
-              className="text-destructive mb-6 flex-shrink-0"
-            />
+    if (!this.state.hasError) return this.props.children;
 
-            <h2 className="text-xl mb-4">An unexpected error occurred.</h2>
-
-            <div className="p-4 w-full rounded bg-muted overflow-auto mb-6">
-              <pre className="text-sm text-muted-foreground whitespace-break-spaces">
-                {this.state.error?.stack}
-              </pre>
-            </div>
-
-            <button
-              onClick={() => window.location.reload()}
-              className={cn(
-                "flex items-center gap-2 px-4 py-2 rounded-lg",
-                "bg-primary text-primary-foreground",
-                "hover:opacity-90 cursor-pointer"
-              )}
-            >
-              <RotateCcw size={16} />
-              Reload Page
-            </button>
-          </div>
+    return (
+      <div className="app-error" dir="rtl">
+        <span className="app-error-mark" aria-hidden="true">
+          <AlertTriangle size={28} strokeWidth={1.4} />
+        </span>
+        <p className="app-error-eyebrow">GLL / ERROR</p>
+        <h1>
+          حدث خطأ غير متوقع.
+          <br />
+          <em>لنُعِد المحاولة.</em>
+        </h1>
+        <p className="app-error-body">
+          نعتذر عن ذلك. أعِد تحميل الصفحة، وإن استمرت المشكلة تواصل معنا مباشرة
+          على واتساب وسنساعدك فوراً.
+        </p>
+        <div className="app-error-actions">
+          <button
+            type="button"
+            className="dark-button"
+            onClick={() => window.location.reload()}
+          >
+            <RotateCcw size={16} /> إعادة تحميل الصفحة
+          </button>
+          <a className="text-link" href="/">
+            العودة للرئيسية
+          </a>
         </div>
-      );
-    }
-
-    return this.props.children;
+        {import.meta.env.DEV && this.state.error?.stack && (
+          <pre className="app-error-stack">{this.state.error.stack}</pre>
+        )}
+      </div>
+    );
   }
 }
 

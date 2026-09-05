@@ -187,6 +187,16 @@ export const appRouter = router({
         const notified = await notifyOwner({
           title: `طلب استشارة جديد — ${input.fullName}`,
           content: consultationNotificationContent(input, sourceProject?.title),
+        }).catch(error => {
+          // The consultation is ALREADY persisted at this point. Notifying the
+          // owner is a best-effort side channel: if it fails we log it and
+          // still report success to the visitor, otherwise they would see an
+          // error, resubmit, and create duplicate requests.
+          console.error(
+            "[Consultation] Owner notification failed; request was still saved.",
+            error
+          );
+          return false;
         });
         return { success: true as const, id: request?.id ?? null, notified };
       }),

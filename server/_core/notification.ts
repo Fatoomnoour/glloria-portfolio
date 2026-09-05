@@ -14,9 +14,7 @@ const isNonEmptyString = (value: unknown): value is string =>
   typeof value === "string" && value.trim().length > 0;
 
 const buildEndpointUrl = (baseUrl: string): string => {
-  const normalizedBase = baseUrl.endsWith("/")
-    ? baseUrl
-    : `${baseUrl}/`;
+  const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
   return new URL(
     "webdevtoken.v1.WebDevService/SendNotification",
     normalizedBase
@@ -59,27 +57,31 @@ const validatePayload = (input: NotificationPayload): NotificationPayload => {
 
 /**
  * Dispatches a project-owner notification through the Manus Notification Service.
- * Returns `true` if the request was accepted, `false` when the upstream service
- * cannot be reached (callers can fall back to email/slack). Validation errors
- * bubble up as TRPC errors so callers can fix the payload.
+ *
+ * Returns `true` if the request was accepted, `false` when the service is not
+ * configured or cannot be reached. It NEVER throws for an infrastructure reason
+ * — notifications are a side channel, and a missing/unavailable notification
+ * backend must never invalidate the business action that triggered it (e.g. a
+ * consultation request that is already persisted in the database).
+ *
+ * Callers should treat `false` as "the owner was not pinged, fall back to
+ * email/WhatsApp/the admin console" and continue their happy path.
+ *
+ * Validation errors (empty or oversized payload) still bubble up as TRPC errors,
+ * because those are programming mistakes the caller must fix.
  */
 export async function notifyOwner(
   payload: NotificationPayload
 ): Promise<boolean> {
   const { title, content } = validatePayload(payload);
 
-  if (!ENV.forgeApiUrl) {
-    throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
-      message: "Notification service URL is not configured.",
-    });
-  }
-
-  if (!ENV.forgeApiKey) {
-    throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
-      message: "Notification service API key is not configured.",
-    });
+  if (!ENV.forgeApiUrl || !ENV.forgeApiKey) {
+    console.warn(
+      "[Notification] Skipped: notification service is not configured " +
+        "(BUILT_IN_FORGE_API_URL / BUILT_IN_FORGE_API_KEY). " +
+        "The originating request was NOT affected."
+    );
+    return false;
   }
 
   const endpoint = buildEndpointUrl(ENV.forgeApiUrl);

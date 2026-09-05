@@ -10,15 +10,32 @@ import {
 } from "lucide-react";
 import { Link } from "wouter";
 import { useLocale } from "../contexts/LocaleContext";
-import { buildGeneralWhatsAppUrl } from "../../../shared/whatsapp";
+import {
+  buildContactInquiryUrl,
+  buildGeneralWhatsAppUrl,
+} from "../../../shared/whatsapp";
 
 export default function Contact() {
   const { locale, t } = useLocale();
   const isArabic = locale === "ar";
   const [sent, setSent] = useState(false);
+  const [handoffUrl, setHandoffUrl] = useState("");
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const url = buildContactInquiryUrl({
+      locale,
+      name: String(data.get("name") ?? "").trim(),
+      phone: String(data.get("phone") ?? "").trim(),
+      projectType: String(data.get("type") ?? "").trim(),
+      message: String(data.get("message") ?? "").trim(),
+    });
+    setHandoffUrl(url);
     setSent(true);
+    // Open the prefilled WhatsApp thread straight away. If the browser blocks
+    // the popup, the confirmation panel still renders the same link so the
+    // enquiry is never silently lost.
+    window.open(url, "_blank", "noopener,noreferrer");
   };
   return (
     <div className="contact-page page-transition section-pad">
@@ -109,28 +126,39 @@ export default function Contact() {
                 <Check size={21} />
               </div>
               <p className="eyebrow">
-                {isArabic ? "تم استلام رسالتك" : "Message received"}
+                {isArabic ? "رسالتك جاهزة للإرسال" : "Your message is ready"}
               </p>
               <h2>
                 {isArabic ? (
                   <>
-                    شكراً لأنكِ
+                    خطوة أخيرة
                     <br />
-                    <em>بدأتِ الحكاية.</em>
+                    <em>على واتساب.</em>
                   </>
                 ) : (
                   <>
-                    Thank you for
+                    One last step
                     <br />
-                    <em>starting the story.</em>
+                    <em>on WhatsApp.</em>
                   </>
                 )}
               </h2>
               <p>
                 {isArabic
-                  ? "وصلت التفاصيل إلى Glloria. سنعود إليكِ قريباً."
-                  : "Your details reached Glloria. We will be in touch soon."}
+                  ? "فتحنا واتساب برسالة معبّأة بتفاصيلك. اضغط إرسال داخل واتساب حتى تصل إلى Glloria، ونرد خلال 24 ساعة."
+                  : "WhatsApp has opened with your details prefilled. Press send inside WhatsApp so it reaches Glloria — we reply within 24 hours."}
               </p>
+              {handoffUrl && (
+                <a
+                  className="dark-button"
+                  href={handoffUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {isArabic ? "فتح واتساب مرة أخرى" : "Open WhatsApp again"}{" "}
+                  <ArrowUpLeft size={18} strokeWidth={1.4} />
+                </a>
+              )}
               <button className="text-link" onClick={() => setSent(false)}>
                 {isArabic ? "إرسال رسالة أخرى" : "Send another message"}{" "}
                 <ArrowUpLeft size={17} />
@@ -192,12 +220,13 @@ export default function Contact() {
                 />
               </label>
               <button className="dark-button form-submit" type="submit">
-                {t("nav.primary")} <ArrowUpLeft size={18} strokeWidth={1.4} />
+                {isArabic ? "إرسال عبر واتساب" : "Send via WhatsApp"}{" "}
+                <ArrowUpLeft size={18} strokeWidth={1.4} />
               </button>
               <p className="form-note">
                 {isArabic
-                  ? "لن نستخدم بياناتك إلا للتواصل بخصوص مشروعك."
-                  : "Your details are used only to contact you about this project."}
+                  ? "سيفتح واتساب برسالة جاهزة بتفاصيلك — راجعها واضغط إرسال. لن نستخدم بياناتك إلا للتواصل بخصوص مشروعك."
+                  : "WhatsApp opens with your details prefilled — review it and press send. Your details are used only to contact you about this project."}
               </p>
             </form>
           )}
