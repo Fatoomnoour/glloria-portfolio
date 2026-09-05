@@ -6,6 +6,7 @@ import {
   Check,
   Instagram,
   MapPin,
+  MessageCircle,
   Phone,
 } from "lucide-react";
 import { Link } from "wouter";
@@ -14,6 +15,13 @@ import {
   buildContactInquiryUrl,
   buildGeneralWhatsAppUrl,
 } from "../../../shared/whatsapp";
+import {
+  GLLORIA_EMAIL,
+  GLLORIA_PHONE,
+  GLLORIA_SOCIAL,
+  mailtoHref,
+  telHref,
+} from "../../../shared/contact";
 
 export default function Contact() {
   const { locale, t } = useLocale();
@@ -85,35 +93,33 @@ export default function Contact() {
             </div>
           </div>
           <div className="contact-details">
+            <a href={telHref}>
+              <span>
+                <Phone size={15} /> {isArabic ? "اتصال مباشر" : "Call directly"}
+              </span>
+              <b dir="ltr">{GLLORIA_PHONE.display}</b>
+            </a>
             <a
               href={buildGeneralWhatsAppUrl(locale)}
               target="_blank"
               rel="noreferrer"
             >
               <span>
-                <Phone size={15} /> WhatsApp
+                <MessageCircle size={15} /> WhatsApp
               </span>
-              <b>+20 10 666 46397</b>
+              <b dir="ltr">{GLLORIA_PHONE.display}</b>
             </a>
-            <a href="mailto:hello@glloria.studio">
+            <a href={mailtoHref}>
               <span>{isArabic ? "البريد الإلكتروني" : "Email"}</span>
-              <b>hello@glloria.studio</b>
+              <b>{GLLORIA_EMAIL}</b>
             </a>
-            <a
-              href="https://www.instagram.com/glloriaaa"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href={GLLORIA_SOCIAL.instagram} target="_blank" rel="noreferrer">
               <span>
                 <Instagram size={15} /> Instagram
               </span>
               <b>@glloriaaa</b>
             </a>
-            <a
-              href="https://www.facebook.com/glloriaaa"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href={GLLORIA_SOCIAL.facebook} target="_blank" rel="noreferrer">
               <span>Facebook</span>
               <b>facebook.com/glloriaaa</b>
             </a>

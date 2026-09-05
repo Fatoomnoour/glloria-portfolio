@@ -1,4 +1,6 @@
-export const GLLORIA_CONFIRMATION_WHATSAPP_NUMBER = "201066646397";
+import { GLLORIA_PHONE } from "./contact";
+
+export const GLLORIA_CONFIRMATION_WHATSAPP_NUMBER = GLLORIA_PHONE.waDigits;
 
 export type WhatsAppLocale = "ar" | "en";
 

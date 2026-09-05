@@ -5734,7 +5734,7 @@ img {
     left: 12px;
     z-index: 46;
     display: grid;
-    grid-template-columns: 0.82fr 1.18fr;
+    grid-template-columns: 0.78fr 0.6fr 1.1fr;
     gap: 7px;
     padding: 7px;
     border: 1px solid color-mix(in srgb, var(--line) 88%, transparent);
@@ -5885,4 +5885,29 @@ img {
   font-size: 12px;
   line-height: 1.7;
   white-space: pre-wrap;
+}
+
+/* Direct-dial affordance. Contracting and fit-out clients still convert over a
+   phone call far more than a form, and the footer previously offered no number
+   at all — only WhatsApp and email. The number is forced LTR because an
+   international phone number must not be reordered by the RTL layout. */
+.footer-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  direction: ltr;
+  font-variant-numeric: tabular-nums;
+}
+.mobile-conversion-bar .mobile-call {
+  gap: 5px;
+}
+@media (max-width: 380px) {
+  /* On the narrowest handsets the three-up bar would crowd; drop the call
+     label and keep the icon, which stays a 44px touch target. */
+  .mobile-conversion-bar .mobile-call span {
+    display: none;
+  }
+  .mobile-conversion-bar {
+    grid-template-columns: 0.9fr 0.34fr 1.1fr;
+  }
 }

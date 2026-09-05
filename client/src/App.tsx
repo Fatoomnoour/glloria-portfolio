@@ -6,6 +6,7 @@ import {
   Instagram,
   Menu,
   Moon,
+  Phone,
   Sun,
   X,
 } from "lucide-react";
@@ -15,6 +16,12 @@ import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import { buildGeneralWhatsAppUrl } from "../../shared/whatsapp";
+import {
+  GLLORIA_EMAIL,
+  GLLORIA_PHONE,
+  mailtoHref,
+  telHref,
+} from "../../shared/contact";
 import RevealObserver from "./components/RevealObserver";
 import { logoImage } from "./data/projectImages";
 import {
@@ -239,6 +246,9 @@ function SiteFooter() {
         </div>
         <div className="footer-column">
           <span className="footer-label">{t("footer.contact")}</span>
+          <a href={telHref} className="footer-phone" dir="ltr">
+            <Phone size={13} /> {GLLORIA_PHONE.display}
+          </a>
           <a
             href={buildGeneralWhatsAppUrl(locale)}
             target="_blank"
@@ -246,7 +256,7 @@ function SiteFooter() {
           >
             WhatsApp ↗
           </a>
-          <a href="mailto:hello@glloria.studio">hello@glloria.studio</a>
+          <a href={mailtoHref}>{GLLORIA_EMAIL}</a>
         </div>
         <div className="footer-column">
           <span className="footer-label">{t("footer.follow")}</span>
@@ -294,6 +304,10 @@ function MobileConversionBar() {
         rel="noreferrer"
       >
         <span>WhatsApp</span>
+      </a>
+      <a href={telHref} className="mobile-call">
+        <Phone size={15} strokeWidth={1.6} />
+        <span>{locale === "ar" ? "اتصال" : "Call"}</span>
       </a>
       <Link href="/booking">
         <span>{t("nav.primary")}</span>
