@@ -6,9 +6,9 @@ describe("project gallery parsing", () => {
     expect(parseProjectGallery(null, "/cover.webp", "Cover image")).toEqual([
       { url: "/cover.webp", alt: "Cover image", order: 1 },
     ]);
-    expect(parseProjectGallery("not-json", "/cover.webp", "Cover image")).toEqual([
-      { url: "/cover.webp", alt: "Cover image", order: 1 },
-    ]);
+    expect(
+      parseProjectGallery("not-json", "/cover.webp", "Cover image")
+    ).toEqual([{ url: "/cover.webp", alt: "Cover image", order: 1 }]);
   });
 
   it("filters incomplete entries and sorts valid images by order", () => {
@@ -20,8 +20,8 @@ describe("project gallery parsing", () => {
           { url: "/one.webp", alt: "One", order: 1 },
         ]),
         "/cover.webp",
-        "Cover image",
-      ),
+        "Cover image"
+      )
     ).toEqual([
       { url: "/one.webp", alt: "One", order: 1 },
       { url: "/two.webp", alt: "Two", order: 2 },
@@ -29,13 +29,18 @@ describe("project gallery parsing", () => {
   });
 });
 
-
 describe("approved minimal project galleries", () => {
   it("preserves approved project-only alt text and ordering", () => {
-    expect(parseProjectGallery(JSON.stringify([
-      { url: "/boska-2.webp", alt: "BOSKA project image 2", order: 2 },
-      { url: "/boska-1.webp", alt: "BOSKA project image 1", order: 1 },
-    ]), "/boska-1.webp", "BOSKA project image")).toEqual([
+    expect(
+      parseProjectGallery(
+        JSON.stringify([
+          { url: "/boska-2.webp", alt: "BOSKA project image 2", order: 2 },
+          { url: "/boska-1.webp", alt: "BOSKA project image 1", order: 1 },
+        ]),
+        "/boska-1.webp",
+        "BOSKA project image"
+      )
+    ).toEqual([
       { url: "/boska-1.webp", alt: "BOSKA project image 1", order: 1 },
       { url: "/boska-2.webp", alt: "BOSKA project image 2", order: 2 },
     ]);

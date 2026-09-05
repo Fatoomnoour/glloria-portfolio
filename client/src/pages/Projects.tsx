@@ -6,6 +6,7 @@ import { trpc } from "../lib/trpc";
 import { useLocale } from "../contexts/LocaleContext";
 import ResponsiveImage from "../components/ResponsiveImage";
 import { privateResidenceImage, boskaCafeImage } from "../data/projectImages";
+import { useSeo } from "../hooks/useSeo";
 
 export type ProjectCard = {
   slug: string;
@@ -70,6 +71,7 @@ export function getVisibleProjects(items: ProjectCard[], filter: FilterValue) {
 }
 
 export default function Projects() {
+  useSeo({ page: "projects", path: "/projects" });
   const { t, locale } = useLocale();
   const [active, setActive] = useState<FilterValue>("all");
   const [isFiltering, setIsFiltering] = useState(false);

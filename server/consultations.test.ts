@@ -4,17 +4,19 @@ import type { TrpcContext } from "./_core/context";
 
 function contextFor(role: "user" | "admin" | null): TrpcContext {
   return {
-    user: role ? {
-      id: 8,
-      openId: `${role}-consultation-test`,
-      name: "Consultation Test",
-      email: "test@example.com",
-      loginMethod: "test",
-      role,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      lastSignedIn: new Date(),
-    } : null,
+    user: role
+      ? {
+          id: 8,
+          openId: `${role}-consultation-test`,
+          name: "Consultation Test",
+          email: "test@example.com",
+          loginMethod: "test",
+          role,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          lastSignedIn: new Date(),
+        }
+      : null,
     req: { protocol: "https", headers: {} } as TrpcContext["req"],
     res: {} as TrpcContext["res"],
   };
@@ -39,16 +41,25 @@ const validRequest = {
 describe("consultation procedures", () => {
   it("blocks regular users from reading private bookings", async () => {
     const caller = appRouter.createCaller(contextFor("user"));
-    await expect(caller.consultations.list()).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(caller.consultations.list()).rejects.toMatchObject({
+      code: "FORBIDDEN",
+    });
   });
 
   it("rejects a filled honeypot before touching the database", async () => {
     const caller = appRouter.createCaller(contextFor(null));
-    await expect(caller.consultations.create({ ...validRequest, honeypot: "website-link" })).rejects.toMatchObject({ code: "BAD_REQUEST" });
+    await expect(
+      caller.consultations.create({ ...validRequest, honeypot: "website-link" })
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
   });
 
   it("requires explicit privacy consent in the public input", async () => {
     const caller = appRouter.createCaller(contextFor(null));
-    await expect(caller.consultations.create({ ...validRequest, privacyConsent: false as never })).rejects.toThrow();
+    await expect(
+      caller.consultations.create({
+        ...validRequest,
+        privacyConsent: false as never,
+      })
+    ).rejects.toThrow();
   });
 });

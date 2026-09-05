@@ -15,6 +15,7 @@ import {
   hasBeforeAfterPair,
   type PublicManagedProject,
 } from "@shared/project";
+import { useSeo } from "../hooks/useSeo";
 
 type CaseStudyProject = PublicManagedProject & {
   challenge?: string | null;
@@ -120,7 +121,7 @@ function MaterialExplorer({
         <p className="eyebrow" id="materials-title">
           {ar ? "الخامات المذكورة" : "MATERIAL NOTES"}
         </p>
-        <span>{ar ? "اختاري عنصراً" : "Select an element"}</span>
+        <span>{ar ? "اختر عنصراً" : "Select an element"}</span>
       </div>
       <div
         className="material-list"
@@ -291,6 +292,25 @@ export default function ProjectDetail() {
     .join(" / ");
   const showCaseStudy = hasApprovedCaseStudy(project);
 
+  // Per-project metadata. Without this every case study inherited the home
+  // page's title and, worse, its canonical — telling Google the real page was
+  // the homepage. The project's own image becomes the social preview.
+  useSeo({
+    path: `/projects/${project.slug}`,
+    type: "article",
+    title: ar
+      ? `${project.title} | مشروع تصميم داخلي — Glloria`
+      : `${project.title} | Interior Design Project — Glloria`,
+    description:
+      project.concept?.trim() ||
+      project.challenge?.trim() ||
+      (ar
+        ? `${project.title} — مشروع من أعمال استوديو Glloria للتصميم الداخلي والتنفيذ بقنا.`
+        : `${project.title} — a project by Glloria, an interior design and fit-out studio in Qena, Egypt.`),
+    image: project.imageUrl,
+    imageAlt: project.title,
+  });
+
   return (
     <div className="detail-page page-transition">
       <div className="detail-back section-pad">
@@ -332,7 +352,7 @@ export default function ProjectDetail() {
       <section className="detail-next section-pad">
         <p className="eyebrow">{ar ? "الأرشيف" : "THE ARCHIVE"}</p>
         <Link href="/projects" className="next-link">
-          {ar ? "شاهدي بقية الأرشيف" : "View the full archive"}{" "}
+          {ar ? "استعرض بقية الأرشيف" : "View the full archive"}{" "}
           <ArrowUpLeft size={19} />
         </Link>
       </section>

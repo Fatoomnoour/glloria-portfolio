@@ -3,63 +3,1022 @@ import { FormEvent, useEffect, useState } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import DashboardLayout from "@/components/DashboardLayout";
 import { trpc } from "@/lib/trpc";
-import { BarChart3, CalendarCheck, Check, Edit3, FilePlus2, ImagePlus, LayoutDashboard, Plus, Save, ShieldCheck, Star, Trash2, X } from "lucide-react";
+import {
+  BarChart3,
+  CalendarCheck,
+  Check,
+  Edit3,
+  FilePlus2,
+  ImagePlus,
+  LayoutDashboard,
+  Plus,
+  Save,
+  ShieldCheck,
+  Star,
+  Trash2,
+  X,
+} from "lucide-react";
 import AdminBookings from "../components/AdminBookings";
 import AdminAnalytics from "../components/AdminAnalytics";
 import { Link } from "wouter";
 
 type DesignType = "interior" | "architectural";
 type VerificationStatus = "pending" | "verified" | "rejected";
-type ProjectForm = { slug: string; title: string; projectType: string; designType: DesignType; location: string; year: string; imageUrl: string; imageAlt: string; galleryJson: string; imageKind: string; intro: string; statement: string; description: string; challenge: string; concept: string; materials: string; palette: string; serviceScope: string; beforeImageUrl: string; beforeImageAlt: string; afterImageUrl: string; afterImageAlt: string; caseStudyApproved: boolean; published: boolean; };
-type TestimonialForm = { clientName: string; clientRole: string; quote: string; rating: string; projectName: string; imageUrl: string; consentConfirmed: boolean; verificationStatus: VerificationStatus; approved: boolean; };
+type ProjectForm = {
+  slug: string;
+  title: string;
+  projectType: string;
+  designType: DesignType;
+  location: string;
+  year: string;
+  imageUrl: string;
+  imageAlt: string;
+  galleryJson: string;
+  imageKind: string;
+  intro: string;
+  statement: string;
+  description: string;
+  challenge: string;
+  concept: string;
+  materials: string;
+  palette: string;
+  serviceScope: string;
+  beforeImageUrl: string;
+  beforeImageAlt: string;
+  afterImageUrl: string;
+  afterImageAlt: string;
+  caseStudyApproved: boolean;
+  published: boolean;
+};
+type TestimonialForm = {
+  clientName: string;
+  clientRole: string;
+  quote: string;
+  rating: string;
+  projectName: string;
+  imageUrl: string;
+  consentConfirmed: boolean;
+  verificationStatus: VerificationStatus;
+  approved: boolean;
+};
 
-const emptyProject: ProjectForm = { slug: "", title: "", projectType: "", designType: "interior", location: "بانتظار اعتماد البيانات", year: "", imageUrl: "", imageAlt: "", galleryJson: "", imageKind: "بانتظار اعتماد الحالة", intro: "", statement: "", description: "", challenge: "", concept: "", materials: "", palette: "", serviceScope: "", beforeImageUrl: "", beforeImageAlt: "", afterImageUrl: "", afterImageAlt: "", caseStudyApproved: false, published: false };
-const emptyTestimonial: TestimonialForm = { clientName: "", clientRole: "", quote: "", rating: "5", projectName: "", imageUrl: "", consentConfirmed: false, verificationStatus: "pending", approved: false };
+const emptyProject: ProjectForm = {
+  slug: "",
+  title: "",
+  projectType: "",
+  designType: "interior",
+  location: "بانتظار اعتماد البيانات",
+  year: "",
+  imageUrl: "",
+  imageAlt: "",
+  galleryJson: "",
+  imageKind: "بانتظار اعتماد الحالة",
+  intro: "",
+  statement: "",
+  description: "",
+  challenge: "",
+  concept: "",
+  materials: "",
+  palette: "",
+  serviceScope: "",
+  beforeImageUrl: "",
+  beforeImageAlt: "",
+  afterImageUrl: "",
+  afterImageAlt: "",
+  caseStudyApproved: false,
+  published: false,
+};
+const emptyTestimonial: TestimonialForm = {
+  clientName: "",
+  clientRole: "",
+  quote: "",
+  rating: "5",
+  projectName: "",
+  imageUrl: "",
+  consentConfirmed: false,
+  verificationStatus: "pending",
+  approved: false,
+};
 
-function initialAdminTab(): "analytics" | "projects" | "testimonials" | "bookings" {
+function initialAdminTab():
+  | "analytics"
+  | "projects"
+  | "testimonials"
+  | "bookings" {
   if (typeof window === "undefined") return "projects";
   const hash = window.location.hash.replace("#", "");
-  return hash === "analytics" || hash === "testimonials" || hash === "bookings" ? hash : "projects";
+  return hash === "analytics" || hash === "testimonials" || hash === "bookings"
+    ? hash
+    : "projects";
 }
 
 function AdminPageContent() {
-  const { user, loading } = useAuth({ redirectOnUnauthenticated: true, redirectPath: "/admin" });
-  const [tab, setTab] = useState<"analytics" | "projects" | "testimonials" | "bookings">(initialAdminTab);
+  const { user, loading } = useAuth({
+    redirectOnUnauthenticated: true,
+    redirectPath: "/admin",
+  });
+  const [tab, setTab] = useState<
+    "analytics" | "projects" | "testimonials" | "bookings"
+  >(initialAdminTab);
   useEffect(() => {
     const onHashChange = () => setTab(initialAdminTab());
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
   const [projectForm, setProjectForm] = useState<ProjectForm>(emptyProject);
-  const [testimonialForm, setTestimonialForm] = useState<TestimonialForm>(emptyTestimonial);
+  const [testimonialForm, setTestimonialForm] =
+    useState<TestimonialForm>(emptyTestimonial);
   const [editingProjectId, setEditingProjectId] = useState<number | null>(null);
-  const [editingTestimonialId, setEditingTestimonialId] = useState<number | null>(null);
+  const [editingTestimonialId, setEditingTestimonialId] = useState<
+    number | null
+  >(null);
   const [notice, setNotice] = useState("");
   const utils = trpc.useUtils();
-  const projectsQuery = trpc.projects.adminList.useQuery(undefined, { enabled: Boolean(user?.role === "admin") });
-  const testimonialsQuery = trpc.testimonials.adminList.useQuery(undefined, { enabled: Boolean(user?.role === "admin") });
-  const createProject = trpc.projects.create.useMutation({ onSuccess: () => { utils.projects.adminList.invalidate(); setProjectForm(emptyProject); setNotice("تمت إضافة المشروع إلى الأرشيف."); } });
-  const updateProject = trpc.projects.update.useMutation({ onSuccess: () => { utils.projects.adminList.invalidate(); setProjectForm(emptyProject); setEditingProjectId(null); setNotice("تم تحديث بيانات المشروع."); } });
-  const deleteProject = trpc.projects.delete.useMutation({ onSuccess: () => { utils.projects.adminList.invalidate(); setNotice("تم حذف المشروع."); } });
-  const createTestimonial = trpc.testimonials.create.useMutation({ onSuccess: () => { utils.testimonials.adminList.invalidate(); setTestimonialForm(emptyTestimonial); setNotice("تم حفظ التقييم في لوحة الإدارة."); } });
-  const updateTestimonial = trpc.testimonials.update.useMutation({ onSuccess: () => { utils.testimonials.adminList.invalidate(); setTestimonialForm(emptyTestimonial); setEditingTestimonialId(null); setNotice("تم تحديث التقييم."); } });
-  const deleteTestimonial = trpc.testimonials.delete.useMutation({ onSuccess: () => { utils.testimonials.adminList.invalidate(); setNotice("تم حذف التقييم."); } });
+  const projectsQuery = trpc.projects.adminList.useQuery(undefined, {
+    enabled: Boolean(user?.role === "admin"),
+  });
+  const testimonialsQuery = trpc.testimonials.adminList.useQuery(undefined, {
+    enabled: Boolean(user?.role === "admin"),
+  });
+  const createProject = trpc.projects.create.useMutation({
+    onSuccess: () => {
+      utils.projects.adminList.invalidate();
+      setProjectForm(emptyProject);
+      setNotice("تمت إضافة المشروع إلى الأرشيف.");
+    },
+  });
+  const updateProject = trpc.projects.update.useMutation({
+    onSuccess: () => {
+      utils.projects.adminList.invalidate();
+      setProjectForm(emptyProject);
+      setEditingProjectId(null);
+      setNotice("تم تحديث بيانات المشروع.");
+    },
+  });
+  const deleteProject = trpc.projects.delete.useMutation({
+    onSuccess: () => {
+      utils.projects.adminList.invalidate();
+      setNotice("تم حذف المشروع.");
+    },
+  });
+  const createTestimonial = trpc.testimonials.create.useMutation({
+    onSuccess: () => {
+      utils.testimonials.adminList.invalidate();
+      setTestimonialForm(emptyTestimonial);
+      setNotice("تم حفظ التقييم في لوحة الإدارة.");
+    },
+  });
+  const updateTestimonial = trpc.testimonials.update.useMutation({
+    onSuccess: () => {
+      utils.testimonials.adminList.invalidate();
+      setTestimonialForm(emptyTestimonial);
+      setEditingTestimonialId(null);
+      setNotice("تم تحديث التقييم.");
+    },
+  });
+  const deleteTestimonial = trpc.testimonials.delete.useMutation({
+    onSuccess: () => {
+      utils.testimonials.adminList.invalidate();
+      setNotice("تم حذف التقييم.");
+    },
+  });
 
   if (loading) return null;
-  if (!user || user.role !== "admin") return <div className="admin-denied"><ShieldCheck size={24} /><p className="eyebrow">ADMIN / PRIVATE</p><h1>هذه المساحة<br /><em>مخصصة لفريق Glloria.</em></h1><p>يجب تسجيل الدخول بحساب المالك أو حساب مصرح له بإدارة المحتوى.</p><Link className="dark-button" href="/">العودة للموقع <LayoutDashboard size={16} /></Link></div>;
+  if (!user || user.role !== "admin")
+    return (
+      <div className="admin-denied">
+        <ShieldCheck size={24} />
+        <p className="eyebrow">ADMIN / PRIVATE</p>
+        <h1>
+          هذه المساحة
+          <br />
+          <em>مخصصة لفريق Glloria.</em>
+        </h1>
+        <p>يجب تسجيل الدخول بحساب المالك أو حساب مصرح له بإدارة المحتوى.</p>
+        <Link className="dark-button" href="/">
+          العودة للموقع <LayoutDashboard size={16} />
+        </Link>
+      </div>
+    );
 
-  const submitProject = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); const input = { ...projectForm, year: projectForm.year ? Number(projectForm.year) : null }; if (editingProjectId) updateProject.mutate({ id: editingProjectId, data: input }); else createProject.mutate(input); };
-  const submitTestimonial = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); const input = { ...testimonialForm, rating: Number(testimonialForm.rating) }; if (editingTestimonialId) updateTestimonial.mutate({ id: editingTestimonialId, data: input }); else createTestimonial.mutate(input); };
-  const editProject = (project: NonNullable<typeof projectsQuery.data>[number]) => { setTab("projects"); setEditingProjectId(project.id); setProjectForm({ slug: project.slug, title: project.title, projectType: project.projectType, designType: project.designType, location: project.location, year: project.year ? String(project.year) : "", imageUrl: project.imageUrl, imageAlt: project.imageAlt ?? "", galleryJson: project.galleryJson ?? "", imageKind: project.imageKind ?? "", intro: project.intro, statement: project.statement, description: project.description, challenge: project.challenge ?? "", concept: project.concept ?? "", materials: project.materials ?? "", palette: project.palette ?? "", serviceScope: project.serviceScope ?? "", beforeImageUrl: project.beforeImageUrl ?? "", beforeImageAlt: project.beforeImageAlt ?? "", afterImageUrl: project.afterImageUrl ?? "", afterImageAlt: project.afterImageAlt ?? "", caseStudyApproved: project.caseStudyApproved, published: project.published }); window.scrollTo({ top: 0, behavior: "smooth" }); };
-  const editTestimonial = (item: NonNullable<typeof testimonialsQuery.data>[number]) => { setTab("testimonials"); setEditingTestimonialId(item.id); setTestimonialForm({ clientName: item.clientName, clientRole: item.clientRole ?? "", quote: item.quote, rating: String(item.rating), projectName: item.projectName ?? "", imageUrl: item.imageUrl ?? "", consentConfirmed: item.consentConfirmed, verificationStatus: item.verificationStatus, approved: item.approved }); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const submitProject = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const input = {
+      ...projectForm,
+      year: projectForm.year ? Number(projectForm.year) : null,
+    };
+    if (editingProjectId)
+      updateProject.mutate({ id: editingProjectId, data: input });
+    else createProject.mutate(input);
+  };
+  const submitTestimonial = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const input = {
+      ...testimonialForm,
+      rating: Number(testimonialForm.rating),
+    };
+    if (editingTestimonialId)
+      updateTestimonial.mutate({ id: editingTestimonialId, data: input });
+    else createTestimonial.mutate(input);
+  };
+  const editProject = (
+    project: NonNullable<typeof projectsQuery.data>[number]
+  ) => {
+    setTab("projects");
+    setEditingProjectId(project.id);
+    setProjectForm({
+      slug: project.slug,
+      title: project.title,
+      projectType: project.projectType,
+      designType: project.designType,
+      location: project.location,
+      year: project.year ? String(project.year) : "",
+      imageUrl: project.imageUrl,
+      imageAlt: project.imageAlt ?? "",
+      galleryJson: project.galleryJson ?? "",
+      imageKind: project.imageKind ?? "",
+      intro: project.intro,
+      statement: project.statement,
+      description: project.description,
+      challenge: project.challenge ?? "",
+      concept: project.concept ?? "",
+      materials: project.materials ?? "",
+      palette: project.palette ?? "",
+      serviceScope: project.serviceScope ?? "",
+      beforeImageUrl: project.beforeImageUrl ?? "",
+      beforeImageAlt: project.beforeImageAlt ?? "",
+      afterImageUrl: project.afterImageUrl ?? "",
+      afterImageAlt: project.afterImageAlt ?? "",
+      caseStudyApproved: project.caseStudyApproved,
+      published: project.published,
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const editTestimonial = (
+    item: NonNullable<typeof testimonialsQuery.data>[number]
+  ) => {
+    setTab("testimonials");
+    setEditingTestimonialId(item.id);
+    setTestimonialForm({
+      clientName: item.clientName,
+      clientRole: item.clientRole ?? "",
+      quote: item.quote,
+      rating: String(item.rating),
+      projectName: item.projectName ?? "",
+      imageUrl: item.imageUrl ?? "",
+      consentConfirmed: item.consentConfirmed,
+      verificationStatus: item.verificationStatus,
+      approved: item.approved,
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
-  return <div className="admin-console">
-    <div className="admin-topbar"><div><p className="eyebrow">GLLORIA / CONTENT STUDIO</p><h1>إدارة المحتوى</h1></div><Link className="admin-view-site" href="/">مشاهدة الموقع ↗</Link></div>
-    <div className="admin-welcome"><div className="admin-welcome-mark"><ShieldCheck size={22} /></div><div><span>مرحباً، {user.name || "هبة"}</span><p>من هنا يمكنكِ تحديث الأعمال وإدارة الأصوات الموثقة.</p></div><span className="admin-status"><i /> ADMIN ACCESS</span></div>
-    {notice && <div className="admin-notice"><Check size={16} /> {notice}<button onClick={() => setNotice("")} aria-label="إغلاق التنبيه"><X size={14} /></button></div>}
-    <div className="admin-tabs"><button className={tab === "analytics" ? "active" : ""} onClick={() => { setTab("analytics"); window.location.hash = "analytics"; }}><BarChart3 size={16} /> التحليلات</button><button className={tab === "projects" ? "active" : ""} onClick={() => { setTab("projects"); window.location.hash = "projects"; }}><ImagePlus size={16} /> معرض الأعمال <b>{projectsQuery.data?.length ?? 0}</b></button><button className={tab === "testimonials" ? "active" : ""} onClick={() => { setTab("testimonials"); window.location.hash = "testimonials"; }}><Star size={16} /> آراء العملاء <b>{testimonialsQuery.data?.length ?? 0}</b></button><button className={tab === "bookings" ? "active" : ""} onClick={() => { setTab("bookings"); window.location.hash = "bookings"; }}><CalendarCheck size={16} /> الحجوزات</button></div>
-    {tab === "analytics" ? <AdminAnalytics /> : tab === "projects" ? <div className="admin-workspace"><section className="admin-editor"><div className="admin-section-head"><div><span className="admin-kicker">PROJECT / {editingProjectId ? "EDIT" : "NEW"}</span><h2>{editingProjectId ? "تعديل مشروع" : "إضافة مشروع"}</h2></div>{editingProjectId && <button className="admin-cancel" onClick={() => { setEditingProjectId(null); setProjectForm(emptyProject); }}><X size={14} /> إلغاء التعديل</button>}</div><form onSubmit={submitProject}><div className="admin-form-grid"><label>اسم المشروع<input required value={projectForm.title} onChange={(e) => setProjectForm({ ...projectForm, title: e.target.value })} placeholder="مثال: بيت بين الضوء والظل" /></label><label>الرابط المختصر<input required value={projectForm.slug} onChange={(e) => setProjectForm({ ...projectForm, slug: e.target.value.toLowerCase().replace(/\s+/g, "-") })} placeholder="private-residence" /></label><label>نوع التصميم<select value={projectForm.designType} onChange={(e) => setProjectForm({ ...projectForm, designType: e.target.value as DesignType })}><option value="interior">تصميم داخلي</option><option value="architectural">تصميم معماري</option></select></label><label>نوع المشروع<input required value={projectForm.projectType} onChange={(e) => setProjectForm({ ...projectForm, projectType: e.target.value })} placeholder="سكني / تجاري / ضيافة" /></label><label>الموقع<input required value={projectForm.location} onChange={(e) => setProjectForm({ ...projectForm, location: e.target.value })} /></label><label>السنة<input type="number" min="1900" max="2200" value={projectForm.year} onChange={(e) => setProjectForm({ ...projectForm, year: e.target.value })} /></label></div><label>رابط صورة المشروع<input required value={projectForm.imageUrl} onChange={(e) => setProjectForm({ ...projectForm, imageUrl: e.target.value })} placeholder="https://... أو /manus-storage/..." /></label><label>النص البديل للصورة<input value={projectForm.imageAlt} onChange={(e) => setProjectForm({ ...projectForm, imageAlt: e.target.value })} placeholder="وصف دقيق للصورة" /></label><label>حالة الصور<input value={projectForm.imageKind} onChange={(e) => setProjectForm({ ...projectForm, imageKind: e.target.value })} placeholder="منفذ فعلي / 3D / بانتظار الاعتماد" /></label><label>معرض الصور وترتيبها (JSON اختياري)<textarea rows={4} value={projectForm.galleryJson} onChange={(e) => setProjectForm({ ...projectForm, galleryJson: e.target.value })} placeholder='[{"url":"/manus-storage/...","alt":"وصف الصورة","order":1}]' /></label><label>الوصف القصير<input required value={projectForm.intro} onChange={(e) => setProjectForm({ ...projectForm, intro: e.target.value })} placeholder="جملة واحدة تظهر في الأرشيف" /></label><label>الجملة الرئيسية<input required value={projectForm.statement} onChange={(e) => setProjectForm({ ...projectForm, statement: e.target.value })} placeholder="الجملة التحريرية للمشروع" /></label><label>قصة المشروع<textarea required rows={4} value={projectForm.description} onChange={(e) => setProjectForm({ ...projectForm, description: e.target.value })} /></label><div className="admin-case-study"><div className="admin-integrity-note"><ShieldCheck size={15} /><span>دراسة الحالة اختيارية. أضيفي نصوصاً وصوراً معتمدة فقط؛ لن تظهر للعامة إلا بعد تفعيل الاعتماد.</span></div><div className="admin-case-study-grid"><label>التحدي التصميمي<textarea rows={3} value={projectForm.challenge} onChange={(e) => setProjectForm({ ...projectForm, challenge: e.target.value })} placeholder="اختياري — نص معتمد فقط" /></label><label>فكرة التصميم<textarea rows={3} value={projectForm.concept} onChange={(e) => setProjectForm({ ...projectForm, concept: e.target.value })} placeholder="اختياري — نص معتمد فقط" /></label><label>الألوان والخامات<textarea rows={3} value={projectForm.materials} onChange={(e) => setProjectForm({ ...projectForm, materials: e.target.value })} placeholder="اختياري — لا تضيفي خامات غير مؤكدة" /></label><label>لوحة الألوان<textarea rows={3} value={projectForm.palette} onChange={(e) => setProjectForm({ ...projectForm, palette: e.target.value })} placeholder="اختياري" /></label><label>نطاق العمل<textarea rows={3} value={projectForm.serviceScope} onChange={(e) => setProjectForm({ ...projectForm, serviceScope: e.target.value })} placeholder="اختياري" /></label></div><div className="admin-before-after"><span className="admin-kicker">BEFORE / AFTER · OPTIONAL</span><div className="admin-case-study-grid"><label>رابط صورة قبل<input value={projectForm.beforeImageUrl} onChange={(e) => setProjectForm({ ...projectForm, beforeImageUrl: e.target.value })} placeholder="رابط صورة أصلية موثقة" /></label><label>وصف صورة قبل<input value={projectForm.beforeImageAlt} onChange={(e) => setProjectForm({ ...projectForm, beforeImageAlt: e.target.value })} placeholder="نص بديل وصفي" /></label><label>رابط صورة بعد<input value={projectForm.afterImageUrl} onChange={(e) => setProjectForm({ ...projectForm, afterImageUrl: e.target.value })} placeholder="رابط صورة أصلية موثقة" /></label><label>وصف صورة بعد<input value={projectForm.afterImageAlt} onChange={(e) => setProjectForm({ ...projectForm, afterImageAlt: e.target.value })} placeholder="نص بديل وصفي" /></label></div></div><label className="admin-check"><input type="checkbox" checked={projectForm.caseStudyApproved} onChange={(e) => setProjectForm({ ...projectForm, caseStudyApproved: e.target.checked })} /> اعتماد دراسة الحالة للنشر عند اكتمال البيانات</label></div><label className="admin-check"><input type="checkbox" checked={projectForm.published} onChange={(e) => setProjectForm({ ...projectForm, published: e.target.checked })} /> نشر المشروع للعامة</label><button className="admin-primary" type="submit" disabled={createProject.isPending || updateProject.isPending}>{editingProjectId ? <Save size={16} /> : <Plus size={16} />} {editingProjectId ? "حفظ التعديلات" : "إضافة إلى المعرض"}</button></form></section><section className="admin-list"><div className="admin-section-head"><div><span className="admin-kicker">ARCHIVE / {projectsQuery.data?.length ?? 0}</span><h2>المشاريع الحالية</h2></div></div>{projectsQuery.isLoading ? <p className="admin-muted">جاري تحميل الأرشيف...</p> : projectsQuery.data?.length ? projectsQuery.data.map((project) => <article className="admin-item" key={project.id}><img src={project.imageUrl} alt="" /><div><span className="admin-item-meta">{project.designType === "architectural" ? "ARCHITECTURAL" : "INTERIOR"} · {project.year} · {project.published ? "PUBLISHED" : "DRAFT"}</span><h3>{project.title}</h3><p>{project.location} · {project.projectType}</p></div><div className="admin-item-actions"><button onClick={() => editProject(project)} aria-label={`تعديل ${project.title}`}><Edit3 size={15} /></button><button onClick={() => window.confirm("حذف هذا المشروع؟") && deleteProject.mutate({ id: project.id })} aria-label={`حذف ${project.title}`}><Trash2 size={15} /></button></div></article>) : <div className="admin-empty"><FilePlus2 size={20} /><p>لم تتم إضافة مشاريع بعد.<br />ابدئي بالمشروع الأول.</p></div>}</section></div> : tab === "testimonials" ? <div className="admin-workspace"><section className="admin-editor"><div className="admin-section-head"><div><span className="admin-kicker">VOICE / {editingTestimonialId ? "EDIT" : "NEW"}</span><h2>{editingTestimonialId ? "تعديل تقييم" : "إضافة تقييم"}</h2></div>{editingTestimonialId && <button className="admin-cancel" onClick={() => { setEditingTestimonialId(null); setTestimonialForm(emptyTestimonial); }}><X size={14} /> إلغاء التعديل</button>}</div><div className="admin-integrity-note"><ShieldCheck size={15} /><span>أضيفي فقط تجربة حقيقية بموافقة صاحبها. التقييم غير المعتمد لن يظهر على الموقع العام.</span></div><form onSubmit={submitTestimonial}><div className="admin-form-grid"><label>اسم العميل<input required value={testimonialForm.clientName} onChange={(e) => setTestimonialForm({ ...testimonialForm, clientName: e.target.value })} placeholder="الاسم المعتمد للنشر" /></label><label>الصفة أو الوصف<input value={testimonialForm.clientRole} onChange={(e) => setTestimonialForm({ ...testimonialForm, clientRole: e.target.value })} placeholder="مثال: صاحبة منزل" /></label><label>اسم المشروع<input value={testimonialForm.projectName} onChange={(e) => setTestimonialForm({ ...testimonialForm, projectName: e.target.value })} placeholder="اختياري" /></label><label>التقييم<select value={testimonialForm.rating} onChange={(e) => setTestimonialForm({ ...testimonialForm, rating: e.target.value })}><option value="5">5 / 5</option><option value="4">4 / 5</option><option value="3">3 / 5</option><option value="2">2 / 5</option><option value="1">1 / 5</option></select></label></div><label>نص التجربة<textarea required rows={6} value={testimonialForm.quote} onChange={(e) => setTestimonialForm({ ...testimonialForm, quote: e.target.value })} placeholder="النص الذي وافق العميل على نشره" /></label><label>رابط صورة العميل أو المشروع<input value={testimonialForm.imageUrl} onChange={(e) => setTestimonialForm({ ...testimonialForm, imageUrl: e.target.value })} placeholder="اختياري" /></label><div className="admin-form-grid"><label>حالة التحقق<select value={testimonialForm.verificationStatus} onChange={(e) => setTestimonialForm({ ...testimonialForm, verificationStatus: e.target.value as VerificationStatus })}><option value="pending">قيد المراجعة</option><option value="verified">تم التحقق</option><option value="rejected">مرفوض</option></select></label><label className="admin-check"><input type="checkbox" checked={testimonialForm.consentConfirmed} onChange={(e) => setTestimonialForm({ ...testimonialForm, consentConfirmed: e.target.checked })} /> موافقة العميل على النشر</label></div><label className="admin-check"><input type="checkbox" checked={testimonialForm.approved} onChange={(e) => setTestimonialForm({ ...testimonialForm, approved: e.target.checked })} /> نشر التقييم للعامة بعد التحقق</label><button className="admin-primary" type="submit" disabled={createTestimonial.isPending || updateTestimonial.isPending}>{editingTestimonialId ? <Save size={16} /> : <Plus size={16} />} {editingTestimonialId ? "حفظ التعديلات" : "حفظ التقييم"}</button></form></section><section className="admin-list"><div className="admin-section-head"><div><span className="admin-kicker">VOICES / {testimonialsQuery.data?.length ?? 0}</span><h2>التقييمات المحفوظة</h2></div></div>{testimonialsQuery.isLoading ? <p className="admin-muted">جاري تحميل التقييمات...</p> : testimonialsQuery.data?.length ? testimonialsQuery.data.map((item) => <article className="admin-item testimonial-admin-item" key={item.id}><div className="admin-rating">{item.rating}<Star size={13} fill="currentColor" /></div><div><span className="admin-item-meta">{item.approved ? "APPROVED / PUBLIC" : "PENDING / PRIVATE"}</span><h3>{item.clientName}</h3><p>{item.quote}</p></div><div className="admin-item-actions"><button onClick={() => editTestimonial(item)} aria-label={`تعديل تقييم ${item.clientName}`}><Edit3 size={15} /></button><button onClick={() => window.confirm("حذف هذا التقييم؟") && deleteTestimonial.mutate({ id: item.id })} aria-label={`حذف تقييم ${item.clientName}`}><Trash2 size={15} /></button></div></article>) : <div className="admin-empty"><Star size={20} /><p>لا توجد تقييمات محفوظة.<br />أضيفي تجربة موثقة عند توفرها.</p></div>}</section></div> : <AdminBookings />}
-  </div>;
+  return (
+    <div className="admin-console">
+      <div className="admin-topbar">
+        <div>
+          <p className="eyebrow">GLLORIA / CONTENT STUDIO</p>
+          <h1>إدارة المحتوى</h1>
+        </div>
+        <Link className="admin-view-site" href="/">
+          مشاهدة الموقع ↗
+        </Link>
+      </div>
+      <div className="admin-welcome">
+        <div className="admin-welcome-mark">
+          <ShieldCheck size={22} />
+        </div>
+        <div>
+          <span>مرحباً، {user.name || "هبة"}</span>
+          <p>من هنا يمكنكِ تحديث الأعمال وإدارة الأصوات الموثقة.</p>
+        </div>
+        <span className="admin-status">
+          <i /> ADMIN ACCESS
+        </span>
+      </div>
+      {notice && (
+        <div className="admin-notice">
+          <Check size={16} /> {notice}
+          <button onClick={() => setNotice("")} aria-label="إغلاق التنبيه">
+            <X size={14} />
+          </button>
+        </div>
+      )}
+      <div className="admin-tabs">
+        <button
+          className={tab === "analytics" ? "active" : ""}
+          onClick={() => {
+            setTab("analytics");
+            window.location.hash = "analytics";
+          }}
+        >
+          <BarChart3 size={16} /> التحليلات
+        </button>
+        <button
+          className={tab === "projects" ? "active" : ""}
+          onClick={() => {
+            setTab("projects");
+            window.location.hash = "projects";
+          }}
+        >
+          <ImagePlus size={16} /> معرض الأعمال{" "}
+          <b>{projectsQuery.data?.length ?? 0}</b>
+        </button>
+        <button
+          className={tab === "testimonials" ? "active" : ""}
+          onClick={() => {
+            setTab("testimonials");
+            window.location.hash = "testimonials";
+          }}
+        >
+          <Star size={16} /> آراء العملاء{" "}
+          <b>{testimonialsQuery.data?.length ?? 0}</b>
+        </button>
+        <button
+          className={tab === "bookings" ? "active" : ""}
+          onClick={() => {
+            setTab("bookings");
+            window.location.hash = "bookings";
+          }}
+        >
+          <CalendarCheck size={16} /> الحجوزات
+        </button>
+      </div>
+      {tab === "analytics" ? (
+        <AdminAnalytics />
+      ) : tab === "projects" ? (
+        <div className="admin-workspace">
+          <section className="admin-editor">
+            <div className="admin-section-head">
+              <div>
+                <span className="admin-kicker">
+                  PROJECT / {editingProjectId ? "EDIT" : "NEW"}
+                </span>
+                <h2>{editingProjectId ? "تعديل مشروع" : "إضافة مشروع"}</h2>
+              </div>
+              {editingProjectId && (
+                <button
+                  className="admin-cancel"
+                  onClick={() => {
+                    setEditingProjectId(null);
+                    setProjectForm(emptyProject);
+                  }}
+                >
+                  <X size={14} /> إلغاء التعديل
+                </button>
+              )}
+            </div>
+            <form onSubmit={submitProject}>
+              <div className="admin-form-grid">
+                <label>
+                  اسم المشروع
+                  <input
+                    required
+                    value={projectForm.title}
+                    onChange={e =>
+                      setProjectForm({ ...projectForm, title: e.target.value })
+                    }
+                    placeholder="مثال: بيت بين الضوء والظل"
+                  />
+                </label>
+                <label>
+                  الرابط المختصر
+                  <input
+                    required
+                    value={projectForm.slug}
+                    onChange={e =>
+                      setProjectForm({
+                        ...projectForm,
+                        slug: e.target.value.toLowerCase().replace(/\s+/g, "-"),
+                      })
+                    }
+                    placeholder="private-residence"
+                  />
+                </label>
+                <label>
+                  نوع التصميم
+                  <select
+                    value={projectForm.designType}
+                    onChange={e =>
+                      setProjectForm({
+                        ...projectForm,
+                        designType: e.target.value as DesignType,
+                      })
+                    }
+                  >
+                    <option value="interior">تصميم داخلي</option>
+                    <option value="architectural">تصميم معماري</option>
+                  </select>
+                </label>
+                <label>
+                  نوع المشروع
+                  <input
+                    required
+                    value={projectForm.projectType}
+                    onChange={e =>
+                      setProjectForm({
+                        ...projectForm,
+                        projectType: e.target.value,
+                      })
+                    }
+                    placeholder="سكني / تجاري / ضيافة"
+                  />
+                </label>
+                <label>
+                  الموقع
+                  <input
+                    required
+                    value={projectForm.location}
+                    onChange={e =>
+                      setProjectForm({
+                        ...projectForm,
+                        location: e.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <label>
+                  السنة
+                  <input
+                    type="number"
+                    min="1900"
+                    max="2200"
+                    value={projectForm.year}
+                    onChange={e =>
+                      setProjectForm({ ...projectForm, year: e.target.value })
+                    }
+                  />
+                </label>
+              </div>
+              <label>
+                رابط صورة المشروع
+                <input
+                  required
+                  value={projectForm.imageUrl}
+                  onChange={e =>
+                    setProjectForm({ ...projectForm, imageUrl: e.target.value })
+                  }
+                  placeholder="https://... أو /manus-storage/..."
+                />
+              </label>
+              <label>
+                النص البديل للصورة
+                <input
+                  value={projectForm.imageAlt}
+                  onChange={e =>
+                    setProjectForm({ ...projectForm, imageAlt: e.target.value })
+                  }
+                  placeholder="وصف دقيق للصورة"
+                />
+              </label>
+              <label>
+                حالة الصور
+                <input
+                  value={projectForm.imageKind}
+                  onChange={e =>
+                    setProjectForm({
+                      ...projectForm,
+                      imageKind: e.target.value,
+                    })
+                  }
+                  placeholder="منفذ فعلي / 3D / بانتظار الاعتماد"
+                />
+              </label>
+              <label>
+                معرض الصور وترتيبها (JSON اختياري)
+                <textarea
+                  rows={4}
+                  value={projectForm.galleryJson}
+                  onChange={e =>
+                    setProjectForm({
+                      ...projectForm,
+                      galleryJson: e.target.value,
+                    })
+                  }
+                  placeholder='[{"url":"/manus-storage/...","alt":"وصف الصورة","order":1}]'
+                />
+              </label>
+              <label>
+                الوصف القصير
+                <input
+                  required
+                  value={projectForm.intro}
+                  onChange={e =>
+                    setProjectForm({ ...projectForm, intro: e.target.value })
+                  }
+                  placeholder="جملة واحدة تظهر في الأرشيف"
+                />
+              </label>
+              <label>
+                الجملة الرئيسية
+                <input
+                  required
+                  value={projectForm.statement}
+                  onChange={e =>
+                    setProjectForm({
+                      ...projectForm,
+                      statement: e.target.value,
+                    })
+                  }
+                  placeholder="الجملة التحريرية للمشروع"
+                />
+              </label>
+              <label>
+                قصة المشروع
+                <textarea
+                  required
+                  rows={4}
+                  value={projectForm.description}
+                  onChange={e =>
+                    setProjectForm({
+                      ...projectForm,
+                      description: e.target.value,
+                    })
+                  }
+                />
+              </label>
+              <div className="admin-case-study">
+                <div className="admin-integrity-note">
+                  <ShieldCheck size={15} />
+                  <span>
+                    دراسة الحالة اختيارية. أضيفي نصوصاً وصوراً معتمدة فقط؛ لن
+                    تظهر للعامة إلا بعد تفعيل الاعتماد.
+                  </span>
+                </div>
+                <div className="admin-case-study-grid">
+                  <label>
+                    التحدي التصميمي
+                    <textarea
+                      rows={3}
+                      value={projectForm.challenge}
+                      onChange={e =>
+                        setProjectForm({
+                          ...projectForm,
+                          challenge: e.target.value,
+                        })
+                      }
+                      placeholder="اختياري — نص معتمد فقط"
+                    />
+                  </label>
+                  <label>
+                    فكرة التصميم
+                    <textarea
+                      rows={3}
+                      value={projectForm.concept}
+                      onChange={e =>
+                        setProjectForm({
+                          ...projectForm,
+                          concept: e.target.value,
+                        })
+                      }
+                      placeholder="اختياري — نص معتمد فقط"
+                    />
+                  </label>
+                  <label>
+                    الألوان والخامات
+                    <textarea
+                      rows={3}
+                      value={projectForm.materials}
+                      onChange={e =>
+                        setProjectForm({
+                          ...projectForm,
+                          materials: e.target.value,
+                        })
+                      }
+                      placeholder="اختياري — لا تضيفي خامات غير مؤكدة"
+                    />
+                  </label>
+                  <label>
+                    لوحة الألوان
+                    <textarea
+                      rows={3}
+                      value={projectForm.palette}
+                      onChange={e =>
+                        setProjectForm({
+                          ...projectForm,
+                          palette: e.target.value,
+                        })
+                      }
+                      placeholder="اختياري"
+                    />
+                  </label>
+                  <label>
+                    نطاق العمل
+                    <textarea
+                      rows={3}
+                      value={projectForm.serviceScope}
+                      onChange={e =>
+                        setProjectForm({
+                          ...projectForm,
+                          serviceScope: e.target.value,
+                        })
+                      }
+                      placeholder="اختياري"
+                    />
+                  </label>
+                </div>
+                <div className="admin-before-after">
+                  <span className="admin-kicker">
+                    BEFORE / AFTER · OPTIONAL
+                  </span>
+                  <div className="admin-case-study-grid">
+                    <label>
+                      رابط صورة قبل
+                      <input
+                        value={projectForm.beforeImageUrl}
+                        onChange={e =>
+                          setProjectForm({
+                            ...projectForm,
+                            beforeImageUrl: e.target.value,
+                          })
+                        }
+                        placeholder="رابط صورة أصلية موثقة"
+                      />
+                    </label>
+                    <label>
+                      وصف صورة قبل
+                      <input
+                        value={projectForm.beforeImageAlt}
+                        onChange={e =>
+                          setProjectForm({
+                            ...projectForm,
+                            beforeImageAlt: e.target.value,
+                          })
+                        }
+                        placeholder="نص بديل وصفي"
+                      />
+                    </label>
+                    <label>
+                      رابط صورة بعد
+                      <input
+                        value={projectForm.afterImageUrl}
+                        onChange={e =>
+                          setProjectForm({
+                            ...projectForm,
+                            afterImageUrl: e.target.value,
+                          })
+                        }
+                        placeholder="رابط صورة أصلية موثقة"
+                      />
+                    </label>
+                    <label>
+                      وصف صورة بعد
+                      <input
+                        value={projectForm.afterImageAlt}
+                        onChange={e =>
+                          setProjectForm({
+                            ...projectForm,
+                            afterImageAlt: e.target.value,
+                          })
+                        }
+                        placeholder="نص بديل وصفي"
+                      />
+                    </label>
+                  </div>
+                </div>
+                <label className="admin-check">
+                  <input
+                    type="checkbox"
+                    checked={projectForm.caseStudyApproved}
+                    onChange={e =>
+                      setProjectForm({
+                        ...projectForm,
+                        caseStudyApproved: e.target.checked,
+                      })
+                    }
+                  />{" "}
+                  اعتماد دراسة الحالة للنشر عند اكتمال البيانات
+                </label>
+              </div>
+              <label className="admin-check">
+                <input
+                  type="checkbox"
+                  checked={projectForm.published}
+                  onChange={e =>
+                    setProjectForm({
+                      ...projectForm,
+                      published: e.target.checked,
+                    })
+                  }
+                />{" "}
+                نشر المشروع للعامة
+              </label>
+              <button
+                className="admin-primary"
+                type="submit"
+                disabled={createProject.isPending || updateProject.isPending}
+              >
+                {editingProjectId ? <Save size={16} /> : <Plus size={16} />}{" "}
+                {editingProjectId ? "حفظ التعديلات" : "إضافة إلى المعرض"}
+              </button>
+            </form>
+          </section>
+          <section className="admin-list">
+            <div className="admin-section-head">
+              <div>
+                <span className="admin-kicker">
+                  ARCHIVE / {projectsQuery.data?.length ?? 0}
+                </span>
+                <h2>المشاريع الحالية</h2>
+              </div>
+            </div>
+            {projectsQuery.isLoading ? (
+              <p className="admin-muted">جاري تحميل الأرشيف...</p>
+            ) : projectsQuery.data?.length ? (
+              projectsQuery.data.map(project => (
+                <article className="admin-item" key={project.id}>
+                  <img src={project.imageUrl} alt="" />
+                  <div>
+                    <span className="admin-item-meta">
+                      {project.designType === "architectural"
+                        ? "ARCHITECTURAL"
+                        : "INTERIOR"}{" "}
+                      · {project.year} ·{" "}
+                      {project.published ? "PUBLISHED" : "DRAFT"}
+                    </span>
+                    <h3>{project.title}</h3>
+                    <p>
+                      {project.location} · {project.projectType}
+                    </p>
+                  </div>
+                  <div className="admin-item-actions">
+                    <button
+                      onClick={() => editProject(project)}
+                      aria-label={`تعديل ${project.title}`}
+                    >
+                      <Edit3 size={15} />
+                    </button>
+                    <button
+                      onClick={() =>
+                        window.confirm("حذف هذا المشروع؟") &&
+                        deleteProject.mutate({ id: project.id })
+                      }
+                      aria-label={`حذف ${project.title}`}
+                    >
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
+                </article>
+              ))
+            ) : (
+              <div className="admin-empty">
+                <FilePlus2 size={20} />
+                <p>
+                  لم تتم إضافة مشاريع بعد.
+                  <br />
+                  ابدئي بالمشروع الأول.
+                </p>
+              </div>
+            )}
+          </section>
+        </div>
+      ) : tab === "testimonials" ? (
+        <div className="admin-workspace">
+          <section className="admin-editor">
+            <div className="admin-section-head">
+              <div>
+                <span className="admin-kicker">
+                  VOICE / {editingTestimonialId ? "EDIT" : "NEW"}
+                </span>
+                <h2>{editingTestimonialId ? "تعديل تقييم" : "إضافة تقييم"}</h2>
+              </div>
+              {editingTestimonialId && (
+                <button
+                  className="admin-cancel"
+                  onClick={() => {
+                    setEditingTestimonialId(null);
+                    setTestimonialForm(emptyTestimonial);
+                  }}
+                >
+                  <X size={14} /> إلغاء التعديل
+                </button>
+              )}
+            </div>
+            <div className="admin-integrity-note">
+              <ShieldCheck size={15} />
+              <span>
+                أضيفي فقط تجربة حقيقية بموافقة صاحبها. التقييم غير المعتمد لن
+                يظهر على الموقع العام.
+              </span>
+            </div>
+            <form onSubmit={submitTestimonial}>
+              <div className="admin-form-grid">
+                <label>
+                  اسم العميل
+                  <input
+                    required
+                    value={testimonialForm.clientName}
+                    onChange={e =>
+                      setTestimonialForm({
+                        ...testimonialForm,
+                        clientName: e.target.value,
+                      })
+                    }
+                    placeholder="الاسم المعتمد للنشر"
+                  />
+                </label>
+                <label>
+                  الصفة أو الوصف
+                  <input
+                    value={testimonialForm.clientRole}
+                    onChange={e =>
+                      setTestimonialForm({
+                        ...testimonialForm,
+                        clientRole: e.target.value,
+                      })
+                    }
+                    placeholder="مثال: صاحبة منزل"
+                  />
+                </label>
+                <label>
+                  اسم المشروع
+                  <input
+                    value={testimonialForm.projectName}
+                    onChange={e =>
+                      setTestimonialForm({
+                        ...testimonialForm,
+                        projectName: e.target.value,
+                      })
+                    }
+                    placeholder="اختياري"
+                  />
+                </label>
+                <label>
+                  التقييم
+                  <select
+                    value={testimonialForm.rating}
+                    onChange={e =>
+                      setTestimonialForm({
+                        ...testimonialForm,
+                        rating: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="5">5 / 5</option>
+                    <option value="4">4 / 5</option>
+                    <option value="3">3 / 5</option>
+                    <option value="2">2 / 5</option>
+                    <option value="1">1 / 5</option>
+                  </select>
+                </label>
+              </div>
+              <label>
+                نص التجربة
+                <textarea
+                  required
+                  rows={6}
+                  value={testimonialForm.quote}
+                  onChange={e =>
+                    setTestimonialForm({
+                      ...testimonialForm,
+                      quote: e.target.value,
+                    })
+                  }
+                  placeholder="النص الذي وافق العميل على نشره"
+                />
+              </label>
+              <label>
+                رابط صورة العميل أو المشروع
+                <input
+                  value={testimonialForm.imageUrl}
+                  onChange={e =>
+                    setTestimonialForm({
+                      ...testimonialForm,
+                      imageUrl: e.target.value,
+                    })
+                  }
+                  placeholder="اختياري"
+                />
+              </label>
+              <div className="admin-form-grid">
+                <label>
+                  حالة التحقق
+                  <select
+                    value={testimonialForm.verificationStatus}
+                    onChange={e =>
+                      setTestimonialForm({
+                        ...testimonialForm,
+                        verificationStatus: e.target
+                          .value as VerificationStatus,
+                      })
+                    }
+                  >
+                    <option value="pending">قيد المراجعة</option>
+                    <option value="verified">تم التحقق</option>
+                    <option value="rejected">مرفوض</option>
+                  </select>
+                </label>
+                <label className="admin-check">
+                  <input
+                    type="checkbox"
+                    checked={testimonialForm.consentConfirmed}
+                    onChange={e =>
+                      setTestimonialForm({
+                        ...testimonialForm,
+                        consentConfirmed: e.target.checked,
+                      })
+                    }
+                  />{" "}
+                  موافقة العميل على النشر
+                </label>
+              </div>
+              <label className="admin-check">
+                <input
+                  type="checkbox"
+                  checked={testimonialForm.approved}
+                  onChange={e =>
+                    setTestimonialForm({
+                      ...testimonialForm,
+                      approved: e.target.checked,
+                    })
+                  }
+                />{" "}
+                نشر التقييم للعامة بعد التحقق
+              </label>
+              <button
+                className="admin-primary"
+                type="submit"
+                disabled={
+                  createTestimonial.isPending || updateTestimonial.isPending
+                }
+              >
+                {editingTestimonialId ? <Save size={16} /> : <Plus size={16} />}{" "}
+                {editingTestimonialId ? "حفظ التعديلات" : "حفظ التقييم"}
+              </button>
+            </form>
+          </section>
+          <section className="admin-list">
+            <div className="admin-section-head">
+              <div>
+                <span className="admin-kicker">
+                  VOICES / {testimonialsQuery.data?.length ?? 0}
+                </span>
+                <h2>التقييمات المحفوظة</h2>
+              </div>
+            </div>
+            {testimonialsQuery.isLoading ? (
+              <p className="admin-muted">جاري تحميل التقييمات...</p>
+            ) : testimonialsQuery.data?.length ? (
+              testimonialsQuery.data.map(item => (
+                <article
+                  className="admin-item testimonial-admin-item"
+                  key={item.id}
+                >
+                  <div className="admin-rating">
+                    {item.rating}
+                    <Star size={13} fill="currentColor" />
+                  </div>
+                  <div>
+                    <span className="admin-item-meta">
+                      {item.approved
+                        ? "APPROVED / PUBLIC"
+                        : "PENDING / PRIVATE"}
+                    </span>
+                    <h3>{item.clientName}</h3>
+                    <p>{item.quote}</p>
+                  </div>
+                  <div className="admin-item-actions">
+                    <button
+                      onClick={() => editTestimonial(item)}
+                      aria-label={`تعديل تقييم ${item.clientName}`}
+                    >
+                      <Edit3 size={15} />
+                    </button>
+                    <button
+                      onClick={() =>
+                        window.confirm("حذف هذا التقييم؟") &&
+                        deleteTestimonial.mutate({ id: item.id })
+                      }
+                      aria-label={`حذف تقييم ${item.clientName}`}
+                    >
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
+                </article>
+              ))
+            ) : (
+              <div className="admin-empty">
+                <Star size={20} />
+                <p>
+                  لا توجد تقييمات محفوظة.
+                  <br />
+                  أضيفي تجربة موثقة عند توفرها.
+                </p>
+              </div>
+            )}
+          </section>
+        </div>
+      ) : (
+        <AdminBookings />
+      )}
+    </div>
+  );
 }
 
-export default function Admin() { return <DashboardLayout><AdminPageContent /></DashboardLayout>; }
+export default function Admin() {
+  return (
+    <DashboardLayout>
+      <AdminPageContent />
+    </DashboardLayout>
+  );
+}

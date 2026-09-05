@@ -19,6 +19,7 @@ import {
   parseBookingAttribution,
   type BookingStep,
 } from "../../../shared/booking";
+import { useSeo } from "../hooks/useSeo";
 
 const times = [
   { value: "10:00", ar: "10:00 صباحاً", en: "10:00 AM" },
@@ -99,6 +100,7 @@ function readDraft() {
 }
 
 export default function Booking() {
+  useSeo({ page: "booking", path: "/booking" });
   const { t, locale } = useLocale();
   const ar = locale === "ar";
   const [booking, setBooking] = useState<BookingState>(initial);
@@ -198,7 +200,7 @@ export default function Booking() {
         value={value}
         onChange={event => setter(event.target.value)}
       >
-        <option value="">{ar ? "اختاري" : "Choose"}</option>
+        <option value="">{ar ? "اختر" : "Choose"}</option>
         {items.map(item => (
           <option key={item} value={item}>
             {item}
@@ -368,7 +370,7 @@ export default function Booking() {
             onChange={e => set("description", e.target.value)}
             placeholder={
               ar
-                ? "ما الذي تتخيلينه للمكان؟"
+                ? "ما الذي تتخيله للمكان؟"
                 : "Tell us about your space and goals."
             }
           />
@@ -557,7 +559,7 @@ export default function Booking() {
               {create.isError && (
                 <p className="form-error" role="alert">
                   {ar
-                    ? "تعذر إرسال الطلب حالياً. حاولي مرة أخرى أو تواصلي معنا عبر WhatsApp."
+                    ? "تعذر إرسال الطلب حالياً. حاول مرة أخرى أو تواصل معنا عبر WhatsApp."
                     : "We could not send your request. Please try again or contact us on WhatsApp."}
                 </p>
               )}

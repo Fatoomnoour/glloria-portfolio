@@ -22,8 +22,10 @@ import {
   mailtoHref,
   telHref,
 } from "../../../shared/contact";
+import { useSeo } from "../hooks/useSeo";
 
 export default function Contact() {
+  useSeo({ page: "contact", path: "/contact" });
   const { locale, t } = useLocale();
   const isArabic = locale === "ar";
   const [sent, setSent] = useState(false);
@@ -61,14 +63,14 @@ export default function Contact() {
       <div className="contact-layout">
         <div className="contact-copy">
           <p className="eyebrow">
-            {isArabic ? "تواصلي مع Glloria" : "Get in touch with Glloria"}
+            {isArabic ? "تواصل مع Glloria" : "Get in touch with Glloria"}
           </p>
           <h1>
             {isArabic ? (
               <>
                 المكان الذي
                 <br />
-                <em>تتخيلينه يبدأ هنا.</em>
+                <em>تتخيله يبدأ هنا.</em>
               </>
             ) : (
               <>
@@ -80,7 +82,7 @@ export default function Contact() {
           </h1>
           <p>
             {isArabic
-              ? "أرسلي لنا بعض التفاصيل عن مشروعك، وسنعود إليكِ خلال 24 ساعة لنسمع الحكاية كاملة."
+              ? "أرسل لنا بعض التفاصيل عن مشروعك، ونعود إليك خلال 24 ساعة لنسمع الحكاية كاملة."
               : "Share a few details about your project and we will be in touch within 24 hours to hear the full story."}
           </p>
           <div className="contact-booking-link">
@@ -196,7 +198,7 @@ export default function Contact() {
                 {isArabic ? "نوع المشروع" : "Project type"}
                 <select name="type" defaultValue="" required>
                   <option value="" disabled>
-                    {isArabic ? "اختاري نوع المشروع" : "Choose a project type"}
+                    {isArabic ? "اختر نوع المشروع" : "Choose a project type"}
                   </option>
                   <option>
                     {isArabic ? "منزل / شقة" : "House / apartment"}
@@ -220,7 +222,7 @@ export default function Contact() {
                   rows={4}
                   placeholder={
                     isArabic
-                      ? "ما الذي تتخيلينه للمكان؟"
+                      ? "ما الذي تتخيله للمكان؟"
                       : "Tell us what you imagine for the space."
                   }
                 />

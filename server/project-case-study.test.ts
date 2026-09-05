@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { hasApprovedCaseStudy, hasBeforeAfterPair, type PublicManagedProject } from "@shared/project";
+import {
+  hasApprovedCaseStudy,
+  hasBeforeAfterPair,
+  type PublicManagedProject,
+} from "@shared/project";
 
 const baseProject: PublicManagedProject = {
   slug: "interior",
@@ -15,9 +19,19 @@ const baseProject: PublicManagedProject = {
 
 describe("public case-study gating", () => {
   it("keeps optional case-study content private until explicitly approved", () => {
-    expect(hasApprovedCaseStudy({ ...baseProject, concept: "Approved concept" })).toBe(false);
-    expect(hasApprovedCaseStudy({ ...baseProject, caseStudyApproved: true })).toBe(false);
-    expect(hasApprovedCaseStudy({ ...baseProject, caseStudyApproved: true, concept: "Approved concept" })).toBe(true);
+    expect(
+      hasApprovedCaseStudy({ ...baseProject, concept: "Approved concept" })
+    ).toBe(false);
+    expect(
+      hasApprovedCaseStudy({ ...baseProject, caseStudyApproved: true })
+    ).toBe(false);
+    expect(
+      hasApprovedCaseStudy({
+        ...baseProject,
+        caseStudyApproved: true,
+        concept: "Approved concept",
+      })
+    ).toBe(true);
   });
 
   it("requires a complete before/after pair with descriptive alternatives", () => {
@@ -30,6 +44,8 @@ describe("public case-study gating", () => {
     };
     expect(hasBeforeAfterPair(complete)).toBe(true);
     expect(hasBeforeAfterPair({ ...complete, afterImageAlt: "" })).toBe(false);
-    expect(hasApprovedCaseStudy({ ...complete, caseStudyApproved: true })).toBe(true);
+    expect(hasApprovedCaseStudy({ ...complete, caseStudyApproved: true })).toBe(
+      true
+    );
   });
 });

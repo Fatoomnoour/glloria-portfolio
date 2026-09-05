@@ -21,10 +21,20 @@ import {
 } from "@/components/ui/sidebar";
 import { startLogin } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { BarChart3, CalendarCheck, FolderKanban, LayoutDashboard, LogOut, Moon, PanelLeft, Star, Sun } from "lucide-react";
+import {
+  BarChart3,
+  CalendarCheck,
+  FolderKanban,
+  LayoutDashboard,
+  LogOut,
+  Moon,
+  PanelLeft,
+  Star,
+  Sun,
+} from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
-import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
+import { DashboardLayoutSkeleton } from "./DashboardLayoutSkeleton";
 import { useTheme } from "../contexts/ThemeContext";
 import { Button } from "./ui/button";
 
@@ -57,7 +67,7 @@ export default function DashboardLayout({
   }, [sidebarWidth]);
 
   if (loading) {
-    return <DashboardLayoutSkeleton />
+    return <DashboardLayoutSkeleton />;
   }
 
   if (!user) {
@@ -69,7 +79,8 @@ export default function DashboardLayout({
               Sign in to continue
             </h1>
             <p className="text-sm text-muted-foreground text-center max-w-sm">
-              Access to this dashboard requires authentication. Continue to launch the login flow.
+              Access to this dashboard requires authentication. Continue to
+              launch the login flow.
             </p>
           </div>
           <Button
@@ -116,11 +127,13 @@ function DashboardLayoutContent({
   const isCollapsed = state === "collapsed";
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const activeHash = typeof window === "undefined" ? "" : window.location.hash.replace("#", "");
-  const activeMenuItem = menuItems.find((item) => {
-    const [path, hash] = item.path.split("#");
-    return path === location && (hash ? hash === activeHash : !activeHash);
-  }) ?? menuItems[0];
+  const activeHash =
+    typeof window === "undefined" ? "" : window.location.hash.replace("#", "");
+  const activeMenuItem =
+    menuItems.find(item => {
+      const [path, hash] = item.path.split("#");
+      return path === location && (hash ? hash === activeHash : !activeHash);
+    }) ?? menuItems[0];
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -194,7 +207,12 @@ function DashboardLayoutContent({
                   <SidebarMenuItem key={item.path}>
                     <SidebarMenuButton
                       isActive={isActive}
-                      onClick={() => { if (item.path.includes("#")) { window.location.hash = item.path.split("#")[1] ?? ""; } setLocation(item.path.split("#")[0] ?? "/admin"); }}
+                      onClick={() => {
+                        if (item.path.includes("#")) {
+                          window.location.hash = item.path.split("#")[1] ?? "";
+                        }
+                        setLocation(item.path.split("#")[0] ?? "/admin");
+                      }}
                       tooltip={item.label}
                       className={`h-10 transition-all font-normal`}
                     >
@@ -210,9 +228,25 @@ function DashboardLayoutContent({
           </SidebarContent>
 
           <SidebarFooter className="p-3">
-            <button type="button" className="dashboard-theme-toggle" onClick={() => toggleTheme?.()} aria-label={theme === "dark" ? "التبديل إلى الوضع الفاتح" : "التبديل إلى الوضع الداكن"} title={theme === "dark" ? "الوضع الفاتح" : "الوضع الداكن"}>
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              <span className="group-data-[collapsible=icon]:hidden">{theme === "dark" ? "الوضع الفاتح" : "الوضع الداكن"}</span>
+            <button
+              type="button"
+              className="dashboard-theme-toggle"
+              onClick={() => toggleTheme?.()}
+              aria-label={
+                theme === "dark"
+                  ? "التبديل إلى الوضع الفاتح"
+                  : "التبديل إلى الوضع الداكن"
+              }
+              title={theme === "dark" ? "الوضع الفاتح" : "الوضع الداكن"}
+            >
+              {theme === "dark" ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
+              <span className="group-data-[collapsible=icon]:hidden">
+                {theme === "dark" ? "الوضع الفاتح" : "الوضع الداكن"}
+              </span>
             </button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -257,7 +291,7 @@ function DashboardLayoutContent({
       <SidebarInset className="min-w-0">
         {isMobile && (
           <div className="flex border-b h-14 items-center justify-between bg-background/95 px-2 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <SidebarTrigger className="h-9 w-9 rounded-lg bg-background" />
               <div className="flex items-center gap-3">
                 <div className="flex flex-col gap-1">
@@ -266,8 +300,22 @@ function DashboardLayoutContent({
                   </span>
                 </div>
               </div>
-              <button type="button" className="dashboard-mobile-theme-toggle" onClick={() => toggleTheme?.()} aria-label={theme === "dark" ? "التبديل إلى الوضع الفاتح" : "التبديل إلى الوضع الداكن"} title={theme === "dark" ? "الوضع الفاتح" : "الوضع الداكن"}>
-                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              <button
+                type="button"
+                className="dashboard-mobile-theme-toggle"
+                onClick={() => toggleTheme?.()}
+                aria-label={
+                  theme === "dark"
+                    ? "التبديل إلى الوضع الفاتح"
+                    : "التبديل إلى الوضع الداكن"
+                }
+                title={theme === "dark" ? "الوضع الفاتح" : "الوضع الداكن"}
+              >
+                {theme === "dark" ? (
+                  <Sun className="h-4 w-4" />
+                ) : (
+                  <Moon className="h-4 w-4" />
+                )}
               </button>
             </div>
           </div>

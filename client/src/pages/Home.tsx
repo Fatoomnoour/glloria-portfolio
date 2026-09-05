@@ -11,6 +11,8 @@ import {
   founderPortraitImage,
   logoImage,
 } from "../data/projectImages";
+import { useSeo } from "../hooks/useSeo";
+import { useFaqSchema } from "../hooks/useFaqSchema";
 
 const TestimonialsSection = lazy(
   () => import("../components/TestimonialsSection")
@@ -151,6 +153,8 @@ const faqs = [
 ];
 
 export default function Home() {
+  useSeo({ page: "home", path: "/" });
+  useFaqSchema(faqs);
   const { locale, t } = useLocale();
   const isArabic = locale === "ar";
   return (
@@ -218,9 +222,9 @@ export default function Home() {
           <a
             className="hero-scroll-cue"
             href="#about"
-            aria-label={isArabic ? "اكتشفي المساحة" : "SCROLL TO EXPLORE"}
+            aria-label={isArabic ? "اكتشف المساحة" : "SCROLL TO EXPLORE"}
           >
-            <span>{isArabic ? "اكتشفي المساحة" : "SCROLL TO EXPLORE"}</span>
+            <span>{isArabic ? "اكتشف المساحة" : "SCROLL TO EXPLORE"}</span>
             <ArrowDownLeft size={15} strokeWidth={1.4} />
           </a>
         </div>
@@ -275,7 +279,7 @@ export default function Home() {
             <span>{isArabic ? "مصممة داخلية" : "Interior designer"}</span>
           </div>
           <Link className="text-link" href="/projects">
-            {isArabic ? "شاهدي طريقة تفكيرنا" : "See our way of thinking"}{" "}
+            {isArabic ? "تعرّف على طريقة تفكيرنا" : "See our way of thinking"}{" "}
             <MoveUpLeft size={17} strokeWidth={1.4} />
           </Link>
         </div>
@@ -360,9 +364,7 @@ export default function Home() {
                   src={boskaCafeImage.src}
                   width={boskaCafeImage.width}
                   height={boskaCafeImage.height}
-                  alt={
-                    isArabic ? boskaCafeImage.alt.ar : boskaCafeImage.alt.en
-                  }
+                  alt={isArabic ? boskaCafeImage.alt.ar : boskaCafeImage.alt.en}
                   loading="lazy"
                   decoding="async"
                   sizes="(max-width: 760px) 100vw, 38vw"
@@ -435,7 +437,7 @@ export default function Home() {
               <>
                 واضحة، إنسانية،
                 <br />
-                <em>ومصممة لكِ.</em>
+                <em>ومصممة لك.</em>
               </>
             ) : (
               <>
@@ -517,9 +519,9 @@ export default function Home() {
         <h2>
           {isArabic ? (
             <>
-              احكي لنا عن المكان
+              احكِ لنا عن المكان
               <br />
-              <em>{isArabic ? "الذي تتخيلينه." : ""}</em>
+              <em>الذي تتخيله.</em>
             </>
           ) : (
             <>

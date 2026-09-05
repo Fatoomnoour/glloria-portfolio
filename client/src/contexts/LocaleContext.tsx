@@ -18,11 +18,11 @@ const copy: Record<string, { ar: string; en: string }> = {
   "nav.contact": { ar: "تواصل معنا", en: "Contact" },
   "nav.testimonials": { ar: "آراء العملاء", en: "Client voices" },
   "nav.skip": { ar: "تخطَّ إلى المحتوى", en: "Skip to content" },
-  "nav.primary": { ar: "احجزي استشارتك", en: "Book your consultation" },
-  "nav.secondary": { ar: "شاهدي الأعمال", en: "View the work" },
+  "nav.primary": { ar: "احجز استشارتك", en: "Book your consultation" },
+  "nav.secondary": { ar: "استعرض الأعمال", en: "View the work" },
   "nav.language": { ar: "English", en: "العربية" },
-  "footer.contact": { ar: "تواصلي معنا", en: "Get in touch" },
-  "footer.follow": { ar: "تابعينا", en: "Follow along" },
+  "footer.contact": { ar: "تواصل معنا", en: "Get in touch" },
+  "footer.follow": { ar: "تابعنا", en: "Follow along" },
   "footer.statement": {
     ar: "مساحات تُشبه أصحابها،\nوتعيش معهم طويلاً.",
     en: "Spaces that feel like their owners,\nand live with them.",
@@ -33,7 +33,7 @@ const copy: Record<string, { ar: string; en: string }> = {
   "booking.title": { ar: "نحدد موعداً", en: "Let's find a time" },
   "booking.titleAccent": { ar: "للبداية.", en: "to begin." },
   "booking.intro": {
-    ar: "اختاري اليوم والوقت الأنسب لكِ. سنراجع التفاصيل أولاً، ثم نؤكد الموعد عبر WhatsApp قبل اعتماده.",
+    ar: "اختر اليوم والوقت الأنسب لك. سنراجع التفاصيل أولاً، ثم نؤكد الموعد عبر WhatsApp قبل اعتماده.",
     en: "Choose a preferred day and time. We will review the details, then confirm availability with you on WhatsApp.",
   },
   "booking.fullName": { ar: "الاسم الكامل", en: "Full name" },
@@ -77,7 +77,7 @@ const copy: Record<string, { ar: string; en: string }> = {
   "booking.stepReview": { ar: "مراجعة الطلب", en: "Review request" },
   "booking.next": { ar: "الخطوة التالية", en: "Next step" },
   "booking.previous": { ar: "الخطوة السابقة", en: "Previous step" },
-  "booking.review": { ar: "راجعي طلبك", en: "Review your request" },
+  "booking.review": { ar: "راجع طلبك", en: "Review your request" },
   "booking.aesthetic": {
     ar: "ما الإحساس الذي تبحثين عنه؟ (اختياري)",
     en: "What feeling are you looking for? (optional)",
@@ -87,7 +87,7 @@ const copy: Record<string, { ar: string; en: string }> = {
     en: "Calm / warm / practical / still exploring",
   },
   "booking.reviewHint": {
-    ar: "راجعي البيانات قبل الإرسال. سنستخدمها فقط لمراجعة الاستشارة والتواصل معك.",
+    ar: "راجع البيانات قبل الإرسال. سنستخدمها فقط لمراجعة الاستشارة والتواصل معك.",
     en: "Review your details before sending. We use them only to review the consultation and contact you.",
   },
   "booking.requiredStep": {
@@ -95,7 +95,7 @@ const copy: Record<string, { ar: string; en: string }> = {
     en: "Complete the required fields to continue.",
   },
   "booking.whatsappHandoff": {
-    ar: "سيفتح WhatsApp برسالة جاهزة إلى رقم Glloria Business. راجعيها واضغطي إرسال لإتمام التواصل.",
+    ar: "سيفتح WhatsApp برسالة جاهزة إلى رقم Glloria Business. راجعها واضغطي إرسال لإتمام التواصل.",
     en: "WhatsApp will open with a prefilled message to Glloria Business. Review it and press send to complete the handoff.",
   },
   "projects.filterLabel": {
@@ -112,7 +112,7 @@ const copy: Record<string, { ar: string; en: string }> = {
     ar: "لا توجد أعمال منشورة تحت هذا التصنيف بعد. ستظهر هنا بمجرد إضافتها من لوحة الإدارة.",
     en: "There are no published projects in this discipline yet. New work added from the admin studio will appear here.",
   },
-  "projects.emptyCta": { ar: "احجزي استشارتك", en: "Book your consultation" },
+  "projects.emptyCta": { ar: "احجز استشارتك", en: "Book your consultation" },
   "testimonials.eyebrow": { ar: "آراء العملاء", en: "Client voices" },
   "testimonials.title": { ar: "الثقة تبدأ", en: "Trust begins" },
   "testimonials.accent": {
@@ -127,7 +127,7 @@ const copy: Record<string, { ar: string; en: string }> = {
     ar: "تجارب العملاء المعتمدة ستظهر هنا.",
     en: "Approved client experiences will appear here.",
   },
-  "testimonials.cta": { ar: "احجزي استشارتك", en: "Book your consultation" },
+  "testimonials.cta": { ar: "احجز استشارتك", en: "Book your consultation" },
   "faq.title": { ar: "أسئلة قبل البداية", en: "Questions before we begin" },
   "faq.subtitle": {
     ar: "إجابات واضحة قبل أول خطوة.",

@@ -336,7 +336,7 @@ function Shell({ children }: { children: React.ReactNode }) {
         href={buildGeneralWhatsAppUrl(locale)}
         target="_blank"
         rel="noreferrer"
-        aria-label="تواصلي مع Glloria على واتساب"
+        aria-label="تواصل مع Glloria على واتساب"
       >
         <span>واتساب</span>
         <ArrowUpLeft size={17} strokeWidth={1.5} />

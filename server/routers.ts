@@ -23,6 +23,11 @@ import {
   updateTestimonial,
 } from "./db";
 import { toNullablePublicProject } from "@shared/project";
+import {
+  CONSULTATION_RATE_LIMIT,
+  clientKey,
+  enforceRateLimit,
+} from "./_core/rateLimit";
 
 const projectFields = {
   slug: z.string().trim().min(2).max(160),
@@ -163,7 +168,14 @@ export const appRouter = router({
   consultations: router({
     create: publicProcedure
       .input(consultationInput)
-      .mutation(async ({ input }) => {
+      .mutation(async ({ ctx, input }) => {
+        // A honeypot alone stops naive bots but not a two-line script, which
+        // could bury real leads under thousands of fake rows.
+        enforceRateLimit(
+          `consultation:${clientKey(ctx.req.headers)}`,
+          CONSULTATION_RATE_LIMIT,
+          "تم استقبال عدة طلبات من نفس الجهاز. برجاء المحاولة لاحقاً أو التواصل عبر WhatsApp."
+        );
         if (input.honeypot.trim())
           throw new TRPCError({
             code: "BAD_REQUEST",

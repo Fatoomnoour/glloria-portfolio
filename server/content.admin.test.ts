@@ -23,26 +23,31 @@ function createUserContext(role: "user" | "admin"): TrpcContext {
 describe("admin content procedures", () => {
   it("blocks a regular user from reading the admin project list", async () => {
     const caller = appRouter.createCaller(createUserContext("user"));
-    await expect(caller.projects.adminList()).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(caller.projects.adminList()).rejects.toMatchObject({
+      code: "FORBIDDEN",
+    });
   });
 
   it("blocks a regular user from creating a testimonial", async () => {
     const caller = appRouter.createCaller(createUserContext("user"));
-    await expect(caller.testimonials.create({
-      clientName: "A real client",
-      clientRole: "Home owner",
-      quote: "A verified experience supplied with consent.",
-      rating: 5,
-      projectName: "Private Residence",
-      imageUrl: "",
-      approved: false,
-    })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(
+      caller.testimonials.create({
+        clientName: "A real client",
+        clientRole: "Home owner",
+        quote: "A verified experience supplied with consent.",
+        rating: 5,
+        projectName: "Private Residence",
+        imageUrl: "",
+        approved: false,
+      })
+    ).rejects.toMatchObject({ code: "FORBIDDEN" });
   });
 });
 
-  it("rejects public approval without explicit verification and consent", async () => {
-    const caller = appRouter.createCaller(createUserContext("admin"));
-    await expect(caller.testimonials.create({
+it("rejects public approval without explicit verification and consent", async () => {
+  const caller = appRouter.createCaller(createUserContext("admin"));
+  await expect(
+    caller.testimonials.create({
       clientName: "Verified later",
       clientRole: "Home owner",
       quote: "This content must not publish without a verification record.",
@@ -52,5 +57,6 @@ describe("admin content procedures", () => {
       consentConfirmed: false,
       verificationStatus: "pending",
       approved: true,
-    })).rejects.toMatchObject({ code: "BAD_REQUEST" });
-  });
+    })
+  ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+});

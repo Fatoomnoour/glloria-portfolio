@@ -1,26 +1,440 @@
 import { useMemo, useState } from "react";
-import { CalendarCheck, Download, ExternalLink, Mail, MessageCircle, Save, Search } from "lucide-react";
+import {
+  CalendarCheck,
+  Download,
+  ExternalLink,
+  Mail,
+  MessageCircle,
+  Save,
+  Search,
+} from "lucide-react";
 import { trpc } from "../lib/trpc";
 import { parseBookingIdFromSearch } from "@shared/booking";
 
-type Status = "new" | "reviewing" | "contacted" | "confirmed" | "completed" | "cancelled";
-const labels: Record<Status, string> = { new: "جديد", reviewing: "قيد المراجعة", contacted: "تم التواصل", confirmed: "مؤكد", completed: "مكتمل", cancelled: "ملغي" };
-const initialFilters = { search: "", city: "", service: "", status: undefined as Status | undefined, date: "" };
-const initialId = () => typeof window === "undefined" ? null : parseBookingIdFromSearch(window.location.search);
+type Status =
+  | "new"
+  | "reviewing"
+  | "contacted"
+  | "confirmed"
+  | "completed"
+  | "cancelled";
+const labels: Record<Status, string> = {
+  new: "جديد",
+  reviewing: "قيد المراجعة",
+  contacted: "تم التواصل",
+  confirmed: "مؤكد",
+  completed: "مكتمل",
+  cancelled: "ملغي",
+};
+const initialFilters = {
+  search: "",
+  city: "",
+  service: "",
+  status: undefined as Status | undefined,
+  date: "",
+};
+const initialId = () =>
+  typeof window === "undefined"
+    ? null
+    : parseBookingIdFromSearch(window.location.search);
 
 function downloadCsv(rows: Array<Record<string, unknown>>) {
-  const headers = ["ID", "Created at", "Full name", "Phone", "Email", "City", "Property", "Area", "Service", "Budget", "Aesthetic preference", "Source project", "UTM source", "UTM medium", "UTM campaign", "Preferred date", "Preferred time", "Status", "Admin notes"];
-  const lines = rows.map((row) => [row.id, row.createdAt, row.fullName, row.phone, row.email, row.city, row.propertyType, row.area, row.service, row.budget, row.aestheticPreference, row.sourceProjectTitle, row.utmSource, row.utmMedium, row.utmCampaign, row.preferredDate, row.preferredTime, row.status, row.adminNotes]);
-  const quote = (value: unknown) => `"${String(value ?? "").replaceAll('"', '""')}"`;
-  const url = URL.createObjectURL(new Blob([`\uFEFF${[headers, ...lines].map((line) => line.map(quote).join(",")).join("\n")}`], { type: "text/csv;charset=utf-8" }));
-  const link = document.createElement("a"); link.href = url; link.download = `glloria-consultations-${new Date().toISOString().slice(0, 10)}.csv`; link.click(); URL.revokeObjectURL(url);
+  const headers = [
+    "ID",
+    "Created at",
+    "Full name",
+    "Phone",
+    "Email",
+    "City",
+    "Property",
+    "Area",
+    "Service",
+    "Budget",
+    "Aesthetic preference",
+    "Source project",
+    "UTM source",
+    "UTM medium",
+    "UTM campaign",
+    "Preferred date",
+    "Preferred time",
+    "Status",
+    "Admin notes",
+  ];
+  const lines = rows.map(row => [
+    row.id,
+    row.createdAt,
+    row.fullName,
+    row.phone,
+    row.email,
+    row.city,
+    row.propertyType,
+    row.area,
+    row.service,
+    row.budget,
+    row.aestheticPreference,
+    row.sourceProjectTitle,
+    row.utmSource,
+    row.utmMedium,
+    row.utmCampaign,
+    row.preferredDate,
+    row.preferredTime,
+    row.status,
+    row.adminNotes,
+  ]);
+  const quote = (value: unknown) =>
+    `"${String(value ?? "").replaceAll('"', '""')}"`;
+  const url = URL.createObjectURL(
+    new Blob(
+      [
+        `\uFEFF${[headers, ...lines].map(line => line.map(quote).join(",")).join("\n")}`,
+      ],
+      { type: "text/csv;charset=utf-8" }
+    )
+  );
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `glloria-consultations-${new Date().toISOString().slice(0, 10)}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
 }
 
 export default function AdminBookings() {
-  const [filters, setFilters] = useState(initialFilters); const [selectedId, setSelectedId] = useState<number | null>(initialId); const [status, setStatus] = useState<Status>("new"); const [notes, setNotes] = useState("");
-  const input = useMemo(() => ({ search: filters.search || undefined, city: filters.city || undefined, service: filters.service || undefined, status: filters.status, date: filters.date || undefined }), [filters]);
-  const list = trpc.consultations.list.useQuery(input); const stats = trpc.consultations.stats.useQuery(); const exported = trpc.consultations.export.useQuery(input, { enabled: false }); const detail = trpc.consultations.get.useQuery({ id: selectedId || 0 }, { enabled: selectedId !== null });
-  const update = trpc.consultations.update.useMutation({ onSuccess: () => { list.refetch(); stats.refetch(); detail.refetch(); } }); const rows = list.data || [];
-  const open = (id: number) => { const booking = rows.find((item) => item.id === id); setSelectedId(id); setStatus((booking?.status || "new") as Status); setNotes(booking?.adminNotes || ""); };
-  return <div className="admin-bookings"><div className="admin-bookings-head"><div><span className="admin-kicker">INQUIRIES / LIVE PIPELINE</span><h2>طلبات الاستشارات</h2><p>كل طلب جديد محفوظ داخلياً ولا يعتبر الموعد مؤكداً إلا بعد تحديث حالته.</p></div><button className="admin-secondary" onClick={async () => { const result = await exported.refetch(); if (result.data) downloadCsv(result.data as unknown as Array<Record<string, unknown>>); }} disabled={exported.isFetching}><Download size={15} /> {exported.isFetching ? "جاري التصدير" : "تصدير CSV"}</button></div><div className="booking-stats-grid">{(["total", "new", "reviewing", "confirmed", "completed", "cancelled"] as const).map((key) => <div className="booking-stat" key={key}><span>{key === "total" ? "كل الطلبات" : labels[key]}</span><strong>{stats.data?.[key] || 0}</strong></div>)}</div><div className="booking-filters"><label><Search size={15} /><span className="sr-only">بحث بالاسم</span><input value={filters.search} onChange={(e) => setFilters({ ...filters, search: e.target.value })} placeholder="ابحثي بالاسم" /></label><label><span className="sr-only">المدينة</span><input value={filters.city} onChange={(e) => setFilters({ ...filters, city: e.target.value })} placeholder="المدينة" /></label><label><span className="sr-only">الخدمة</span><input value={filters.service} onChange={(e) => setFilters({ ...filters, service: e.target.value })} placeholder="الخدمة" /></label><label><span className="sr-only">الحالة</span><select value={filters.status || ""} onChange={(e) => setFilters({ ...filters, status: (e.target.value || undefined) as Status | undefined })}><option value="">كل الحالات</option>{Object.entries(labels).map(([value, label]) => <option value={value} key={value}>{label}</option>)}</select></label><label><span className="sr-only">التاريخ</span><input type="date" value={filters.date} onChange={(e) => setFilters({ ...filters, date: e.target.value })} /></label></div><div className="bookings-table-wrap"><table className="bookings-table"><thead><tr><th>#</th><th>العميل</th><th>التواصل</th><th>الخدمة / المدينة</th><th>الموعد المقترح</th><th>الحالة</th><th><span className="sr-only">إجراء</span></th></tr></thead><tbody>{list.isLoading ? <tr><td colSpan={7} className="table-empty">جاري تحميل الطلبات...</td></tr> : rows.length ? rows.map((item) => <tr key={item.id}><td className="mono-cell">#{String(item.id).padStart(4, "0")}</td><td><strong>{item.fullName}</strong><small>{item.propertyType} · {item.area}{item.sourceProjectTitle ? ` · من ${item.sourceProjectTitle}` : ""}</small></td><td><a href={`https://wa.me/${item.phone.replace(/\D/g, "")}`} target="_blank" rel="noreferrer"><MessageCircle size={13} /> WhatsApp</a>{item.email && <a href={`mailto:${item.email}`}><Mail size={13} /> Email</a>}</td><td><strong>{item.service}</strong><small>{item.city}</small></td><td><strong>{item.preferredDate}</strong><small>{item.preferredTime}</small></td><td><span className={`status-pill status-${item.status}`}>{labels[item.status as Status]}</span></td><td><button className="table-action" onClick={() => open(item.id)}>فتح التفاصيل <ExternalLink size={13} /></button></td></tr>) : <tr><td colSpan={7} className="table-empty"><CalendarCheck size={20} /><span>لا توجد طلبات محفوظة بعد.</span></td></tr>}</tbody></table></div>{selectedId !== null && <div className="booking-detail-card"><div className="booking-detail-head"><div><span className="admin-kicker">REQUEST / #{String(selectedId).padStart(4, "0")}</span><h3>{detail.data?.fullName || "تفاصيل الطلب"}</h3></div><button className="admin-secondary" onClick={() => setSelectedId(null)}>إغلاق</button></div>{detail.data && <div className="booking-detail-grid"><div><span>الهاتف</span><strong>{detail.data.phone}</strong></div><div><span>البريد</span><strong>{detail.data.email || "—"}</strong></div><div><span>المشروع المرجعي</span><strong>{detail.data.sourceProjectTitle || "—"}</strong></div><div><span>مصدر الحملة</span><strong>{[detail.data.utmSource, detail.data.utmMedium, detail.data.utmCampaign].filter(Boolean).join(" / ") || "—"}</strong></div><div><span>العقار</span><strong>{detail.data.propertyType}</strong></div><div><span>المساحة</span><strong>{detail.data.area}</strong></div><div><span>الميزانية</span><strong>{detail.data.budget}</strong></div><div><span>الإحساس المطلوب</span><strong>{detail.data.aestheticPreference || "—"}</strong></div><div className="booking-detail-wide"><span>وصف المشروع</span><p>{detail.data.description}</p></div><label>حالة الطلب<select value={status} onChange={(e) => setStatus(e.target.value as Status)}>{Object.entries(labels).map(([value, label]) => <option value={value} key={value}>{label}</option>)}</select></label><label className="booking-detail-wide">ملاحظات داخلية<textarea rows={4} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="أضيفي ملاحظات المتابعة هنا" /></label></div>}<div className="booking-detail-actions"><a className="admin-secondary" href={`https://wa.me/${detail.data?.phone.replace(/\D/g, "") || ""}`} target="_blank" rel="noreferrer"><MessageCircle size={15} /> WhatsApp</a>{detail.data?.email && <a className="admin-secondary" href={`mailto:${detail.data.email}`}><Mail size={15} /> Email</a>}<button className="admin-primary" onClick={() => selectedId && update.mutate({ id: selectedId, status, adminNotes: notes })} disabled={update.isPending}><Save size={15} /> {update.isPending ? "جاري الحفظ" : "حفظ الحالة والملاحظات"}</button></div></div>}</div>;
+  const [filters, setFilters] = useState(initialFilters);
+  const [selectedId, setSelectedId] = useState<number | null>(initialId);
+  const [status, setStatus] = useState<Status>("new");
+  const [notes, setNotes] = useState("");
+  const input = useMemo(
+    () => ({
+      search: filters.search || undefined,
+      city: filters.city || undefined,
+      service: filters.service || undefined,
+      status: filters.status,
+      date: filters.date || undefined,
+    }),
+    [filters]
+  );
+  const list = trpc.consultations.list.useQuery(input);
+  const stats = trpc.consultations.stats.useQuery();
+  const exported = trpc.consultations.export.useQuery(input, {
+    enabled: false,
+  });
+  const detail = trpc.consultations.get.useQuery(
+    { id: selectedId || 0 },
+    { enabled: selectedId !== null }
+  );
+  const update = trpc.consultations.update.useMutation({
+    onSuccess: () => {
+      list.refetch();
+      stats.refetch();
+      detail.refetch();
+    },
+  });
+  const rows = list.data || [];
+  const open = (id: number) => {
+    const booking = rows.find(item => item.id === id);
+    setSelectedId(id);
+    setStatus((booking?.status || "new") as Status);
+    setNotes(booking?.adminNotes || "");
+  };
+  return (
+    <div className="admin-bookings">
+      <div className="admin-bookings-head">
+        <div>
+          <span className="admin-kicker">INQUIRIES / LIVE PIPELINE</span>
+          <h2>طلبات الاستشارات</h2>
+          <p>
+            كل طلب جديد محفوظ داخلياً ولا يعتبر الموعد مؤكداً إلا بعد تحديث
+            حالته.
+          </p>
+        </div>
+        <button
+          className="admin-secondary"
+          onClick={async () => {
+            const result = await exported.refetch();
+            if (result.data)
+              downloadCsv(
+                result.data as unknown as Array<Record<string, unknown>>
+              );
+          }}
+          disabled={exported.isFetching}
+        >
+          <Download size={15} />{" "}
+          {exported.isFetching ? "جاري التصدير" : "تصدير CSV"}
+        </button>
+      </div>
+      <div className="booking-stats-grid">
+        {(
+          [
+            "total",
+            "new",
+            "reviewing",
+            "confirmed",
+            "completed",
+            "cancelled",
+          ] as const
+        ).map(key => (
+          <div className="booking-stat" key={key}>
+            <span>{key === "total" ? "كل الطلبات" : labels[key]}</span>
+            <strong>{stats.data?.[key] || 0}</strong>
+          </div>
+        ))}
+      </div>
+      <div className="booking-filters">
+        <label>
+          <Search size={15} />
+          <span className="sr-only">بحث بالاسم</span>
+          <input
+            value={filters.search}
+            onChange={e => setFilters({ ...filters, search: e.target.value })}
+            placeholder="ابحثي بالاسم"
+          />
+        </label>
+        <label>
+          <span className="sr-only">المدينة</span>
+          <input
+            value={filters.city}
+            onChange={e => setFilters({ ...filters, city: e.target.value })}
+            placeholder="المدينة"
+          />
+        </label>
+        <label>
+          <span className="sr-only">الخدمة</span>
+          <input
+            value={filters.service}
+            onChange={e => setFilters({ ...filters, service: e.target.value })}
+            placeholder="الخدمة"
+          />
+        </label>
+        <label>
+          <span className="sr-only">الحالة</span>
+          <select
+            value={filters.status || ""}
+            onChange={e =>
+              setFilters({
+                ...filters,
+                status: (e.target.value || undefined) as Status | undefined,
+              })
+            }
+          >
+            <option value="">كل الحالات</option>
+            {Object.entries(labels).map(([value, label]) => (
+              <option value={value} key={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          <span className="sr-only">التاريخ</span>
+          <input
+            type="date"
+            value={filters.date}
+            onChange={e => setFilters({ ...filters, date: e.target.value })}
+          />
+        </label>
+      </div>
+      <div className="bookings-table-wrap">
+        <table className="bookings-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>العميل</th>
+              <th>التواصل</th>
+              <th>الخدمة / المدينة</th>
+              <th>الموعد المقترح</th>
+              <th>الحالة</th>
+              <th>
+                <span className="sr-only">إجراء</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {list.isLoading ? (
+              <tr>
+                <td colSpan={7} className="table-empty">
+                  جاري تحميل الطلبات...
+                </td>
+              </tr>
+            ) : rows.length ? (
+              rows.map(item => (
+                <tr key={item.id}>
+                  <td className="mono-cell">
+                    #{String(item.id).padStart(4, "0")}
+                  </td>
+                  <td>
+                    <strong>{item.fullName}</strong>
+                    <small>
+                      {item.propertyType} · {item.area}
+                      {item.sourceProjectTitle
+                        ? ` · من ${item.sourceProjectTitle}`
+                        : ""}
+                    </small>
+                  </td>
+                  <td>
+                    <a
+                      href={`https://wa.me/${item.phone.replace(/\D/g, "")}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <MessageCircle size={13} /> WhatsApp
+                    </a>
+                    {item.email && (
+                      <a href={`mailto:${item.email}`}>
+                        <Mail size={13} /> Email
+                      </a>
+                    )}
+                  </td>
+                  <td>
+                    <strong>{item.service}</strong>
+                    <small>{item.city}</small>
+                  </td>
+                  <td>
+                    <strong>{item.preferredDate}</strong>
+                    <small>{item.preferredTime}</small>
+                  </td>
+                  <td>
+                    <span className={`status-pill status-${item.status}`}>
+                      {labels[item.status as Status]}
+                    </span>
+                  </td>
+                  <td>
+                    <button
+                      className="table-action"
+                      onClick={() => open(item.id)}
+                    >
+                      فتح التفاصيل <ExternalLink size={13} />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={7} className="table-empty">
+                  <CalendarCheck size={20} />
+                  <span>لا توجد طلبات محفوظة بعد.</span>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+      {selectedId !== null && (
+        <div className="booking-detail-card">
+          <div className="booking-detail-head">
+            <div>
+              <span className="admin-kicker">
+                REQUEST / #{String(selectedId).padStart(4, "0")}
+              </span>
+              <h3>{detail.data?.fullName || "تفاصيل الطلب"}</h3>
+            </div>
+            <button
+              className="admin-secondary"
+              onClick={() => setSelectedId(null)}
+            >
+              إغلاق
+            </button>
+          </div>
+          {detail.data && (
+            <div className="booking-detail-grid">
+              <div>
+                <span>الهاتف</span>
+                <strong>{detail.data.phone}</strong>
+              </div>
+              <div>
+                <span>البريد</span>
+                <strong>{detail.data.email || "—"}</strong>
+              </div>
+              <div>
+                <span>المشروع المرجعي</span>
+                <strong>{detail.data.sourceProjectTitle || "—"}</strong>
+              </div>
+              <div>
+                <span>مصدر الحملة</span>
+                <strong>
+                  {[
+                    detail.data.utmSource,
+                    detail.data.utmMedium,
+                    detail.data.utmCampaign,
+                  ]
+                    .filter(Boolean)
+                    .join(" / ") || "—"}
+                </strong>
+              </div>
+              <div>
+                <span>العقار</span>
+                <strong>{detail.data.propertyType}</strong>
+              </div>
+              <div>
+                <span>المساحة</span>
+                <strong>{detail.data.area}</strong>
+              </div>
+              <div>
+                <span>الميزانية</span>
+                <strong>{detail.data.budget}</strong>
+              </div>
+              <div>
+                <span>الإحساس المطلوب</span>
+                <strong>{detail.data.aestheticPreference || "—"}</strong>
+              </div>
+              <div className="booking-detail-wide">
+                <span>وصف المشروع</span>
+                <p>{detail.data.description}</p>
+              </div>
+              <label>
+                حالة الطلب
+                <select
+                  value={status}
+                  onChange={e => setStatus(e.target.value as Status)}
+                >
+                  {Object.entries(labels).map(([value, label]) => (
+                    <option value={value} key={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="booking-detail-wide">
+                ملاحظات داخلية
+                <textarea
+                  rows={4}
+                  value={notes}
+                  onChange={e => setNotes(e.target.value)}
+                  placeholder="أضيفي ملاحظات المتابعة هنا"
+                />
+              </label>
+            </div>
+          )}
+          <div className="booking-detail-actions">
+            <a
+              className="admin-secondary"
+              href={`https://wa.me/${detail.data?.phone.replace(/\D/g, "") || ""}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <MessageCircle size={15} /> WhatsApp
+            </a>
+            {detail.data?.email && (
+              <a
+                className="admin-secondary"
+                href={`mailto:${detail.data.email}`}
+              >
+                <Mail size={15} /> Email
+              </a>
+            )}
+            <button
+              className="admin-primary"
+              onClick={() =>
+                selectedId &&
+                update.mutate({ id: selectedId, status, adminNotes: notes })
+              }
+              disabled={update.isPending}
+            >
+              <Save size={15} />{" "}
+              {update.isPending ? "جاري الحفظ" : "حفظ الحالة والملاحظات"}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }

@@ -114,10 +114,7 @@ export default function RevealObserver() {
       for (const mutation of mutations) {
         if (mutation.type !== "attributes") continue;
         const target = mutation.target as HTMLElement;
-        if (
-          revealed.has(target) &&
-          !target.classList.contains("is-revealed")
-        ) {
+        if (revealed.has(target) && !target.classList.contains("is-revealed")) {
           target.classList.add("is-revealed");
         }
       }
