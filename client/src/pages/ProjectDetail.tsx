@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { ArrowUpLeft, Check, ChevronLeft } from "lucide-react";
 import { Link, useRoute } from "wouter";
 import { trpc } from "../lib/trpc";
+import { buildGeneralWhatsAppUrl } from "../../shared/whatsapp";
 import ShareActions from "../components/ShareActions";
 import ProjectLightbox from "../components/ProjectLightbox";
 import ResponsiveImage from "../components/ResponsiveImage";
@@ -348,7 +349,17 @@ export default function ProjectDetail() {
           {ar ? "أريد مساحة بهذا الإحساس" : "I want a space with this feeling"}{" "}
           <ArrowUpLeft size={17} />
         </Link>
+        <a
+          className="text-link detail-whatsapp"
+          href={buildGeneralWhatsAppUrl(ar ? "ar" : "en")}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {ar ? "أو تواصلي عبر WhatsApp" : "Or chat on WhatsApp"}{" "}
+          <ArrowUpLeft size={16} />
+        </a>
       </section>
     </div>
   );
 }
+

@@ -217,7 +217,7 @@ export default function Booking() {
             autoFocus
             value={booking.name}
             onChange={e => set("name", e.target.value)}
-            placeholder={ar ? "مثال: هبة أحمد" : "Your full name"}
+            placeholder={ar ? "مثال: سارة أحمد" : "Your full name"}
           />
         </label>
         <label>
@@ -613,3 +613,4 @@ export default function Booking() {
     </div>
   );
 }
+
