@@ -97,8 +97,8 @@ export const heroImage: ImageAsset = {
   width: 1920,
   height: 1280,
   alt: {
-    ar: "مساحة معيشة دافئة بأسلوب تصميم Glloria — صورة توضيحية مؤقتة",
-    en: "Warm living space in the Glloria design style — temporary placeholder image",
+    ar: "مساحة معيشة دافئة بأسلوب تصميم Glloria",
+    en: "Warm living space in the Glloria design style",
   },
   imageKind: {
     ar: "صورة توضيحية مؤقتة، وليست صورة تنفيذ فعلي",
@@ -125,8 +125,8 @@ export const privateResidenceImage: ImageAsset = {
   width: 1200,
   height: 800,
   alt: {
-    ar: "منزل خاص — صورة توضيحية مؤقتة لمساحة معيشة دافئة",
-    en: "Private Residence — temporary placeholder image of a warm living space",
+    ar: "مساحة معيشة دافئة بأسلوب Glloria",
+    en: "Warm living space in the Glloria design style",
   },
   imageKind: {
     ar: "بانتظار اعتماد صور التنفيذ الفعلي",
@@ -153,8 +153,8 @@ export const boskaCafeImage: ImageAsset = {
   width: 1200,
   height: 800,
   alt: {
-    ar: "BOSKA كافيه ومطعم — صورة توضيحية مؤقتة لمساحة كافيه دافئة",
-    en: "Boska Café & Restaurant — temporary placeholder image of a warm café space",
+    ar: "مساحة كافيه دافئة بأسلوب Glloria",
+    en: "Warm café space in the Glloria design style",
   },
   imageKind: {
     ar: "بانتظار اعتماد صور التنفيذ الفعلي",
@@ -214,3 +214,4 @@ export const logoImage: ImageAsset = {
     en: "Temporary placeholder logo pending the final approved brand identity",
   },
 };
+
