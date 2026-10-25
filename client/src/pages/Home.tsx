@@ -4,12 +4,12 @@ import { lazy, Suspense } from "react";
 import { Link } from "wouter";
 import { useLocale } from "../contexts/LocaleContext";
 import ResponsiveImage from "../components/ResponsiveImage";
+import Tilt from "../components/Tilt";
+import { buildGeneralWhatsAppUrl } from "../../shared/whatsapp";
 import {
   heroImage,
   privateResidenceImage,
   boskaCafeImage,
-  founderPortraitImage,
-  logoImage,
 } from "../data/projectImages";
 
 const TestimonialsSection = lazy(
@@ -156,7 +156,7 @@ export default function Home() {
   return (
     <div className="home-page">
       <section className="hero hero-immersive">
-        <div className="hero-media">
+        <Tilt className="hero-media" max={4}>
           <ResponsiveImage
             className="hero-parallax-image"
             src={heroImage.src}
@@ -168,7 +168,7 @@ export default function Home() {
             sizes="100vw"
           />
           <div className="hero-cinematic-wash" aria-hidden="true" />
-        </div>
+        </Tilt>
         <div className="hero-overlay-grid section-pad">
           <div className="hero-index editorial-index">
             <span>01</span>
@@ -205,10 +205,17 @@ export default function Home() {
                 <ArrowDownLeft size={17} strokeWidth={1.4} />
               </a>
             </div>
+            <p className="hero-trust">
+              {isArabic
+                ? "استشارة 45 دقيقة · قنا والصعيد والقاهرة · استشارات أونلاين متاحة"
+                : "45-minute consultation · Qena, Upper Egypt & Cairo · Online consultations available"}
+            </p>
           </div>
           <div className="hero-caption hero-overlay-caption">
-            <span>01 / 04</span>
-            <span>Private Residence</span>
+            <span>GLLORIA / STYLE</span>
+            <span>
+              {isArabic ? "مساحة معيشة دافئة" : "A warm living space"}
+            </span>
           </div>
           <div className="hero-side-note">
             DESIGNED FOR LIVING
@@ -267,8 +274,8 @@ export default function Home() {
           </p>
           <blockquote className="founder-quote">
             {isArabic
-              ? "بيتك لازم يحكي حكاية أنت مين. <3"
-              : "Your home should tell the story of who you are <3"}
+              ? "بيتك لازم يحكي حكاية أنت مين."
+              : "Your home should tell the story of who you are."}
           </blockquote>
           <div className="about-credentials">
             <span>{isArabic ? "مؤسسة Glloria" : "Glloria founder"}</span>
@@ -280,35 +287,20 @@ export default function Home() {
           </Link>
         </div>
         <div className="manifesto-aside founder-card">
-          <div className="founder-portrait">
-            <ResponsiveImage
-              src={founderPortraitImage.src}
-              width={founderPortraitImage.width}
-              height={founderPortraitImage.height}
-              alt={
-                isArabic
-                  ? founderPortraitImage.alt.ar
-                  : founderPortraitImage.alt.en
-              }
-              loading="lazy"
-              decoding="async"
-              sizes="(max-width: 700px) 76vw, 30vw"
-            />
-          </div>
+          <Tilt className="founder-portrait" max={5}>
+            <div className="founder-monogram" aria-hidden="true">
+              {isArabic ? "هـ" : "H"}
+            </div>
+          </Tilt>
           <p className="founder-caption">
             Heba El Damarany
             <br />
             <span>FOUNDER / GLLORIA STUDIO</span>
           </p>
           <div className="studio-seal">
-            <img
-              src={logoImage.src}
-              alt={isArabic ? logoImage.alt.ar : logoImage.alt.en}
-              width={logoImage.width}
-              height={logoImage.height}
-              loading="lazy"
-              decoding="async"
-            />
+            <span className="studio-seal-mark" aria-hidden="true">
+              G
+            </span>
           </div>
         </div>
       </section>
@@ -330,7 +322,7 @@ export default function Home() {
             href="/projects/interior"
             className="project-card project-card-large"
           >
-            <div className="project-image">
+            <Tilt className="project-image" max={5}>
               <ResponsiveImage
                 src={privateResidenceImage.src}
                 width={privateResidenceImage.width}
@@ -347,7 +339,7 @@ export default function Home() {
               <span className="project-arrow">
                 <ArrowUpLeft size={19} strokeWidth={1.4} />
               </span>
-            </div>
+            </Tilt>
             <div className="project-meta">
               <span>01 / PRIVATE RESIDENCE</span>
             </div>
@@ -355,7 +347,7 @@ export default function Home() {
           </Link>
           <div className="project-stack">
             <Link href="/projects/boska" className="project-card">
-              <div className="project-image">
+              <Tilt className="project-image" max={5}>
                 <ResponsiveImage
                   src={boskaCafeImage.src}
                   width={boskaCafeImage.width}
@@ -370,7 +362,7 @@ export default function Home() {
                 <span className="project-arrow">
                   <ArrowUpLeft size={17} strokeWidth={1.4} />
                 </span>
-              </div>
+              </Tilt>
               <div className="project-meta">
                 <span>02 / CAFE</span>
               </div>
@@ -404,7 +396,16 @@ export default function Home() {
         </div>
         <div className="services-list">
           {services.map(service => (
-            <div className="service-row" key={service.number}>
+            <Link
+              href="/booking"
+              className="service-row"
+              key={service.number}
+              aria-label={
+                isArabic
+                  ? `احجزي استشارة — ${service.title}`
+                  : `Book a consultation — ${service.enTitle}`
+              }
+            >
               <span className="service-number">{service.number}</span>
               <h3>
                 {isArabic ? service.title : service.enTitle}
@@ -416,7 +417,7 @@ export default function Home() {
                 size={19}
                 strokeWidth={1.25}
               />
-            </div>
+            </Link>
           ))}
         </div>
         <Link href="/booking" className="clay-button">
@@ -519,7 +520,7 @@ export default function Home() {
             <>
               احكي لنا عن المكان
               <br />
-              <em>{isArabic ? "الذي تتخيلينه." : ""}</em>
+              <em>الذي تتخيلينه.</em>
             </>
           ) : (
             <>
@@ -532,6 +533,15 @@ export default function Home() {
         <Link href="/booking" className="dark-button">
           {t("nav.primary")} <ArrowUpLeft size={18} strokeWidth={1.4} />
         </Link>
+        <a
+          className="text-link closing-whatsapp"
+          href={buildGeneralWhatsAppUrl(locale)}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {isArabic ? "أو تواصلي عبر WhatsApp" : "Or chat on WhatsApp"}{" "}
+          <ArrowUpLeft size={16} strokeWidth={1.4} />
+        </a>
         <div className="closing-foot">
           <span>Glloria / Interior Design Studio</span>
           <span>
@@ -543,3 +553,4 @@ export default function Home() {
     </div>
   );
 }
+

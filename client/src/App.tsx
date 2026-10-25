@@ -9,14 +9,13 @@ import {
   Sun,
   X,
 } from "lucide-react";
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { LocaleProvider, useLocale } from "./contexts/LocaleContext";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import { buildGeneralWhatsAppUrl } from "../../shared/whatsapp";
 import RevealObserver from "./components/RevealObserver";
-import { logoImage } from "./data/projectImages";
 
 const Projects = lazy(() => import("./pages/Projects"));
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
@@ -31,7 +30,6 @@ const navItems = [
   { key: "nav.about", href: "/#about" },
   { key: "nav.services", href: "/#services" },
   { key: "nav.booking", href: "/booking" },
-  { key: "nav.testimonials", href: "/#testimonials" },
 ];
 
 function SiteHeader() {
@@ -46,7 +44,15 @@ function SiteHeader() {
         <button
           className="menu-toggle"
           onClick={() => setOpen(!open)}
-          aria-label={open ? "إغلاق القائمة" : "فتح القائمة"}
+          aria-label={
+            open
+              ? locale === "ar"
+                ? "إغلاق القائمة"
+                : "Close menu"
+              : locale === "ar"
+                ? "فتح القائمة"
+                : "Open menu"
+          }
           aria-expanded={open}
         >
           {open ? (
@@ -56,13 +62,8 @@ function SiteHeader() {
           )}
         </button>
         <Link href="/" className="brand-lockup" onClick={() => setOpen(false)}>
-          <span className="brand-mark" aria-hidden="true">
-            <img
-              src={logoImage.src}
-              alt=""
-              width={logoImage.width}
-              height={logoImage.height}
-            />
+          <span className="brand-mark brand-mark-type" aria-hidden="true">
+            G
           </span>
           <span className="brand-name">Glloria</span>
           <span className="brand-sub">INTERIORS / STUDIO</span>
@@ -72,14 +73,14 @@ function SiteHeader() {
           aria-label="Primary navigation"
         >
           {navItems.map(item => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               className={location === item.href ? "is-active" : ""}
               onClick={() => setOpen(false)}
             >
               {t(item.key)}
-            </a>
+            </Link>
           ))}
           <Link
             href="/booking"
@@ -134,7 +135,7 @@ function SiteHeader() {
           </button>
         </nav>
         <div className="header-note">
-          {locale === "ar" ? "قنا، مصر" : "Qena, Egypt"} <span>·</span> 2024—
+          {locale === "ar" ? "قنا، مصر" : "Qena, Egypt"}
         </div>
       </div>
     </header>
@@ -243,7 +244,11 @@ function Shell({ children }: { children: React.ReactNode }) {
         href={buildGeneralWhatsAppUrl(locale)}
         target="_blank"
         rel="noreferrer"
-        aria-label="تواصلي مع Glloria على واتساب"
+        aria-label={
+        locale === "ar"
+          ? "تواصلي مع Glloria على واتساب"
+          : "Chat with Glloria on WhatsApp"
+      }
       >
         <span>واتساب</span>
         <ArrowUpLeft size={17} strokeWidth={1.5} />
@@ -263,6 +268,14 @@ function PageLoader() {
 
 function AppContent() {
   const [location] = useLocation();
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      document.querySelector(hash)?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [location]);
   if (location.startsWith("/admin"))
     return (
       <Suspense fallback={<PageLoader />}>

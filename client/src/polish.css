@@ -1,0 +1,131 @@
+/* Glloria polish layer (branch: polish/brand-3d).
+   Loaded after index.css. Only additive styles: nothing here overrides
+   the editorial system, it completes it — typographic brand marks,
+   honest monogram, 3D tilt depth, and conversion bands. */
+
+/* ---- Typographic brand mark (replaces the placeholder logo image) ---- */
+.brand-mark-type {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background);
+  color: var(--ink);
+  font: 600 19px/1 var(--serif);
+  overflow: visible;
+}
+.brand-mark-type::after {
+  position: absolute;
+  inset-inline-end: -3px;
+  bottom: -2px;
+  width: 6px;
+  height: 6px;
+  background: var(--clay);
+  transform: rotate(45deg);
+  content: "";
+}
+
+/* ---- Founder monogram (replaces the illustrated fake portrait) ---- */
+.founder-monogram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background:
+    linear-gradient(160deg, var(--secondary), transparent 70%),
+    var(--background);
+  color: var(--ink);
+  font: 600 76px/1 var(--serif);
+}
+.founder-monogram::after {
+  position: absolute;
+  inset-inline-end: 22px;
+  bottom: 24px;
+  width: 10px;
+  height: 10px;
+  background: var(--clay);
+  transform: rotate(45deg);
+  content: "";
+}
+
+/* ---- Studio seal mark (header-adjacent founder card) ---- */
+.studio-seal-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  font: 600 20px/1 var(--serif);
+}
+
+/* ---- 3D tilt: pointer-tracked depth, desktop only, motion-safe ---- */
+.tilt-3d {
+  transform: perspective(1000px) rotateX(var(--tilt-x, 0deg))
+    rotateY(var(--tilt-y, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 0.4s var(--ease-out);
+  will-change: transform;
+}
+.tilt-3d .project-arrow,
+.tilt-3d .hero-cinematic-wash {
+  transform: translateZ(24px);
+}
+@media (hover: none), (pointer: coarse) {
+  .tilt-3d {
+    transform: none;
+    transition: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tilt-3d {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---- Hero trust row (facts already stated in the FAQ) ---- */
+.hero-trust {
+  margin: 18px 0 0;
+  color: var(--muted-foreground);
+  font: 500 12px/1.8 var(--sans, inherit);
+  letter-spacing: 0.02em;
+}
+
+/* ---- Service rows are now booking links: keep the editorial look ---- */
+a.service-row {
+  color: inherit;
+  text-decoration: none;
+}
+a.service-row:hover .service-arrow {
+  transform: translate(3px, -3px);
+}
+a.service-row:focus-visible {
+  outline: 2px solid var(--clay);
+  outline-offset: 4px;
+}
+
+/* ---- Conversion bands (archive + detail + closing WhatsApp) ---- */
+.archive-cta {
+  padding: 72px 0 12px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+.archive-cta h2 {
+  margin: 14px 0 26px;
+}
+.archive-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+}
+.closing-whatsapp,
+.detail-whatsapp {
+  margin-top: 14px;
+}
+.detail-cta .detail-whatsapp {
+  display: inline-block;
+}

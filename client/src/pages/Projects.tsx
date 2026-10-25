@@ -5,6 +5,8 @@ import { Link } from "wouter";
 import { trpc } from "../lib/trpc";
 import { useLocale } from "../contexts/LocaleContext";
 import ResponsiveImage from "../components/ResponsiveImage";
+import Tilt from "../components/Tilt";
+import { buildGeneralWhatsAppUrl } from "../../shared/whatsapp";
 import { privateResidenceImage, boskaCafeImage } from "../data/projectImages";
 
 export type ProjectCard = {
@@ -23,6 +25,17 @@ export type ProjectCard = {
   intro: string;
 };
 
+const fallbackIntros: Record<string, { ar: string; en: string }> = {
+  interior: {
+    ar: "مساحة سكنية بأسلوب Glloria — تصميم داخلي يبدأ من الإنسان قبل التفاصيل.",
+    en: "A home in the Glloria style — interior design that begins with the person before the details.",
+  },
+  boska: {
+    ar: "كافيه ومطعم بأسلوب Glloria — مساحة دافئة للقاءات اليومية.",
+    en: "A café and restaurant in the Glloria style — a warm space for everyday gatherings.",
+  },
+};
+
 export const projects: ProjectCard[] = [
   {
     slug: "interior",
@@ -34,7 +47,6 @@ export const projects: ProjectCard[] = [
     location: "",
     year: "",
     image: privateResidenceImage.src,
-    imageAlt: privateResidenceImage.alt.en,
     intro: "",
   },
   {
@@ -47,7 +59,6 @@ export const projects: ProjectCard[] = [
     location: "",
     year: "",
     image: boskaCafeImage.src,
-    imageAlt: boskaCafeImage.alt.en,
     intro: "",
   },
 ];
@@ -82,8 +93,14 @@ export default function Projects() {
     return () => window.clearTimeout(timer);
   }, [active]);
   const fallbackProjects = useMemo(
-    () => getVisibleProjects(projects, active),
-    [active]
+    () =>
+      getVisibleProjects(projects, active).map(project => ({
+        ...project,
+        intro:
+          fallbackIntros[project.slug]?.[locale === "ar" ? "ar" : "en"] ||
+          project.intro,
+      })),
+    [active, locale]
   );
   const visible: ProjectCard[] = managedProjects?.length
     ? managedProjects.map((project, index) => ({
@@ -95,10 +112,10 @@ export default function Projects() {
         designType: project.designType,
         title: project.title,
         location: project.location,
-        year: project.year ? String(project.year) : "—",
+        year: project.year ? String(project.year) : "",
         image: project.imageUrl,
         imageAlt: project.imageAlt ?? undefined,
-        intro: project.intro,
+        intro: project.intro || fallbackIntros[project.slug]?.[locale === "ar" ? "ar" : "en"] || project.intro,
       }))
     : fallbackProjects;
   const getTitle = (project: ProjectCard) =>
@@ -109,8 +126,7 @@ export default function Projects() {
     locale === "en"
       ? (englishTitles[project.slug]?.[1] ?? project.intro)
       : project.intro;
-  const countLabel =
-    locale === "ar" ? t("projects.count") : t("projects.count");
+  const countLabel = t("projects.count");
 
   const filtering = isFiltering;
   return (
@@ -200,7 +216,7 @@ export default function Projects() {
                 className={`archive-card ${index === 0 ? "archive-card-featured" : ""}`}
                 key={project.slug}
               >
-                <div className="archive-image">
+                <Tilt className="archive-image" max={5}>
                   <ResponsiveImage
                     src={project.image}
                     alt={
@@ -215,12 +231,12 @@ export default function Projects() {
                   <span className="project-arrow">
                     <ArrowUpLeft size={18} strokeWidth={1.4} />
                   </span>
-                </div>
+                </Tilt>
                 <div className="project-meta">
                   <span>
                     {project.number} / {project.type}
                   </span>
-                  {(project.location || project.year !== "—") && (
+                  {(project.location || project.year) && (
                     <span>
                       {locale === "ar"
                         ? project.location
@@ -263,6 +279,41 @@ export default function Projects() {
             : "Every image and project shown here belongs to the Glloria archive."}
         </span>
       </div>
+      <section className="archive-cta">
+        <p className="eyebrow">
+          {locale === "ar" ? "المشروع القادم" : "YOUR NEXT PROJECT"}
+        </p>
+        <h2>
+          {locale === "ar" ? (
+            <>
+              أعجبتك النبرة؟
+              <br />
+              <em>ابدئي مشروعك.</em>
+            </>
+          ) : (
+            <>
+              Like the tone?
+              <br />
+              <em>Start your project.</em>
+            </>
+          )}
+        </h2>
+        <div className="archive-cta-actions">
+          <Link href="/booking" className="dark-button">
+            {t("nav.primary")} <ArrowUpLeft size={17} />
+          </Link>
+          <a
+            className="text-link"
+            href={buildGeneralWhatsAppUrl(locale)}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {locale === "ar" ? "تواصلي عبر WhatsApp" : "Chat on WhatsApp"}{" "}
+            <ArrowUpLeft size={16} />
+          </a>
+        </div>
+      </section>
     </div>
   );
 }
+
